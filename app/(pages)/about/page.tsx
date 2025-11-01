@@ -1,15 +1,16 @@
-// app/page.tsx
+// app/(pages)/about/page.tsx
 'use client';
 
 import { motion } from 'framer-motion';
-import Hero from "@/components/sections/home/Hero";
-import Works from "@/components/sections/home/Works";
-import CallToAction from "@/components/sections/home/CallToAction";
+import AboutHero from "@/components/sections/about/AboutHero";
+import Experience from "@/components/sections/about/Experience";
+import Education from "@/components/sections/about/Education";
+import Testimonials from "@/components/sections/about/Testimonials";
 
-export default function HomePage() {
+export default function AboutPage() {
   return (
     <div className="relative min-h-screen bg-black overflow-hidden">
-      {/* Ultra Modern Animated Background - Same as Services */}
+      {/* Ultra Modern Animated Background */}
       <div className="fixed inset-0 pointer-events-none">
         {/* Animated Gradient Mesh */}
         <div className="absolute inset-0">
@@ -135,9 +136,49 @@ export default function HomePage() {
 
       {/* Main Content */}
       <main className="relative z-10 pt-24">
-        <Hero />
-        <Works />
-        <CallToAction />
+        <AboutHero />
+        
+        {/* Divider */}
+        <div className="max-w-7xl mx-auto px-6 md:px-8 lg:px-12 py-16">
+          <div className="relative">
+            <div className="h-px bg-gradient-to-r from-transparent via-zinc-800 to-transparent" />
+            <motion.div
+              animate={{ x: ['-100%', '100%'] }}
+              transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+              className="absolute top-0 left-0 h-px w-1/3 bg-gradient-to-r from-transparent via-[#beff01]/50 to-transparent"
+            />
+          </div>
+        </div>
+
+        <Experience />
+        
+        {/* Divider */}
+        <div className="max-w-7xl mx-auto px-6 md:px-8 lg:px-12 py-16">
+          <div className="relative">
+            <div className="h-px bg-gradient-to-r from-transparent via-zinc-800 to-transparent" />
+            <motion.div
+              animate={{ x: ['-100%', '100%'] }}
+              transition={{ duration: 3, repeat: Infinity, ease: "linear", delay: 1.5 }}
+              className="absolute top-0 left-0 h-px w-1/3 bg-gradient-to-r from-transparent via-[#beff01]/50 to-transparent"
+            />
+          </div>
+        </div>
+
+        <Education />
+        
+        {/* Divider */}
+        <div className="max-w-7xl mx-auto px-6 md:px-8 lg:px-12 py-16">
+          <div className="relative">
+            <div className="h-px bg-gradient-to-r from-transparent via-zinc-800 to-transparent" />
+            <motion.div
+              animate={{ x: ['-100%', '100%'] }}
+              transition={{ duration: 3, repeat: Infinity, ease: "linear", delay: 3 }}
+              className="absolute top-0 left-0 h-px w-1/3 bg-gradient-to-r from-transparent via-[#beff01]/50 to-transparent"
+            />
+          </div>
+        </div>
+
+        <Testimonials />
       </main>
 
       <style jsx global>{`

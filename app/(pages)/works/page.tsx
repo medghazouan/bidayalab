@@ -1,15 +1,13 @@
-// app/page.tsx
+// app/works/page.tsx
 'use client';
 
 import { motion } from 'framer-motion';
-import Hero from "@/components/sections/home/Hero";
-import Works from "@/components/sections/home/Works";
-import CallToAction from "@/components/sections/home/CallToAction";
+import WorksGrid from '@/components/sections/works/WorksGrid';
 
-export default function HomePage() {
+export default function WorksPage() {
   return (
     <div className="relative min-h-screen bg-black overflow-hidden">
-      {/* Ultra Modern Animated Background - Same as Services */}
+      {/* Ultra Modern Animated Background */}
       <div className="fixed inset-0 pointer-events-none">
         {/* Animated Gradient Mesh */}
         <div className="absolute inset-0">
@@ -79,21 +77,6 @@ export default function HomePage() {
           }}
           className="absolute top-1/2 right-1/3 w-[450px] h-[450px] bg-purple-500/10 rounded-full blur-3xl"
         />
-        <motion.div
-          animate={{
-            y: [0, 35, 0],
-            x: [0, -25, 0],
-            scale: [1, 1.25, 1],
-            rotate: [0, -45, 0]
-          }}
-          transition={{
-            duration: 22,
-            repeat: Infinity,
-            ease: "easeInOut",
-            delay: 6
-          }}
-          className="absolute bottom-1/3 left-1/3 w-[550px] h-[550px] bg-pink-500/8 rounded-full blur-3xl"
-        />
 
         {/* Scanning Lines Effect */}
         <motion.div
@@ -106,18 +89,6 @@ export default function HomePage() {
             ease: "linear"
           }}
           className="absolute inset-x-0 h-px bg-gradient-to-r from-transparent via-[#beff01]/30 to-transparent"
-        />
-        <motion.div
-          animate={{
-            y: ['200%', '-100%']
-          }}
-          transition={{
-            duration: 10,
-            repeat: Infinity,
-            ease: "linear",
-            delay: 3
-          }}
-          className="absolute inset-x-0 h-px bg-gradient-to-r from-transparent via-blue-500/20 to-transparent"
         />
 
         {/* Noise Texture Overlay */}
@@ -135,9 +106,7 @@ export default function HomePage() {
 
       {/* Main Content */}
       <main className="relative z-10 pt-24">
-        <Hero />
-        <Works />
-        <CallToAction />
+        <WorksGrid />
       </main>
 
       <style jsx global>{`

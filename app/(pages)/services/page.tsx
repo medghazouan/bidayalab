@@ -1,15 +1,31 @@
-// app/page.tsx
+// app/(pages)/services/page.tsx
 'use client';
 
+import { useState } from 'react';
 import { motion } from 'framer-motion';
-import Hero from "@/components/sections/home/Hero";
-import Works from "@/components/sections/home/Works";
-import CallToAction from "@/components/sections/home/CallToAction";
+import ServicesList from '@/components/sections/services/ServicesList';
+import PricingSection from '@/components/sections/services/PricingSection';
+import OrderModal from '@/components/sections/services/OrderModal';
 
-export default function HomePage() {
+export default function ServicesPage() {
+  const [selectedPlan, setSelectedPlan] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleOpenOrderModal = (plan: any) => {
+    setSelectedPlan(plan);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setTimeout(() => {
+      setSelectedPlan(null);
+    }, 300);
+  };
+
   return (
     <div className="relative min-h-screen bg-black overflow-hidden">
-      {/* Ultra Modern Animated Background - Same as Services */}
+      {/* Ultra Modern Animated Background */}
       <div className="fixed inset-0 pointer-events-none">
         {/* Animated Gradient Mesh */}
         <div className="absolute inset-0">
@@ -135,10 +151,33 @@ export default function HomePage() {
 
       {/* Main Content */}
       <main className="relative z-10 pt-24">
-        <Hero />
-        <Works />
-        <CallToAction />
+        {/* Hero Section */}
+
+        {/* Services List Section */}
+        <ServicesList />
+
+        {/* Divider */}
+        <div className="max-w-7xl mx-auto px-6 md:px-8 lg:px-12 py-16">
+          <div className="relative">
+            <div className="h-px bg-gradient-to-r from-transparent via-zinc-800 to-transparent" />
+            <motion.div
+              animate={{ x: ['-100%', '100%'] }}
+              transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+              className="absolute top-0 left-0 h-px w-1/3 bg-gradient-to-r from-transparent via-[#beff01]/50 to-transparent"
+            />
+          </div>
+        </div>
+
+        {/* Pricing Section */}
+        <PricingSection onOpenOrderModal={handleOpenOrderModal} />
       </main>
+
+      {/* Order Modal */}
+      <OrderModal 
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        plan={selectedPlan}
+      />
 
       <style jsx global>{`
         @keyframes gradient {
