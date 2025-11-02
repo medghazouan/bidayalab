@@ -3,10 +3,24 @@
 import { Inter } from 'next/font/google';
 import './globals.css';
 import { Providers } from './providers';
-import Navbar from '@/components/sections/Navbar';
-import Footer from '@/components/sections/Footer';
+import dynamic from 'next/dynamic';
 
-const inter = Inter({ subsets: ['latin'] });
+// Dynamically import components to reduce initial bundle size
+const Navbar = dynamic(() => import('@/components/sections/Navbar'), {
+  ssr: true,
+});
+
+const Footer = dynamic(() => import('@/components/sections/Footer'), {
+  ssr: true,
+});
+
+// Optimized font loading with display swap to prevent render blocking
+const inter = Inter({ 
+  subsets: ['latin'],
+  display: 'swap', // Use fallback font until custom font loads
+  preload: true, // Preload font for better performance
+  variable: '--font-inter', // CSS variable for styling
+});
 
 export const metadata = {
   title: 'MEDDIGITAL - Web Development & Digital Marketing',
@@ -20,6 +34,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        {/* Preload critical resources */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+      </head>
       <body className={inter.className}>
         <Providers>
           <Navbar />

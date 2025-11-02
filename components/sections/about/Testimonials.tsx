@@ -1,7 +1,9 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useQuery } from '@tanstack/react-query';
+import Image from 'next/image';
 import { Quote, Star, ChevronLeft, ChevronRight, Sparkles } from 'lucide-react';
 
 interface Testimonial {
@@ -15,34 +17,25 @@ interface Testimonial {
 }
 
 export default function Testimonials() {
-  const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchTestimonials = async () => {
-      try {
-        const response = await fetch('/api/testimonials');
-        if (!response.ok) throw new Error('Failed to fetch');
-        const data = await response.json();
-        
-        if (Array.isArray(data)) {
-          setTestimonials(data);
-        } else if (data.testimonials && Array.isArray(data.testimonials)) {
-          setTestimonials(data.testimonials);
-        } else {
-          setTestimonials([]);
-        }
-      } catch (err) {
-        console.error(err);
-        setTestimonials([]);
-      } finally {
-        setLoading(false);
-      }
-    };
+  // Use React Query for better caching
+  const { data, isLoading } = useQuery<Testimonial[]>({
+    queryKey: ['testimonials'],
+    queryFn: async () => {
+      const response = await fetch('/api/testimonials');
+      if (!response.ok) throw new Error('Failed to fetch');
+      const data = await response.json();
+      return Array.isArray(data) ? data : [];
+    },
+    staleTime: 5 * 60 * 1000, // 5 minutes
+    gcTime: 30 * 60 * 1000, // 30 minutes cache
+    refetchOnWindowFocus: false,
+    retry: 1,
+  });
 
-    fetchTestimonials();
-  }, []);
+  const testimonials = data || [];
+  const loading = isLoading;
 
   const nextTestimonial = () => {
     setCurrentIndex((prev) => (prev + 1) % testimonials.length);
@@ -189,12 +182,14 @@ export default function Testimonials() {
                     className="flex items-center gap-5"
                   >
                     {currentTestimonial.image ? (
-                      <div className="relative">
+                      <div className="relative w-16 h-16">
                         <div className="absolute inset-0 bg-[#beff01] rounded-full blur-lg opacity-30" />
-                        <img
+                        <Image
                           src={currentTestimonial.image}
                           alt={currentTestimonial.name}
-                          className="relative w-16 h-16 rounded-full object-cover border-2 border-[#beff01]/50"
+                          width={64}
+                          height={64}
+                          className="relative rounded-full object-cover border-2 border-[#beff01]/50"
                         />
                       </div>
                     ) : (

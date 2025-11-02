@@ -1,10 +1,33 @@
 // app/works/category/[slug]/page.tsx
 
 import { notFound } from "next/navigation";
+import dynamic from "next/dynamic";
 import clientPromise from "@/lib/mongodb";
-import WebDevCategoryPage from "@/components/sections/category/WebDevCategoryPage";
-import SocialMediaCategoryPage from "@/components/sections/category/SocialMediaCategoryPage";
-import PaidAdsCategoryPage from "@/components/sections/category/PaidAdsCategoryPage";
+
+// Code splitting - load category pages dynamically
+const WebDevCategoryPage = dynamic(
+  () => import("@/components/sections/category/WebDevCategoryPage"),
+  { 
+    loading: () => <div className="flex items-center justify-center min-h-screen"><div className="animate-spin rounded-full h-12 w-12 border-4 border-[#beff01] border-t-transparent"></div></div>,
+    ssr: true 
+  }
+);
+
+const SocialMediaCategoryPage = dynamic(
+  () => import("@/components/sections/category/SocialMediaCategoryPage"),
+  { 
+    loading: () => <div className="flex items-center justify-center min-h-screen"><div className="animate-spin rounded-full h-12 w-12 border-4 border-[#beff01] border-t-transparent"></div></div>,
+    ssr: true 
+  }
+);
+
+const PaidAdsCategoryPage = dynamic(
+  () => import("@/components/sections/category/PaidAdsCategoryPage"),
+  { 
+    loading: () => <div className="flex items-center justify-center min-h-screen"><div className="animate-spin rounded-full h-12 w-12 border-4 border-[#beff01] border-t-transparent"></div></div>,
+    ssr: true 
+  }
+);
 
 // Category metadata
 const categoryInfo = {
@@ -22,17 +45,23 @@ const categoryInfo = {
   },
 };
 
-// Fetch projects from MongoDB
+// Fetch projects from MongoDB with timeout protection
 async function getProjectsByCategory(categorySlug: string) {
   try {
     const client = await clientPromise;
     const db = client.db('meddigital');
     
-    const projects = await db
-      .collection('projects')
-      .find({ categorySlug: categorySlug })
-      .sort({ order: 1 })
-      .toArray();
+    // Fetch with timeout protection
+    const projects = await Promise.race([
+      db
+        .collection('projects')
+        .find({ categorySlug: categorySlug })
+        .sort({ order: 1 })
+        .toArray(),
+      new Promise((_, reject) =>
+        setTimeout(() => reject(new Error('Query timeout')), 10000)
+      )
+    ]) as any[];
 
     // Convert MongoDB _id to string
     return projects.map((project) => ({

@@ -1,35 +1,38 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Check, Zap, Crown, Shield, Rocket, ArrowRight } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { useQuery } from '@tanstack/react-query';
 
 export default function PricingSection({ onOpenOrderModal }) {
-  const [plans, setPlans] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [hoveredPlan, setHoveredPlan] = useState(null);
 
-  useEffect(() => {
-    fetchPlans();
-  }, []);
-
-  const fetchPlans = async () => {
-    try {
+  // Use React Query for better caching and request deduplication
+  const { data, isLoading } = useQuery<any[]>({
+    queryKey: ['pricing-plans'],
+    queryFn: async () => {
       const response = await fetch('/api/pricing');
-      const data = await response.json();
-      
-      // Sort plans: Starter first (left), Growth middle (center), Custom last (right)
-      // On mobile: Growth first, then Starter, then Custom
-      const sortedPlans = data.sort((a, b) => {
-        const desktopOrder = { 'Starter': 0, 'Growth': 1, 'Custom': 2 };
-        return desktopOrder[a.name] - desktopOrder[b.name];
-      });
-      
-      setPlans(sortedPlans);
-    } catch (error) {
-      console.error('Error fetching plans:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
+      if (!response.ok) throw new Error('Failed to fetch');
+      return response.json();
+    },
+    staleTime: 5 * 60 * 1000, // 5 minutes
+    gcTime: 30 * 60 * 1000, // 30 minutes cache
+    refetchOnWindowFocus: false,
+    retry: 1,
+  });
+
+  // Memoize sorted plans to avoid re-sorting on every render
+  const plans = useMemo(() => {
+    if (!data) return [];
+    // Sort plans: Starter first (left), Growth middle (center), Custom last (right)
+    const desktopOrder: Record<string, number> = { 'Starter': 0, 'Growth': 1, 'Custom': 2 };
+    return [...data].sort((a, b) => {
+      const orderA = desktopOrder[a.name] ?? 999;
+      const orderB = desktopOrder[b.name] ?? 999;
+      return orderA - orderB;
+    });
+  }, [data]);
+
+  const loading = isLoading;
 
   const getPlanIcon = (name) => {
     switch(name.toLowerCase()) {
