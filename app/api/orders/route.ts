@@ -61,52 +61,33 @@ export async function POST(request: Request) {
     const result = await db.collection('orders').insertOne(newOrder);
     console.log('✅ Order saved! ID:', result.insertedId);
 
-    // ✅ SEND EMAIL - SYNCHRONOUSLY WITH BETTER ERROR HANDLING
+    // ✅ SEND EMAIL ASYNC (non-blocking) - DON'T AWAIT
     const emailUser = process.env.EMAIL_USER;
     const emailPass = process.env.EMAIL_PASS;
 
-    console.log('🔍 Email Config Check:', {
-      emailUserExists: !!emailUser,
-      emailPassExists: !!emailPass,
-      emailUserValue: emailUser,
-      emailPassLength: emailPass?.length || 0
-    });
+    // Send email in background without blocking the response
+    if (emailUser && emailPass) {
+      // Don't await - send in background
+      (async () => {
+        try {
+          console.log('📧 Creating email transporter...');
+          
+          // Create transporter with explicit configuration
+          const transporter = nodemailer.createTransport({
+            host: 'smtp.gmail.com',
+            port: 587,
+            secure: false, // Use TLS
+            auth: {
+              user: emailUser,
+              pass: emailPass,
+            },
+            tls: {
+              rejectUnauthorized: false // For development
+            }
+          });
 
-    if (!emailUser || !emailPass) {
-      console.error('❌ EMAIL CREDENTIALS MISSING!');
-      return NextResponse.json(
-        { 
-          success: true, 
-          orderNumber,
-          message: 'Order saved but email notification failed - credentials missing',
-          warning: 'Email not configured'
-        },
-        { status: 200 }
-      );
-    }
-
-    try {
-      console.log('📧 Creating email transporter...');
-      
-      // Create transporter with explicit configuration
-      const transporter = nodemailer.createTransport({
-        host: 'smtp.gmail.com',
-        port: 587,
-        secure: false, // Use TLS
-        auth: {
-          user: emailUser,
-          pass: emailPass,
-        },
-        tls: {
-          rejectUnauthorized: false // For development
-        }
-      });
-
-      console.log('🔄 Verifying SMTP connection...');
-      
-      // Verify connection configuration
-      await transporter.verify();
-      console.log('✅ SMTP connection verified successfully!');
+          // Removed synchronous verification - not needed and adds latency
+          console.log('✅ Transporter created successfully!');
 
       const emailHTML = `
       <!DOCTYPE html>
@@ -213,36 +194,27 @@ Reply to customer: ${email}
         `
       };
 
-      const info = await transporter.sendMail(mailOptions);
-      
-      console.log('✅ EMAIL SENT SUCCESSFULLY!');
-      console.log('📧 Message ID:', info.messageId);
-      console.log('📬 Response:', info.response);
+          const info = await transporter.sendMail(mailOptions);
+          
+          console.log('✅ EMAIL SENT SUCCESSFULLY!');
+          console.log('📧 Message ID:', info.messageId);
+          console.log('📬 Response:', info.response);
 
-    } catch (emailError: any) {
-      console.error('❌ EMAIL ERROR:', emailError);
-      console.error('Error Code:', emailError.code);
-      console.error('Error Message:', emailError.message);
-      console.error('Error Stack:', emailError.stack);
-      
-      // Return success but with warning
-      return NextResponse.json(
-        { 
-          success: true, 
-          orderNumber,
-          message: 'Order saved successfully',
-          warning: `Email failed to send: ${emailError.message}`
-        },
-        { status: 200 }
-      );
+        } catch (emailError: any) {
+          console.error('❌ EMAIL ERROR (non-blocking):', emailError);
+          console.error('Error Code:', emailError.code);
+          console.error('Error Message:', emailError.message);
+          // Email failure doesn't affect the response
+        }
+      })();
     }
 
-    // ✅ SUCCESS RESPONSE
+    // ✅ SUCCESS RESPONSE - Return immediately without waiting for email
     return NextResponse.json(
       { 
         success: true, 
         orderNumber,
-        message: 'Order received successfully! Email notification sent. I will contact you within 24 hours.' 
+        message: 'Order received successfully! I will contact you within 24 hours.' 
       },
       { status: 200 }
     );

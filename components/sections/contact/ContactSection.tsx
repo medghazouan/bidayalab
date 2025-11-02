@@ -18,13 +18,23 @@ const contactInfo = [
   },
   {
     icon: Phone,
-    title: 'WhatsApp',
+    title: 'Phone',
     info: '+212 679 310 770',
-    link: 'https://wa.me/212679310770',
+    link: 'tel:+212679310770',
     gradient: 'from-green-500/20 via-green-500/10 to-transparent',
     borderColor: 'border-green-500/30',
     iconBg: 'bg-green-500/10',
     iconColor: 'text-green-400'
+  },
+  {
+    icon: MessageSquare,
+    title: 'WhatsApp',
+    info: '+212 679 310 770',
+    link: 'https://wa.me/212679310770',
+    gradient: 'from-purple-500/20 via-purple-500/10 to-transparent',
+    borderColor: 'border-purple-500/30',
+    iconBg: 'bg-purple-500/10',
+    iconColor: 'text-purple-400'
   }
 ];
 
@@ -77,7 +87,7 @@ export default function ContactSection() {
   };
 
   return (
-    <section className="relative py-12 px-4 md:px-8 lg:px-16 overflow-hidden">
+    <section className="relative py-8 sm:py-10 md:py-12 px-4 md:px-8 lg:px-16 overflow-hidden">
       <div className="relative max-w-7xl mx-auto px-6 md:px-8 lg:px-12">
         
         {/* Success State */}
@@ -172,7 +182,7 @@ export default function ContactSection() {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, ease: "easeOut" }}
-              className="max-w-7xl mx-auto px-6 md:px-8 lg:px-12 py-8 md:py-12 text-center"
+              className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 lg:px-12 py-6 sm:py-8 md:py-12 text-center"
             >
               <motion.div
                 initial={{ opacity: 0, scale: 0.9 }}
@@ -190,7 +200,7 @@ export default function ContactSection() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.3 }}
-                className="text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-black text-white mb-8 tracking-tight leading-none"
+                className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black text-white mb-6 sm:mb-8 tracking-tight leading-none"
               >
                 Let's Build
                 <br />
@@ -203,7 +213,7 @@ export default function ContactSection() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.4 }}
-                className="text-xl md:text-2xl text-gray-400 max-w-4xl mx-auto leading-relaxed font-light mb-20"
+                className="text-base sm:text-lg md:text-xl lg:text-2xl text-gray-400 max-w-4xl mx-auto leading-relaxed font-light mb-10 sm:mb-16 md:mb-20"
               >
                 Have a project in mind? Drop me a message and let's create something amazing together. 
                 I typically respond within 24 hours.
@@ -211,7 +221,7 @@ export default function ContactSection() {
             </motion.div>
 
             {/* Contact Content Grid */}
-            <div className="grid lg:grid-cols-2 gap-12 items-start">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-10 md:gap-12 items-start">
               {/* Left: Contact Info Cards */}
               <motion.div
                 initial={{ opacity: 0, x: -50 }}
@@ -235,16 +245,16 @@ export default function ContactSection() {
                         href={item.link}
                         target={item.title === 'WhatsApp' ? '_blank' : undefined}
                         rel={item.title === 'WhatsApp' ? 'noopener noreferrer' : undefined}
-                        className={`relative flex items-start gap-5 p-8 rounded-3xl border ${item.borderColor} bg-zinc-900/50 backdrop-blur-sm hover:border-opacity-100 transition-all duration-300`}
+                        className={`relative flex items-start gap-4 sm:gap-5 p-5 sm:p-6 md:p-8 rounded-2xl sm:rounded-3xl border ${item.borderColor} bg-zinc-900/50 backdrop-blur-sm hover:border-opacity-100 transition-all duration-300`}
                       >
-                        <div className={`w-16 h-16 rounded-2xl ${item.iconBg} flex items-center justify-center flex-shrink-0 border ${item.borderColor} group-hover:scale-110 transition-transform`}>
-                          <Icon className={`w-8 h-8 ${item.iconColor}`} strokeWidth={2.5} />
+                        <div className={`w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-xl sm:rounded-2xl ${item.iconBg} flex items-center justify-center flex-shrink-0 border ${item.borderColor} group-hover:scale-110 transition-transform`}>
+                          <Icon className={`w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 ${item.iconColor}`} strokeWidth={2.5} />
                         </div>
                         <div className="flex-1">
                           <h3 className="text-sm font-bold uppercase tracking-wider text-gray-500 mb-2">
                             {item.title}
                           </h3>
-                          <p className={`text-xl font-black text-white group-hover:${item.iconColor} transition-colors`}>
+                          <p className={`text-lg sm:text-xl font-black text-white group-hover:${item.iconColor} transition-colors`}>
                             {item.info}
                           </p>
                         </div>
@@ -258,7 +268,7 @@ export default function ContactSection() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: 0.8 }}
-                  className="p-8 rounded-3xl bg-gradient-to-br from-[#beff01]/10 to-transparent border border-[#beff01]/20 backdrop-blur-sm"
+                  className="p-5 sm:p-6 md:p-8 rounded-2xl sm:rounded-3xl bg-gradient-to-br from-[#beff01]/10 to-transparent border border-[#beff01]/20 backdrop-blur-sm"
                 >
                   <Sparkles className="w-8 h-8 text-[#beff01] mb-4" />
                   <h3 className="text-xl font-black text-white mb-3">Quick Response Guaranteed</h3>
@@ -277,8 +287,8 @@ export default function ContactSection() {
                 className="relative group"
               >
                 <div className="absolute inset-0 bg-gradient-to-br from-[#beff01]/10 via-blue-500/5 to-purple-500/10 rounded-3xl blur-2xl opacity-50 group-hover:opacity-100 transition-opacity" />
-                <div className="relative bg-zinc-900/50 backdrop-blur-sm border border-zinc-800 rounded-3xl p-8 md:p-10">
-                  <form onSubmit={handleSubmit} className="space-y-6">
+                <div className="relative bg-zinc-900/50 backdrop-blur-sm border border-zinc-800 rounded-2xl sm:rounded-3xl p-5 sm:p-6 md:p-8 lg:p-10">
+                  <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-5 md:space-y-6">
                     {/* Name Input */}
                     <motion.div
                       initial={{ opacity: 0, y: 20 }}
@@ -296,7 +306,7 @@ export default function ContactSection() {
                         onChange={handleChange}
                         required
                         disabled={status === 'loading'}
-                        className="w-full px-6 py-4 rounded-2xl border border-zinc-700 bg-zinc-800/50 text-white placeholder-gray-500 focus:outline-none focus:border-[#beff01] focus:ring-2 focus:ring-[#beff01]/20 transition-all disabled:opacity-50 backdrop-blur-sm"
+                        className="w-full px-4 md:px-6 py-4 min-h-[44px] text-base md:text-base rounded-2xl border border-zinc-700 bg-zinc-800/50 text-white placeholder-gray-500 focus:outline-none focus:border-[#beff01] focus:ring-2 focus:ring-[#beff01]/20 transition-all disabled:opacity-50 backdrop-blur-sm"
                         placeholder="John Doe"
                       />
                     </motion.div>
@@ -318,7 +328,7 @@ export default function ContactSection() {
                         onChange={handleChange}
                         required
                         disabled={status === 'loading'}
-                        className="w-full px-6 py-4 rounded-2xl border border-zinc-700 bg-zinc-800/50 text-white placeholder-gray-500 focus:outline-none focus:border-[#beff01] focus:ring-2 focus:ring-[#beff01]/20 transition-all disabled:opacity-50 backdrop-blur-sm"
+                        className="w-full px-4 md:px-6 py-4 min-h-[44px] text-base md:text-base rounded-2xl border border-zinc-700 bg-zinc-800/50 text-white placeholder-gray-500 focus:outline-none focus:border-[#beff01] focus:ring-2 focus:ring-[#beff01]/20 transition-all disabled:opacity-50 backdrop-blur-sm"
                         placeholder="john@example.com"
                       />
                     </motion.div>
@@ -339,7 +349,7 @@ export default function ContactSection() {
                         value={formData.phone}
                         onChange={handleChange}
                         disabled={status === 'loading'}
-                        className="w-full px-6 py-4 rounded-2xl border border-zinc-700 bg-zinc-800/50 text-white placeholder-gray-500 focus:outline-none focus:border-[#beff01] focus:ring-2 focus:ring-[#beff01]/20 transition-all disabled:opacity-50 backdrop-blur-sm"
+                        className="w-full px-4 md:px-6 py-4 min-h-[44px] text-base md:text-base rounded-2xl border border-zinc-700 bg-zinc-800/50 text-white placeholder-gray-500 focus:outline-none focus:border-[#beff01] focus:ring-2 focus:ring-[#beff01]/20 transition-all disabled:opacity-50 backdrop-blur-sm"
                         placeholder="+212 XXX XXX XXX"
                       />
                     </motion.div>
@@ -361,7 +371,7 @@ export default function ContactSection() {
                         required
                         disabled={status === 'loading'}
                         rows={6}
-                        className="w-full px-6 py-4 rounded-2xl border border-zinc-700 bg-zinc-800/50 text-white placeholder-gray-500 focus:outline-none focus:border-[#beff01] focus:ring-2 focus:ring-[#beff01]/20 transition-all resize-none disabled:opacity-50 backdrop-blur-sm"
+                        className="w-full px-4 md:px-6 py-4 min-h-[44px] text-base md:text-base rounded-2xl border border-zinc-700 bg-zinc-800/50 text-white placeholder-gray-500 focus:outline-none focus:border-[#beff01] focus:ring-2 focus:ring-[#beff01]/20 transition-all resize-none disabled:opacity-50 backdrop-blur-sm"
                         placeholder="Tell me about your project..."
                       />
                     </motion.div>
@@ -371,7 +381,7 @@ export default function ContactSection() {
                       <motion.div
                         initial={{ opacity: 0, y: -10 }}
                         animate={{ opacity: 1, y: 0 }}
-                        className="p-5 rounded-2xl border border-red-500/30 bg-red-500/10 flex items-start gap-3 backdrop-blur-sm"
+                        className="p-4 sm:p-5 rounded-xl sm:rounded-2xl border border-red-500/30 bg-red-500/10 flex items-start gap-2 sm:gap-3 backdrop-blur-sm"
                       >
                         <AlertCircle className="w-6 h-6 text-red-500 flex-shrink-0 mt-0.5" />
                         <div>
@@ -392,7 +402,7 @@ export default function ContactSection() {
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 1.1 }}
-                      className="relative w-full py-5 bg-gradient-to-r from-[#beff01] to-[#a8e600] text-black font-bold text-lg rounded-2xl hover:shadow-2xl hover:shadow-[#beff01]/30 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3 overflow-hidden group/btn"
+                      className="relative w-full py-4 sm:py-5 min-h-[44px] bg-gradient-to-r from-[#beff01] to-[#a8e600] text-black font-bold text-base sm:text-lg rounded-xl sm:rounded-2xl hover:shadow-2xl hover:shadow-[#beff01]/30 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 sm:gap-3 overflow-hidden group/btn fixed-bottom"
                     >
                       <div className="absolute inset-0 bg-gradient-to-r from-[#a8e600] to-[#beff01] opacity-0 group-hover/btn:opacity-100 transition-opacity" />
                       <span className="relative flex items-center gap-3">
@@ -415,7 +425,7 @@ export default function ContactSection() {
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       transition={{ delay: 1.2 }}
-                      className="text-xs text-center text-gray-500 leading-relaxed"
+                      className="text-xs text-center text-gray-500 leading-relaxed mt-2 sm:mt-3"
                     >
                       By submitting this form, you agree that I'll contact you about this message. 
                       Your information is secure and will never be shared.

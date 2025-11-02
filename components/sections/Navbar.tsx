@@ -2,7 +2,7 @@
 
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
@@ -17,64 +17,113 @@ const navLinks = [
   { name: "CONTACT", href: "/contact" },
 ];
 
+// Optimized throttle utility function - uses requestAnimationFrame for smooth updates
+function throttle<T extends (...args: any[]) => void>(
+  func: T,
+  limit: number
+): (...args: Parameters<T>) => void {
+  let lastCall = 0;
+  let rafId: number | null = null;
+  return function (this: any, ...args: Parameters<T>) {
+    const now = Date.now();
+    if (now - lastCall >= limit) {
+      lastCall = now;
+      func.apply(this, args);
+    } else {
+      // Use requestAnimationFrame for smooth throttled updates
+      if (rafId !== null) cancelAnimationFrame(rafId);
+      rafId = requestAnimationFrame(() => {
+        lastCall = Date.now();
+        func.apply(this, args);
+      });
+    }
+  };
+}
+
 export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [lastScrollY, setLastScrollY] = useState(0);
+  const lastScrollYRef = useRef(0);
   const [animateLogo, setAnimateLogo] = useState(false);
   const pathname = usePathname();
 
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
+      const lastScrollY = lastScrollYRef.current;
       const isScrollingDown = currentScrollY > lastScrollY;
       const isScrollingUp = currentScrollY < lastScrollY;
 
-      if (isScrollingDown && currentScrollY > 100 && !scrolled) {
-        setScrolled(true);
-        setAnimateLogo(true);
-        setTimeout(() => setAnimateLogo(false), 1500);
-      }
+      // Update ref immediately for next comparison
+      lastScrollYRef.current = currentScrollY;
 
-      if (isScrollingUp && currentScrollY < 50 && scrolled) {
-        setScrolled(false);
-        setAnimateLogo(true);
-        setTimeout(() => setAnimateLogo(false), 1500);
+      // Only update state when threshold crossed (avoids unnecessary re-renders)
+      if (isScrollingDown && currentScrollY > 100) {
+        setScrolled((prev) => {
+          if (!prev) {
+            setAnimateLogo(true);
+            setTimeout(() => setAnimateLogo(false), 1500);
+            return true;
+          }
+          return prev;
+        });
+      } else if (isScrollingUp && currentScrollY < 50) {
+        setScrolled((prev) => {
+          if (prev) {
+            setAnimateLogo(true);
+            setTimeout(() => setAnimateLogo(false), 1500);
+            return false;
+          }
+          return prev;
+        });
       }
-
-      setLastScrollY(currentScrollY);
     };
 
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [lastScrollY, scrolled]);
+    // Throttle scroll handler to run max once per 16ms (~60fps)
+    const throttledHandleScroll = throttle(handleScroll, 16);
+
+    window.addEventListener("scroll", throttledHandleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", throttledHandleScroll);
+  }, []); // Empty dependencies - using refs to avoid re-registration
 
   useEffect(() => {
     setAnimateLogo(true);
     setTimeout(() => setAnimateLogo(false), 1500);
   }, []);
 
-  // Lock body scroll when mobile menu is open
+  // Lock body scroll when mobile menu is open - optimized to avoid layout thrashing
   useEffect(() => {
     if (mobileMenuOpen) {
+      // Batch DOM reads and writes
       const scrollY = window.scrollY;
-      document.body.style.position = 'fixed';
-      document.body.style.top = `-${scrollY}px`;
-      document.body.style.width = '100%';
+      // Use requestAnimationFrame to batch style updates
+      requestAnimationFrame(() => {
+        document.body.style.setProperty('position', 'fixed', 'important');
+        document.body.style.setProperty('top', `-${scrollY}px`, 'important');
+        document.body.style.setProperty('width', '100%', 'important');
+      });
     } else {
+      // Batch DOM reads
       const scrollY = document.body.style.top;
-      document.body.style.position = '';
-      document.body.style.top = '';
-      document.body.style.width = '';
-      if (scrollY) {
-        window.scrollTo(0, parseInt(scrollY || '0') * -1);
-      }
+      const scrollYValue = scrollY ? parseInt(scrollY || '0', 10) * -1 : 0;
+      
+      requestAnimationFrame(() => {
+        document.body.style.removeProperty('position');
+        document.body.style.removeProperty('top');
+        document.body.style.removeProperty('width');
+        if (scrollYValue !== 0) {
+          window.scrollTo(0, scrollYValue);
+        }
+      });
     }
 
     return () => {
-      document.body.style.position = '';
-      document.body.style.top = '';
-      document.body.style.width = '';
+      // Cleanup on unmount
+      requestAnimationFrame(() => {
+        document.body.style.removeProperty('position');
+        document.body.style.removeProperty('top');
+        document.body.style.removeProperty('width');
+      });
     };
   }, [mobileMenuOpen]);
 
@@ -84,8 +133,12 @@ export default function Navbar() {
       animate={{ y: 0 }}
       transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
       className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${
-        scrolled ? 'bg-black/95 backdrop-blur-lg shadow-xl' : 'bg-transparent'
+        scrolled ? 'bg-black/95 shadow-xl' : 'bg-transparent'
       }`}
+      style={{
+        // Use CSS will-change for better performance
+        willChange: scrolled ? 'background-color' : 'auto',
+      }}
     >
       <div className="max-w-7xl mx-auto px-6 md:px-8 lg:px-12">
         <div className="flex items-center justify-between h-24">
@@ -152,12 +205,12 @@ export default function Navbar() {
       {/* Mobile Menu */}
       {mobileMenuOpen && (
         <>
-          {/* Backdrop */}
+          {/* Backdrop - Removed expensive backdrop-blur */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/95 backdrop-blur-lg z-40"
+            className="fixed inset-0 bg-black/95 z-40"
             onClick={() => setMobileMenuOpen(false)}
           />
 

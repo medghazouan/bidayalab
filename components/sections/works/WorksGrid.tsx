@@ -1,8 +1,10 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useRef, useCallback } from 'react';
 import { motion, AnimatePresence, useMotionValue, useSpring, useTransform } from 'framer-motion';
+import { useQuery } from '@tanstack/react-query';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Briefcase, Code, TrendingUp, Palette, Loader2 } from 'lucide-react';
 
 interface Project {
@@ -29,40 +31,53 @@ const categories = [
   { slug: 'social-media', label: 'Social Media', icon: Palette },
 ];
 
+// Throttle utility for mouse move handlers
+function throttleMouseMove<T extends (...args: any[]) => void>(
+  func: T,
+  limit: number
+): (...args: Parameters<T>) => void {
+  let lastCall = 0;
+  let rafId: number | null = null;
+  return function (this: any, ...args: Parameters<T>) {
+    const now = Date.now();
+    if (now - lastCall >= limit) {
+      lastCall = now;
+      func.apply(this, args);
+    } else {
+      // Use requestAnimationFrame for smooth updates
+      if (rafId !== null) cancelAnimationFrame(rafId);
+      rafId = requestAnimationFrame(() => {
+        lastCall = Date.now();
+        func.apply(this, args);
+      });
+    }
+  };
+}
+
 export default function WorksGrid() {
   const [activeCategory, setActiveCategory] = useState('all');
-  const [projects, setProjects] = useState<Project[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
 
-  useEffect(() => {
-    const fetchProjects = async () => {
-      setLoading(true);
-      setError('');
+  // Use React Query for better caching and request deduplication
+  const { data, isLoading, error: queryError } = useQuery<{ success: boolean; projects: Project[] }>({
+    queryKey: ['projects', activeCategory],
+    queryFn: async () => {
+      const url = activeCategory === 'all' 
+        ? '/api/projects' 
+        : `/api/projects?category=${activeCategory}`;
       
-      try {
-        const url = activeCategory === 'all' 
-          ? '/api/projects' 
-          : `/api/projects?category=${activeCategory}`;
-        
-        const response = await fetch(url);
-        const data = await response.json();
+      const response = await fetch(url);
+      if (!response.ok) throw new Error('Failed to fetch');
+      return response.json();
+    },
+    staleTime: 5 * 60 * 1000, // 5 minutes
+    gcTime: 30 * 60 * 1000, // 30 minutes cache
+    refetchOnWindowFocus: false,
+    retry: 1,
+  });
 
-        if (data.success) {
-          setProjects(data.projects);
-        } else {
-          setError('Failed to load projects');
-        }
-      } catch (err) {
-        setError('Error loading projects');
-        console.error('Error:', err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchProjects();
-  }, [activeCategory]);
+  const projects = data?.projects || [];
+  const loading = isLoading;
+  const error = queryError ? 'Error loading projects' : '';
 
   return (
     <section className="relative py-12 px-4 md:px-8 lg:px-16 overflow-hidden">
@@ -226,30 +241,52 @@ function ProjectCard({ project, index }: ProjectCardProps) {
   const [isHovered, setIsHovered] = useState(false);
   const x = useMotionValue(0);
   const y = useMotionValue(0);
+  const rectRef = useRef<DOMRect | null>(null);
+  const cardRef = useRef<HTMLDivElement>(null);
 
-  const mouseXSpring = useSpring(x);
-  const mouseYSpring = useSpring(y);
+  const mouseXSpring = useSpring(x, { stiffness: 150, damping: 15 });
+  const mouseYSpring = useSpring(y, { stiffness: 150, damping: 15 });
 
   const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ['7.5deg', '-7.5deg']);
   const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ['-7.5deg', '7.5deg']);
 
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    const width = rect.width;
-    const height = rect.height;
-    const mouseX = e.clientX - rect.left;
-    const mouseY = e.clientY - rect.top;
-    const xPct = mouseX / width - 0.5;
-    const yPct = mouseY / height - 0.5;
-    x.set(xPct);
-    y.set(yPct);
-  };
+  // Optimized mouse move handler with cached rect and throttling
+  const handleMouseMove = useCallback(
+    throttleMouseMove((e: React.MouseEvent<HTMLDivElement>) => {
+      if (!cardRef.current) return;
+      
+      // Cache rect to avoid repeated getBoundingClientRect calls
+      if (!rectRef.current) {
+        rectRef.current = cardRef.current.getBoundingClientRect();
+      }
+      
+      const rect = rectRef.current;
+      const mouseX = e.clientX - rect.left;
+      const mouseY = e.clientY - rect.top;
+      const xPct = mouseX / rect.width - 0.5;
+      const yPct = mouseY / rect.height - 0.5;
+      
+      x.set(xPct);
+      y.set(yPct);
+    }, 16), // Throttle to ~60fps
+    [x, y]
+  );
 
-  const handleMouseLeave = () => {
+  const handleMouseEnter = useCallback(() => {
+    setIsHovered(true);
+    // Refresh rect cache on enter
+    if (cardRef.current) {
+      rectRef.current = cardRef.current.getBoundingClientRect();
+    }
+  }, []);
+
+  const handleMouseLeave = useCallback(() => {
     x.set(0);
     y.set(0);
     setIsHovered(false);
-  };
+    // Clear rect cache
+    rectRef.current = null;
+  }, [x, y]);
 
   const getCategoryDisplay = (category: string) => {
     const categoryMap: Record<string, string> = {
@@ -265,21 +302,23 @@ function ProjectCard({ project, index }: ProjectCardProps) {
       <motion.div
         initial={{ opacity: 0, y: 50 }}
         whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-100px" }}
+        viewport={{ once: true, margin: "-50px" }}
+        style={{ willChange: 'transform, opacity' }}
         transition={{ 
           duration: 0.6, 
           delay: index * 0.1,
           ease: [0.22, 1, 0.36, 1]
         }}
+        ref={cardRef}
         onMouseMove={handleMouseMove}
-        onMouseEnter={() => setIsHovered(true)}
+        onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
         style={{
           rotateX,
           rotateY,
           transformStyle: 'preserve-3d',
         }}
-        className="group relative aspect-[4/3] overflow-hidden rounded-3xl bg-zinc-900/50 backdrop-blur-xl border border-zinc-800/50 cursor-pointer hover:border-[#beff01]/50 transition-all duration-300"
+        className="group relative aspect-[4/3] overflow-hidden rounded-3xl bg-zinc-900/50 border border-zinc-800/50 cursor-pointer hover:border-[#beff01]/50 transition-all duration-300"
       >
         {/* Glow Effect */}
         {isHovered && (
@@ -298,10 +337,15 @@ function ProjectCard({ project, index }: ProjectCardProps) {
           }}
           transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
         >
-          <img
+          <Image
             src={project.image}
             alt={project.title}
-            className="w-full h-full object-cover"
+            fill
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            className="object-cover"
+            loading="lazy"
+            placeholder="blur"
+            blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWEREiMxUf/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=="
           />
           
           {/* Gradient Overlay */}
@@ -315,7 +359,7 @@ function ProjectCard({ project, index }: ProjectCardProps) {
           transition={{ delay: index * 0.1 + 0.2 }}
           className="absolute top-6 left-6 z-10"
         >
-          <span className="inline-block bg-[#beff01] text-black text-xs font-bold uppercase tracking-wider px-4 py-2 rounded-full shadow-xl shadow-[#beff01]/30 backdrop-blur-sm">
+          <span className="inline-block bg-[#beff01] text-black text-xs font-bold uppercase tracking-wider px-4 py-2 rounded-full shadow-xl shadow-[#beff01]/30">
             {getCategoryDisplay(project.category)}
           </span>
         </motion.div>

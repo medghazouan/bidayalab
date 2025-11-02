@@ -10,15 +10,43 @@ export async function GET() {
     const client = await clientPromise;
     const db = client.db('meddigital');
     
-    const plans = await db
-      .collection(PRICING_PLAN_COLLECTION)
-      .find({})
-      .sort({ price: 1 })
-      .toArray();
+    // Projection to fetch only needed fields
+    const projection = {
+      name: 1,
+      tagline: 1,
+      price: 1,
+      currency: 1,
+      period: 1,
+      description: 1,
+      features: 1,
+      popular: 1,
+      isCustom: 1,
+      createdAt: 1,
+      _id: 1
+    };
+    
+    // Fetch with timeout protection
+    const plans = await Promise.race([
+      db
+        .collection(PRICING_PLAN_COLLECTION)
+        .find({}, { projection })
+        .sort({ price: 1 })
+        .toArray(),
+      new Promise((_, reject) =>
+        setTimeout(() => reject(new Error('Query timeout')), 10000)
+      )
+    ]) as any[];
     
     console.log(`✅ Found ${plans.length} pricing plans`);
     
-    return NextResponse.json(plans);
+    return NextResponse.json(plans.map(plan => ({
+      ...plan,
+      _id: plan._id.toString()
+    })), {
+      headers: {
+        'Cache-Control': 'public, s-maxage=300, stale-while-revalidate=600'
+      }
+    });
   } catch (error) {
     console.error('❌ Error fetching pricing plans:', error);
     return NextResponse.json(

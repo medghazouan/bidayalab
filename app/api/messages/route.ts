@@ -13,25 +13,65 @@ export async function GET(request: Request) {
 
     const { searchParams } = new URL(request.url);
     const status = searchParams.get('status');
-    const limit = parseInt(searchParams.get('limit') || '50');
+    const page = parseInt(searchParams.get('page') || '1', 10);
+    const limit = Math.min(parseInt(searchParams.get('limit') || '20', 10), 100); // Max 100
+    const skip = (page - 1) * limit;
 
     const query = status ? { status } : {};
     
-    const contacts = await db
-      .collection<Contact>(CONTACT_COLLECTION)
-      .find(query)
-      .sort({ createdAt: -1 })
-      .limit(limit)
-      .toArray();
+    // Projection to fetch only needed fields
+    const projection = {
+      name: 1,
+      email: 1,
+      phone: 1,
+      message: 1,
+      status: 1,
+      createdAt: 1,
+      _id: 1
+    };
+    
+    // Fetch with timeout protection
+    const contacts = await Promise.race([
+      db
+        .collection<Contact>(CONTACT_COLLECTION)
+        .find(query, { projection })
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(limit)
+        .toArray(),
+      new Promise((_, reject) =>
+        setTimeout(() => reject(new Error('Query timeout')), 10000)
+      )
+    ]) as Contact[];
 
-    const total = await db
-      .collection(CONTACT_COLLECTION)
-      .countDocuments(query);
+    // Get total count with timeout
+    const total = await Promise.race([
+      db
+        .collection(CONTACT_COLLECTION)
+        .countDocuments(query),
+      new Promise<number>((_, reject) =>
+        setTimeout(() => reject(new Error('Count timeout')), 5000)
+      )
+    ]) as number;
 
     return NextResponse.json({
       success: true,
-      contacts,
-      total,
+      contacts: contacts.map(contact => ({
+        ...contact,
+        _id: contact._id.toString()
+      })),
+      pagination: {
+        page,
+        limit,
+        total,
+        totalPages: Math.ceil(total / limit),
+        hasNextPage: skip + limit < total,
+        hasPrevPage: page > 1
+      }
+    }, {
+      headers: {
+        'Cache-Control': 'private, max-age=60'
+      }
     });
 
   } catch (error) {
