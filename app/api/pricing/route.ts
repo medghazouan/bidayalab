@@ -1,16 +1,13 @@
-// app/api/pricing/route.ts
+// app/api/pricing/route.ts - OPTIMIZED VERSION
 import { NextResponse } from 'next/server';
-import clientPromise from '@/lib/mongodb';
+import { getDatabase } from '@/lib/mongodb';
 import { PRICING_PLAN_COLLECTION, PricingPlan } from '@/models/PricingPlan';
 
 export async function GET() {
   try {
-    console.log('📦 Fetching pricing plans...');
-    
-    const client = await clientPromise;
-    const db = client.db('meddigital');
-    
-    // Projection to fetch only needed fields
+    const db = await getDatabase();
+
+    // Optimized projection - fetch only needed fields
     const projection = {
       name: 1,
       tagline: 1,
@@ -22,31 +19,26 @@ export async function GET() {
       popular: 1,
       isCustom: 1,
       createdAt: 1,
-      _id: 1
     };
-    
-    // Fetch with timeout protection
-    const plans = await Promise.race([
-      db
-        .collection(PRICING_PLAN_COLLECTION)
-        .find({}, { projection })
-        .sort({ price: 1 })
-        .toArray(),
-      new Promise((_, reject) =>
-        setTimeout(() => reject(new Error('Query timeout')), 10000)
-      )
-    ]) as any[];
-    
-    console.log(`✅ Found ${plans.length} pricing plans`);
-    
-    return NextResponse.json(plans.map(plan => ({
-      ...plan,
-      _id: plan._id.toString()
-    })), {
-      headers: {
-        'Cache-Control': 'public, s-maxage=300, stale-while-revalidate=600'
+
+    const plans = await db
+      .collection(PRICING_PLAN_COLLECTION)
+      .find({}, { projection })
+      .sort({ price: 1 })
+      .toArray();
+
+    return NextResponse.json(
+      plans.map((plan) => ({
+        ...plan,
+        _id: plan._id.toString(),
+      })),
+      {
+        headers: {
+          // Aggressive caching since pricing rarely changes
+          'Cache-Control': 'public, s-maxage=600, stale-while-revalidate=1800',
+        },
       }
-    });
+    );
   } catch (error) {
     console.error('❌ Error fetching pricing plans:', error);
     return NextResponse.json(
@@ -56,15 +48,13 @@ export async function GET() {
   }
 }
 
-// ✅ Optional: POST method for creating plans (for future admin)
+// POST - Create new pricing plan
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    
-    const client = await clientPromise;
-    const db = client.db('meddigital');
-    
-    const newPlan: PricingPlan = {
+    const db = await getDatabase();
+
+    const newPlan = {
       name: body.name,
       tagline: body.tagline,
       price: body.price,
@@ -74,17 +64,15 @@ export async function POST(request: Request) {
       features: body.features || [],
       popular: body.popular || false,
       isCustom: body.isCustom || false,
-      createdAt: new Date()
+      createdAt: new Date(),
     };
-    
+
     const result = await db
       .collection(PRICING_PLAN_COLLECTION)
       .insertOne(newPlan);
-    
-    console.log('✅ Created pricing plan:', result.insertedId);
-    
+
     return NextResponse.json(
-      { success: true, id: result.insertedId },
+      { success: true, id: result.insertedId.toString() },
       { status: 201 }
     );
   } catch (error) {
