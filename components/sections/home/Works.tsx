@@ -238,7 +238,7 @@ export default function Works() {
             transition={{ duration: 0.6, delay: 0.3 }}
             className="text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-black text-white mb-8 tracking-tight leading-none"
           >
-            See What I've
+            See What We've
             <br />
             <span className="bg-gradient-to-r from-[#beff01] via-[#d4ff4d] to-[#beff01] bg-clip-text text-transparent bg-[length:200%_auto] animate-gradient">
               Built For Others

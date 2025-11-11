@@ -145,10 +145,10 @@ export default function Navbar() {
           {/* Logo */}
           <Link href="/home" className="relative z-50" prefetch={true}>
             <Image
-              src="/assets/icons/MEDDIGITAL.svg"
+              src="/assets/icons/newlogo.png"
               alt="Med Digital"
-              width={50}
-              height={50}
+              width={150}
+              height={150}
               priority
               className={`transition-all duration-300 ${
                 animateLogo ? 'scale-110 rotate-12' : 'scale-100'

@@ -53,7 +53,7 @@ export default function Hero() {
             transition={{ duration: 0.6, delay: 0.4 }}
             className="text-xl md:text-2xl text-gray-400 max-w-4xl mx-auto leading-relaxed font-light mb-12"
           >
-            I'm <span className="text-white font-semibold">Med Elkechchad</span>, and I help ambitious business owners like you turn their online presence into a 
+            We're <span className="text-white font-semibold">Bidayalab</span>, and we help ambitious business owners like you turn their online presence into a 
             <span className="text-[#beff01] font-semibold"> powerful growth engine</span>. 
             No fluff, no empty promises—just real results that move your business forward.
           </motion.p>
@@ -73,13 +73,13 @@ export default function Hero() {
               },
               { 
                 icon: Sparkles, 
-                title: "No BS Approach", 
-                desc: "I speak human, not tech jargon. You'll always know exactly what's happening",
+                title: "Clear Communication", 
+                desc: "We speak human, not tech jargon. You'll always know exactly what's happening",
               },
               { 
                 icon: Rocket, 
                 title: "Your Success Partner", 
-                desc: "I don't just deliver and disappear. Your growth is my mission",
+                desc: "We don't just deliver and disappear. Your growth is our mission",
               },
             ].map((item, index) => (
               <motion.div
@@ -109,7 +109,7 @@ export default function Hero() {
             transition={{ duration: 0.6, delay: 0.8 }}
             className="mb-12"
           >
-            <p className="text-gray-400 mb-6 text-sm uppercase tracking-wider font-bold">What I Can Do For You</p>
+            <p className="text-gray-400 mb-6 text-sm uppercase tracking-wider font-bold">What We Can Do For You</p>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {[
                 { 
@@ -224,7 +224,7 @@ export default function Hero() {
                 ))}
               </div>
               <span className="text-gray-300">
-                <span className="text-[#beff01] font-bold">20+ businesses</span> already growing with me
+                <span className="text-[#beff01] font-bold">20+ businesses</span> already growing with us
               </span>
             </div>
             <div className="flex items-center gap-2 text-gray-400">

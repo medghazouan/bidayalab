@@ -97,7 +97,7 @@ export default function WorksGrid() {
           >
             <div className="w-2 h-2 rounded-full bg-[#beff01] animate-pulse" />
             <span className="text-[#beff01] text-sm font-bold uppercase tracking-wider">
-              My Portfolio
+              Our works
             </span>
           </motion.div>
 

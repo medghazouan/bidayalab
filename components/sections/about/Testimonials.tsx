@@ -97,7 +97,7 @@ export default function Testimonials() {
             What Clients
             <br />
             <span className="bg-gradient-to-r from-[#beff01] via-[#d4ff4d] to-[#beff01] bg-clip-text text-transparent bg-[length:200%_auto] animate-gradient">
-              Say About Me
+              Say About Us
             </span>
           </motion.h1>
 

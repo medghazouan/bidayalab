@@ -9,8 +9,8 @@ const contactInfo = [
   {
     icon: Mail,
     title: 'Email',
-    info: 'med.elkechchad@gmail.com',
-    link: 'mailto:med.elkechchad@gmail.com',
+    info: 'bidayalab1@gmail.com',
+    link: 'mailto:bidayalab1@gmail.com',
     gradient: 'from-blue-500/20 via-blue-500/10 to-transparent',
     borderColor: 'border-blue-500/30',
     iconBg: 'bg-blue-500/10',
@@ -19,8 +19,8 @@ const contactInfo = [
   {
     icon: Phone,
     title: 'Phone',
-    info: '+212 679 310 770',
-    link: 'tel:+212679310770',
+    info: '0751388901',
+    link: 'tel:0751388901',
     gradient: 'from-green-500/20 via-green-500/10 to-transparent',
     borderColor: 'border-green-500/30',
     iconBg: 'bg-green-500/10',
@@ -29,8 +29,8 @@ const contactInfo = [
   {
     icon: MessageSquare,
     title: 'WhatsApp',
-    info: '+212 679 310 770',
-    link: 'https://wa.me/212679310770',
+    info: '0751388901',
+    link: 'https://wa.me/0751388901',
     gradient: 'from-purple-500/20 via-purple-500/10 to-transparent',
     borderColor: 'border-purple-500/30',
     iconBg: 'bg-purple-500/10',

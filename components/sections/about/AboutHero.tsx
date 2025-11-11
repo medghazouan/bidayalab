@@ -22,7 +22,7 @@ export default function AboutHero() {
           >
             <div className="w-2 h-2 rounded-full bg-[#beff01] animate-pulse" />
             <span className="text-[#beff01] text-sm font-bold uppercase tracking-wider">
-              About Me
+              About Us
             </span>
           </motion.div>
 
@@ -32,10 +32,10 @@ export default function AboutHero() {
             transition={{ duration: 0.6, delay: 0.3 }}
             className="text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-black text-white mb-8 tracking-tight leading-none"
           >
-            Hi, I'm Med
+            Meet Bidayalab
             <br />
             <span className="bg-gradient-to-r from-[#beff01] via-[#d4ff4d] to-[#beff01] bg-clip-text text-transparent bg-[length:200%_auto] animate-gradient">
-              A Developer Who Cares
+              Your Creative Partners
             </span>
           </motion.h1>
 
@@ -45,8 +45,8 @@ export default function AboutHero() {
             transition={{ duration: 0.6, delay: 0.4 }}
             className="text-xl md:text-2xl text-gray-400 max-w-4xl mx-auto leading-relaxed font-light mb-20"
           >
-            I'm not just another developer who codes and disappears. I'm here because I genuinely love 
-            helping businesses grow online—whether it's building websites that convert or running campaigns that bring real results.
+            We're not just another agency that delivers and disappears. We're here because we genuinely love 
+            helping businesses grow online—whether it's building brands that inspire, websites that convert, or running campaigns that bring real results.
           </motion.p>
         </motion.div>
 
@@ -72,13 +72,13 @@ export default function AboutHero() {
                 <div className="w-14 h-14 rounded-2xl bg-blue-500/10 flex items-center justify-center mb-6 border border-blue-500/30">
                   <Heart className="w-7 h-7 text-blue-400" />
                 </div>
-                <h2 className="text-3xl font-black text-white mb-4 tracking-tight">My Journey</h2>
+                <h2 className="text-3xl font-black text-white mb-4 tracking-tight">Our Journey</h2>
                 <p className="text-gray-400 leading-relaxed mb-4">
-                  I started coding back in 2020, and honestly, it felt like finding my calling. 
+                  we started coding back in 2020, and honestly, it felt like finding our calling. 
                   What began as curiosity turned into a passion for building things that people actually use.
                 </p>
                 <p className="text-gray-400 leading-relaxed">
-                  Over the years, I've worked with <span className="text-[#beff01] font-bold">20+ clients</span> in Marrakech and beyond, 
+                  Over the years, we've worked with <span className="text-[#beff01] font-bold">10+ clients</span> in Marrakech and beyond, 
                   helping them turn their ideas into <span className="text-white font-semibold">real, profitable businesses</span>.
                 </p>
               </div>
@@ -97,13 +97,13 @@ export default function AboutHero() {
                 <div className="w-14 h-14 rounded-2xl bg-[#beff01]/10 flex items-center justify-center mb-6 border border-[#beff01]/30">
                   <Zap className="w-7 h-7 text-[#beff01]" />
                 </div>
-                <h2 className="text-3xl font-black text-white mb-4 tracking-tight">My Philosophy</h2>
+                <h2 className="text-3xl font-black text-white mb-4 tracking-tight">Our Philosophy</h2>
                 <p className="text-gray-400 leading-relaxed mb-4">
-                  I don't just build websites and call it a day. I stick around. 
-                  I help with strategy, marketing, design—whatever it takes to make sure you succeed.
+                  We don't just build websites and call it a day. We stick around. 
+                  We help with strategy, marketing, design—whatever it takes to make sure you succeed.
                 </p>
                 <p className="text-gray-400 leading-relaxed">
-                  Because when you win, I win. <span className="text-[#beff01] font-bold">Simple as that.</span>
+                  Because when you win, We win. <span className="text-[#beff01] font-bold">Simple as that.</span>
                 </p>
               </div>
             </motion.div>
@@ -119,7 +119,7 @@ export default function AboutHero() {
           className="mb-20"
         >
           <h2 className="text-4xl md:text-5xl font-black text-white mb-12 text-center tracking-tight">
-            What I'm <span className="text-[#beff01]">Really Good At</span>
+            What We are <span className="text-[#beff01]">Really Good At</span>
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
@@ -194,13 +194,13 @@ export default function AboutHero() {
           className="mb-20"
         >
           <h2 className="text-4xl md:text-5xl font-black text-white mb-12 text-center tracking-tight">
-            Why Work <span className="text-[#beff01]">With Me?</span>
+            Why Work <span className="text-[#beff01]">With Us?</span>
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {[
               { 
                 icon: Users, 
-                text: "20+ happy clients who keep coming back",
+                text: "10+ happy clients who keep coming back",
                 gradient: "from-blue-500/10 to-transparent",
                 iconColor: "text-blue-400"
               },
@@ -212,7 +212,7 @@ export default function AboutHero() {
               },
               { 
                 icon: Award, 
-                text: "Results-driven—I care about your success",
+                text: "Results-driven—We care about your success",
                 gradient: "from-purple-500/10 to-transparent",
                 iconColor: "text-purple-400"
               },
@@ -250,8 +250,7 @@ export default function AboutHero() {
             <div className="absolute inset-0 bg-gradient-to-r from-[#beff01]/20 via-blue-500/10 to-purple-500/20 rounded-3xl blur-2xl opacity-50 group-hover:opacity-100 transition-opacity" />
             <div className="relative bg-zinc-900/50 backdrop-blur-sm border border-zinc-800 rounded-3xl p-8 md:p-10 hover:border-[#beff01]/30 transition-all">
               <p className="text-xl md:text-2xl text-gray-300 leading-relaxed">
-                Look, I'm not here to sell you some fancy pitch. I'm just a guy who loves what he does 
-                and wants to help you succeed. If that sounds good to you,{" "}
+                Look, we’re not here to give you a fancy pitch. We’re a team that loves what we do and we’re here to help your brand grow and succeed. If that sounds good to you, let’s talk.,{" "}
                 <span className="text-[#beff01] font-black">let's chat</span>.
               </p>
             </div>
