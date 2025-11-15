@@ -2,17 +2,19 @@
 
 import { useState, useRef, useCallback } from 'react';
 import Link from 'next/link';
-import { ExternalLink, ArrowRight, Zap } from 'lucide-react';
+import { ArrowRight, Calendar, BookOpen, ExternalLink } from 'lucide-react';
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import { useQuery } from '@tanstack/react-query';
 import Image from 'next/image';
 
-interface Project {
+interface Blog {
   id: string;
   title: string;
   category: string;
   image: string;
   slug: string;
+  publicationDate: string;
+  excerpt?: string;
 }
 
 // Throttle utility for mouse move handlers
@@ -28,7 +30,6 @@ function throttleMouseMove<T extends (...args: any[]) => void>(
       lastCall = now;
       func.apply(this, args);
     } else {
-      // Use requestAnimationFrame for smooth updates
       if (rafId !== null) cancelAnimationFrame(rafId);
       rafId = requestAnimationFrame(() => {
         lastCall = Date.now();
@@ -38,7 +39,7 @@ function throttleMouseMove<T extends (...args: any[]) => void>(
   };
 }
 
-function ProjectCard({ project, index }: { project: Project; index: number }) {
+function BlogCard({ blog, index }: { blog: Blog; index: number }) {
   const [isHovered, setIsHovered] = useState(false);
   const x = useMotionValue(0);
   const y = useMotionValue(0);
@@ -51,12 +52,10 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
   const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ['7.5deg', '-7.5deg']);
   const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ['-7.5deg', '7.5deg']);
 
-  // Optimized mouse move handler with cached rect and throttling
   const handleMouseMove = useCallback(
     throttleMouseMove((e: React.MouseEvent<HTMLDivElement>) => {
       if (!cardRef.current) return;
       
-      // Cache rect to avoid repeated getBoundingClientRect calls
       if (!rectRef.current) {
         rectRef.current = cardRef.current.getBoundingClientRect();
       }
@@ -69,13 +68,12 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
       
       x.set(xPct);
       y.set(yPct);
-    }, 16), // Throttle to ~60fps
+    }, 16),
     [x, y]
   );
 
   const handleMouseEnter = useCallback(() => {
     setIsHovered(true);
-    // Refresh rect cache on enter
     if (cardRef.current) {
       rectRef.current = cardRef.current.getBoundingClientRect();
     }
@@ -85,12 +83,20 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
     x.set(0);
     y.set(0);
     setIsHovered(false);
-    // Clear rect cache
     rectRef.current = null;
   }, [x, y]);
 
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', { 
+      year: 'numeric', 
+      month: 'short', 
+      day: 'numeric' 
+    });
+  };
+
   return (
-    <Link href={`/works/${project.slug}`}>
+    <Link href={`/blogs/${blog.slug}`}>
       <motion.div
         initial={{ opacity: 0, y: 50 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -120,7 +126,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
           />
         )}
 
-        {/* Project Image */}
+        {/* Blog Image */}
         <motion.div
           className="absolute inset-0"
           animate={{
@@ -129,8 +135,8 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
           transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
         >
           <Image
-            src={project.image}
-            alt={project.title}
+            src={blog.image}
+            alt={blog.title}
             fill
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             className="object-cover"
@@ -151,18 +157,22 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
           className="absolute top-6 left-6 z-10"
         >
           <span className="inline-block bg-[#beff01] text-black text-xs font-bold uppercase tracking-wider px-4 py-2 rounded-full shadow-xl shadow-[#beff01]/30 backdrop-blur-sm">
-            {project.category}
+            {blog.category}
           </span>
         </motion.div>
 
-        {/* Project Title */}
+        {/* Blog Title & Date */}
         <motion.div
           className="absolute bottom-0 left-0 right-0 p-8 z-10"
           style={{ transform: 'translateZ(20px)' }}
         >
           <h3 className="text-3xl font-black text-white mb-2 group-hover:text-[#beff01] transition-colors duration-300 tracking-tight">
-            {project.title}
+            {blog.title}
           </h3>
+          <div className="flex items-center gap-2 text-gray-400 text-sm">
+            <Calendar className="w-4 h-4" />
+            <span>{formatDate(blog.publicationDate)}</span>
+          </div>
         </motion.div>
 
         {/* Hover Glow */}
@@ -177,26 +187,25 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
   );
 }
 
-export default function Works() {
-  // Use React Query for better caching and deduplication
-  const { data, isLoading } = useQuery<{ success: boolean; projects: Project[] }>({
-    queryKey: ['projects', 'featured'],
+export default function Blogs() {
+  const { data, isLoading } = useQuery<{ success: boolean; blogs: Blog[] }>({
+    queryKey: ['blogs', 'latest'],
     queryFn: async () => {
-      const response = await fetch('/api/projects?limit=3');
+      const response = await fetch('/api/blogs?limit=3');
       if (!response.ok) throw new Error('Failed to fetch');
       return response.json();
     },
-    staleTime: 5 * 60 * 1000, // 5 minutes
-    gcTime: 30 * 60 * 1000, // 30 minutes cache
+    staleTime: 5 * 60 * 1000,
+    gcTime: 30 * 60 * 1000,
     refetchOnWindowFocus: false,
     retry: 1,
   });
 
-  const projects = data?.projects?.slice(0, 3) || [];
+  const blogs = data?.blogs?.slice(0, 3) || [];
   const loading = isLoading;
 
   return (
-    <section id="works-section" className="relative py-20 md:py-32 overflow-hidden">
+    <section className="relative py-20 md:py-32 overflow-hidden">
       {/* Divider Above Section */}
       <div className="max-w-7xl mx-auto px-6 md:px-8 lg:px-12 pb-16">
         <div className="relative">
@@ -227,7 +236,7 @@ export default function Works() {
           >
             <div className="w-2 h-2 rounded-full bg-[#beff01] animate-pulse" />
             <span className="text-[#beff01] text-sm font-bold uppercase tracking-wider">
-              Real Projects, Real Results
+              Insights & Articles
             </span>
           </motion.div>
 
@@ -238,10 +247,10 @@ export default function Works() {
             transition={{ duration: 0.6, delay: 0.3 }}
             className="text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-black text-white mb-8 tracking-tight leading-none"
           >
-            See What I've
+            Latest from the
             <br />
             <span className="bg-gradient-to-r from-[#beff01] via-[#d4ff4d] to-[#beff01] bg-clip-text text-transparent bg-[length:200%_auto] animate-gradient">
-              Built For Others
+              Blog
             </span>
           </motion.h2>
 
@@ -252,47 +261,36 @@ export default function Works() {
             transition={{ duration: 0.6, delay: 0.4 }}
             className="text-xl md:text-2xl text-gray-400 max-w-4xl mx-auto leading-relaxed font-light mb-16"
           >
-            These aren't just pretty websites or random ads. Each project here helped a real business 
-            <span className="text-white font-semibold"> attract more customers</span>, 
-            <span className="text-[#beff01] font-semibold"> increase sales</span>, and 
-            <span className="text-white font-semibold"> grow faster</span>. 
-            Yours could be next.
+            Discover <span className="text-[#beff01] font-semibold">insights</span>, 
+            <span className="text-white font-semibold"> tips</span>, and 
+            <span className="text-white font-semibold"> stories</span> that inspire and inform.
           </motion.p>
         </motion.div>
 
-        {/* Projects Grid */}
+        {/* Blogs Grid */}
         {loading ? (
           <div className="flex items-center justify-center py-20">
-            <div className="inline-block animate-spin rounded-full h-16 w-16 border-4 border-[#beff01] border-t-transparent"></div>
+            <div className="inline-block animate-spin rounded-full h-18 w-10 border-4 border-[#beff01] border-t-transparent"></div>
           </div>
-        ) : projects.length === 0 ? (
+        ) : blogs.length === 0 ? (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             className="text-center py-16 bg-zinc-900/50 backdrop-blur-sm border border-zinc-800/50 rounded-3xl"
           >
-            <Zap className="w-16 h-16 text-[#beff01] mx-auto mb-6" />
+            <BookOpen className="w-16 h-16 text-[#beff01] mx-auto mb-6" />
             <h3 className="text-2xl font-bold text-white mb-4">
-              Currently Cooking Up Some Amazing Projects
+              More Content Coming Soon
             </h3>
-            <p className="text-gray-400 text-lg mb-8 max-w-2xl mx-auto">
-              I'm working on some exciting new work right now. But here's the thing—
-              <span className="text-white font-semibold"> your project could be the next showcase piece</span>. 
-              Let's make something incredible together.
+            <p className="text-gray-400 text-lg max-w-2xl mx-auto">
+              I'm crafting some amazing articles right now. Stay tuned for insightful content!
             </p>
-            <Link
-              href="/contact"
-              className="inline-flex items-center gap-3 bg-[#beff01] text-black font-bold px-10 py-5 rounded-full hover:bg-[#a8e600] transition-all shadow-xl shadow-[#beff01]/30"
-            >
-              <span>Let's Create Your Success Story</span>
-              <ArrowRight className="w-5 h-5" />
-            </Link>
           </motion.div>
         ) : (
           <>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
-              {projects.map((project, index) => (
-                 <ProjectCard key={`${project.id}-${index}`} project={project} index={index} />
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+              {blogs.map((blog, index) => (
+                <BlogCard key={`${blog.id}-${index}`} blog={blog} index={index} />
               ))}
             </div>
 
@@ -305,10 +303,10 @@ export default function Works() {
               className="text-center"
             >
               <Link
-                href="/works"
+                href="/blogs"
                 className="group inline-flex items-center gap-3 bg-transparent border-2 border-[#beff01] text-[#beff01] font-bold px-10 py-5 rounded-full hover:bg-[#beff01]/10 transition-all backdrop-blur-xl shadow-lg shadow-[#beff01]/10 hover:shadow-[#beff01]/20"
               >
-                <span>Explore All Projects</span>
+                <span>Explore All Articles</span>
                 <motion.div
                   whileHover={{ rotate: 45 }}
                   transition={{ duration: 0.3 }}

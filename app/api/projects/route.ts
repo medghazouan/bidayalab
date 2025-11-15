@@ -1,6 +1,38 @@
-// app/api/projects/route.ts - OPTIMIZED VERSION
+// app/api/projects/route.ts - TYPE-SAFE VERSION
+
 import { NextResponse } from 'next/server';
 import { getDatabase } from '@/lib/mongodb';
+
+// Define proper interfaces instead of using 'any'
+interface ProjectQuery {
+  featured?: boolean;
+  category?: string;
+}
+
+interface MongoProject {
+  _id: { toString: () => string };
+  title: string;
+  slug: string;
+  description: string;
+  image: string;
+  category: string;
+  featured: boolean;
+  order: number;
+  createdAt: Date;
+}
+
+interface ProjectResponse {
+  success: boolean;
+  projects: Omit<MongoProject, '_id'>[] & { _id: string };
+  pagination: {
+    page: number;
+    limit: number;
+    total: number;
+    totalPages: number;
+    hasNextPage: boolean;
+    hasPrevPage: boolean;
+  };
+}
 
 export async function GET(request: Request) {
   try {
@@ -13,8 +45,8 @@ export async function GET(request: Request) {
 
     const db = await getDatabase();
 
-    // Build query object
-    const query: any = {};
+    // Build query object with proper typing
+    const query: ProjectQuery = {};
     if (featured === 'true') {
       query.featured = true;
     }
@@ -22,7 +54,7 @@ export async function GET(request: Request) {
       query.category = category;
     }
 
-    // Optimized projection - fetch only needed fields
+    // Optimized projection
     const projection = {
       title: 1,
       slug: 1,
@@ -34,7 +66,7 @@ export async function GET(request: Request) {
       createdAt: 1,
     };
 
-    // Use aggregation pipeline for better performance (single query)
+    // Use aggregation pipeline
     const result = await db
       .collection('projects')
       .aggregate([
@@ -56,29 +88,28 @@ export async function GET(request: Request) {
     const total = result[0]?.metadata[0]?.total || 0;
     const projects = result[0]?.data || [];
 
-    // Return response with pagination metadata
-    return NextResponse.json(
-      {
-        success: true,
-        projects: projects.map((project: { _id: { toString: () => any; }; }) => ({
-          ...project,
-          _id: project._id.toString(),
-        })),
-        pagination: {
-          page,
-          limit,
-          total,
-          totalPages: Math.ceil(total / limit),
-          hasNextPage: skip + limit < total,
-          hasPrevPage: page > 1,
-        },
+    // Properly type the response
+    const response: ProjectResponse = {
+      success: true,
+      projects: projects.map((project: MongoProject) => ({
+        ...project,
+        _id: project._id.toString(),
+      })),
+      pagination: {
+        page,
+        limit,
+        total,
+        totalPages: Math.ceil(total / limit),
+        hasNextPage: skip + limit < total,
+        hasPrevPage: page > 1,
       },
-      {
-        headers: {
-          'Cache-Control': 'public, s-maxage=120, stale-while-revalidate=300',
-        },
-      }
-    );
+    };
+
+    return NextResponse.json(response, {
+      headers: {
+        'Cache-Control': 'public, s-maxage=120, stale-while-revalidate=300',
+      },
+    });
   } catch (error) {
     console.error('❌ Error fetching projects:', error);
     return NextResponse.json(

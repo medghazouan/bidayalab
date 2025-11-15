@@ -23,7 +23,7 @@ const inter = Inter({
 });
 
 export const metadata = {
-  title: 'MEDDIGITAL - Web Development & Digital Marketing',
+  title: 'BIDAYA - Web Development & Digital Marketing',
   description: 'Professional web development and digital marketing services',
 };
 
