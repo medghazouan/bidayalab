@@ -25,6 +25,11 @@ const inter = Inter({
 export const metadata = {
   title: 'BIDAYA - Web Development & Digital Marketing',
   description: 'Professional web development and digital marketing services',
+  icons: {
+    icon: '/assets/icons/logo.svg',
+    shortcut: '/assets/icons/logo.svg',
+    apple: '/assets/icons/logo.svg',
+  },
 };
 
 export default function RootLayout({
