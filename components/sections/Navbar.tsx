@@ -188,7 +188,7 @@ export default function Navbar() {
             prefetch={true}
             className="hidden md:block bg-[#beff01] hover:bg-[#a8e600] text-black px-8 py-3 rounded-full font-bold transition-all duration-300 hover:scale-105"
           >
-            LET'S TALK
+            LET&apos;S TALK
           </Link>
 
           {/* Mobile Menu Button */}
@@ -256,7 +256,7 @@ export default function Navbar() {
                 onClick={() => setMobileMenuOpen(false)}
                 className="block text-center bg-[#beff01] hover:bg-[#a8e600] text-black px-12 py-4 rounded-full font-bold text-lg transition-all duration-300 hover:scale-105 uppercase"
               >
-                LET'S TALK
+                LET&apos;S TALK
               </Link>
 
               {/* Decorative Element */}

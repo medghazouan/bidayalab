@@ -1,7 +1,7 @@
 // app/(pages)/about/page.tsx
 'use client';
 
-import { useMemo, useCallback } from 'react';
+
 import dynamic from 'next/dynamic';
 
 // Lazy load components for better performance

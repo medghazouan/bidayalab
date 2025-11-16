@@ -11,7 +11,7 @@ export default function ServicesPage() {
   const [selectedPlan, setSelectedPlan] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const handleOpenOrderModal = useCallback((plan: any) => {
+  const handleOpenOrderModal = useCallback((plan: never) => {
     setSelectedPlan(plan);
     setIsModalOpen(true);
   }, []);

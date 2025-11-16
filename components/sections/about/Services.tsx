@@ -65,7 +65,7 @@ export default function Services() {
             What We Offer
           </h2>
           <p className="text-xl text-zinc-400 max-w-2xl mx-auto mt-6">
-            Here's a quick rundown of our services. Each service is backed by years of
+            Here&apos;s a quick rundown of our services. Each service is backed by years of
             experience and proven results.
           </p>
         </motion.div>

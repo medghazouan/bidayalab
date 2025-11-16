@@ -88,7 +88,7 @@ export default function ClientTestimonials() {
             What Clients Say
           </h2>
           <p className="text-xl text-zinc-400 max-w-2xl mx-auto mt-6">
-            Don't just take our word for it. Here's what the businesses we've worked
+            Don&apos;t just take our word for it. Here&apos;s what the businesses we&apos;ve worked
             with have to say about us.
           </p>
         </motion.div>

@@ -108,7 +108,7 @@ export default function Testimonials() {
             transition={{ duration: 0.6, delay: 0.4 }}
             className="text-xl md:text-2xl text-gray-400 max-w-4xl mx-auto leading-relaxed font-light mb-20"
           >
-            Don't just take my word for it. Here's what people I've worked with have to say.
+            Don&apos;t just take my word for it. Here&apos;s what people I&apos;ve worked with have to say.
           </motion.p>
         </motion.div>
 

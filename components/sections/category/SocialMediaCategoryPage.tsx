@@ -322,7 +322,7 @@ export default function SocialMediaCategoryPage({ projects }: Props) {
                 Ready to Grow Your Social Media?
               </h2>
               <p className="text-white/90 text-lg mb-8 max-w-2xl mx-auto">
-                Let's create engaging content that resonates with your audience and
+                Let&apos;s create engaging content that resonates with your audience and
                 drives real business results.
               </p>
               <Link

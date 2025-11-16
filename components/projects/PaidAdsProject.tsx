@@ -346,7 +346,7 @@ export default function PaidAdsProject({ project }: { project: Project }) {
                 Ready to Scale Your Business?
               </h3>
               <p className="text-gray-400 mb-8 max-w-2xl mx-auto text-lg leading-relaxed">
-                Let's create high-performing ad campaigns that drive conversions and maximize your return on investment.
+                Let&apos;s create high-performing ad campaigns that drive conversions and maximize your return on investment.
               </p>
               <Link
                 href="/contact"

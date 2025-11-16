@@ -45,8 +45,8 @@ export default function AboutHero() {
             transition={{ duration: 0.6, delay: 0.4 }}
             className="text-xl md:text-2xl text-gray-400 max-w-4xl mx-auto leading-relaxed font-light mb-20"
           >
-            We're not just another agency that delivers and disappears. We're here because we genuinely love 
-            helping businesses grow online—whether it's building brands that inspire, websites that convert, or running campaigns that bring real results.
+            We&apos;re not just another agency that delivers and disappears. We&apos;re here because we genuinely love 
+            helping businesses grow online—whether it&apos;s building brands that inspire, websites that convert, or running campaigns that bring real results.
           </motion.p>
         </motion.div>
 
@@ -99,7 +99,7 @@ export default function AboutHero() {
                 </div>
                 <h2 className="text-3xl font-black text-white mb-4 tracking-tight">Our Philosophy</h2>
                 <p className="text-gray-400 leading-relaxed mb-4">
-                  We don't just build websites and call it a day. We stick around. 
+                  We don&apos;t just build websites and call it a day. We stick around. 
                   We help with strategy, marketing, design—whatever it takes to make sure you succeed.
                 </p>
                 <p className="text-gray-400 leading-relaxed">
@@ -250,8 +250,8 @@ export default function AboutHero() {
             <div className="absolute inset-0 bg-gradient-to-r from-[#beff01]/20 via-blue-500/10 to-purple-500/20 rounded-3xl blur-2xl opacity-50 group-hover:opacity-100 transition-opacity" />
             <div className="relative bg-zinc-900/50 backdrop-blur-sm border border-zinc-800 rounded-3xl p-8 md:p-10 hover:border-[#beff01]/30 transition-all">
               <p className="text-xl md:text-2xl text-gray-300 leading-relaxed">
-                Look, we’re not here to give you a fancy pitch. We’re a team that loves what we do and we’re here to help your brand grow and succeed. If that sounds good to you, let’s talk.,{" "}
-                <span className="text-[#beff01] font-black">let's chat</span>.
+                Look, we&apos;re not here to give you a fancy pitch. We&apos;re a team that loves what we do and we&apos;re here to help your brand grow and succeed. If that sounds good to you, let&apos;s talk.,{" "}
+                <span className="text-[#beff01] font-black">let&apos;s chat</span>.
               </p>
             </div>
           </div>

@@ -22,7 +22,7 @@ const services = [
   {
     icon: TrendingUp,
     title: "Digital Marketing",
-    description: "Marketing that drives real results. We don't just spend your budget—we invest it smartly to bring you paying customers. Facebook Ads, Google Ads, or organic growth—whatever works best for your business.",
+    description: "Marketing that drives real results. We don&apos;t just spend your budget—we invest it smartly to bring you paying customers. Facebook Ads, Google Ads, or organic growth—whatever works best for your business.",
     features: [
       "Targeted campaigns that convert",
       "Real-time performance tracking",
@@ -38,7 +38,7 @@ const services = [
   {
     icon: Palette,
     title: "Brand Design",
-    description: "Your brand is more than just a logo—it's how people remember you. We create visual identities that make you stand out and build trust. From logos to complete brand kits, everything you need to look professional.",
+    description: "Your brand is more than just a logo—it&apos;s how people remember you. We create visual identities that make you stand out and build trust. From logos to complete brand kits, everything you need to look professional.",
     features: [
       "Custom logo that represents you",
       "Complete brand identity package",
@@ -70,7 +70,7 @@ const services = [
   {
     icon: Megaphone,
     title: "Social Media Management",
-    description: "Stay active online without the stress. We handle your social media so you don't have to—creating posts, engaging with followers, and growing your audience while you focus on running your business.",
+    description: "Stay active online without the stress. We handle your social media so you don&apos;t have to—creating posts, engaging with followers, and growing your audience while you focus on running your business.",
     features: [
       "Content creation & scheduling",
       "Consistent posting strategy",

@@ -43,7 +43,7 @@ async function getProjectBySlug(slug: string) {
       new Promise((_, reject) =>
         setTimeout(() => reject(new Error('Query timeout')), 10000)
       )
-    ]) as any;
+    ]) as unknown;
 
     if (!project) {
       return null;
@@ -61,7 +61,8 @@ async function getProjectBySlug(slug: string) {
 }
 
 // Cache project data to avoid duplicate queries using Next.js unstable_cache
-let projectCache = new Map<string, Promise<any>>();
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const projectCache = new Map<string, Promise<any>>();
 
 async function getProjectData(slug: string) {
   // Simple in-memory cache to deduplicate requests within the same render

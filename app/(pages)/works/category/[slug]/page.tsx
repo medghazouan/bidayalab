@@ -61,6 +61,7 @@ async function getProjectsByCategory(categorySlug: string) {
       new Promise((_, reject) =>
         setTimeout(() => reject(new Error('Query timeout')), 10000)
       )
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     ]) as any[];
 
     // Convert MongoDB _id to string

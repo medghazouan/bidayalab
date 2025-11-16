@@ -202,7 +202,7 @@ export default function PricingSection({ onOpenOrderModal }) {
                         </>
                       ) : (
                         <div className="py-4">
-                          <span className="text-4xl font-black text-white">Let's Talk</span>
+                          <span className="text-4xl font-black text-white">Let&apos;s Talk</span>
                           <p className="text-sm text-gray-500 mt-2 font-medium">Custom pricing for your needs</p>
                         </div>
                       )}
@@ -254,7 +254,7 @@ export default function PricingSection({ onOpenOrderModal }) {
                       `}
                     >
                       <span className="relative z-10 flex items-center justify-center gap-2">
-                        {isCustom ? "Let's Discuss" : 'Get Started'}
+                        {isCustom ? "Let&apos;s Discuss" : 'Get Started'}
                         <ArrowRight className="w-5 h-5 group-hover/btn:translate-x-1 transition-transform" />
                       </span>
                       {isGrowth && (

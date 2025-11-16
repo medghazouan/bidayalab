@@ -196,7 +196,7 @@ export default function Works() {
   const loading = isLoading;
 
   return (
-    <section id="works-section" className="relative py-20 md:py-32 overflow-hidden">
+    <section id="works-section" className="relative pt-20 md:pt-32 pb-12 md:pb-16 overflow-hidden">
       {/* Divider Above Section */}
       <div className="max-w-7xl mx-auto px-6 md:px-8 lg:px-12 pb-16">
         <div className="relative">
@@ -276,15 +276,15 @@ export default function Works() {
               Currently Cooking Up Some Amazing Projects
             </h3>
             <p className="text-gray-400 text-lg mb-8 max-w-2xl mx-auto">
-              I'm working on some exciting new work right now. But here's the thing—
+              I&apos;m working on some exciting new work right now. But here&apos;s the thing—
               <span className="text-white font-semibold"> your project could be the next showcase piece</span>. 
-              Let's make something incredible together.
+              Let&apos;s make something incredible together.
             </p>
             <Link
               href="/contact"
               className="inline-flex items-center gap-3 bg-[#beff01] text-black font-bold px-10 py-5 rounded-full hover:bg-[#a8e600] transition-all shadow-xl shadow-[#beff01]/30"
             >
-              <span>Let's Create Your Success Story</span>
+              <span>Let&apos;s Create Your Success Story</span>
               <ArrowRight className="w-5 h-5" />
             </Link>
           </motion.div>

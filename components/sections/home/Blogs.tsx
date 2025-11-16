@@ -115,7 +115,7 @@ function BlogCard({ blog, index }: { blog: Blog; index: number }) {
           rotateY,
           transformStyle: 'preserve-3d',
         }}
-        className="group relative aspect-[4/3] overflow-hidden rounded-3xl bg-zinc-900/50 backdrop-blur-xl border border-zinc-800/50 cursor-pointer hover:border-[#beff01]/50 transition-all duration-300"
+        className="group relative aspect-[3/4] overflow-hidden rounded-3xl bg-zinc-900/50 backdrop-blur-xl border border-zinc-800/50 cursor-pointer hover:border-[#beff01]/50 transition-all duration-300"
       >
         {/* Glow Effect */}
         {isHovered && (
@@ -205,7 +205,7 @@ export default function Blogs() {
   const loading = isLoading;
 
   return (
-    <section className="relative py-20 md:py-32 overflow-hidden">
+    <section className="relative pt-20 md:pt-32 pb-12 md:pb-16 overflow-hidden">
       {/* Divider Above Section */}
       <div className="max-w-7xl mx-auto px-6 md:px-8 lg:px-12 pb-16">
         <div className="relative">
@@ -270,7 +270,7 @@ export default function Blogs() {
         {/* Blogs Grid */}
         {loading ? (
           <div className="flex items-center justify-center py-20">
-            <div className="inline-block animate-spin rounded-full h-18 w-10 border-4 border-[#beff01] border-t-transparent"></div>
+            <div className="inline-block animate-spin rounded-full h-16 w-16 border-4 border-[#beff01] border-t-transparent"></div>
           </div>
         ) : blogs.length === 0 ? (
           <motion.div
@@ -283,12 +283,12 @@ export default function Blogs() {
               More Content Coming Soon
             </h3>
             <p className="text-gray-400 text-lg max-w-2xl mx-auto">
-              I'm crafting some amazing articles right now. Stay tuned for insightful content!
+              I&apos;m crafting some amazing articles right now. Stay tuned for insightful content!
             </p>
           </motion.div>
         ) : (
           <>
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
               {blogs.map((blog, index) => (
                 <BlogCard key={`${blog.id}-${index}`} blog={blog} index={index} />
               ))}

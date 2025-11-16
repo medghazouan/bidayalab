@@ -313,7 +313,7 @@ export default function WebDevProject({ project }: { project: Project }) {
                 Ready to Start Your Project?
               </h3>
               <p className="text-gray-400 mb-8 max-w-2xl mx-auto text-lg leading-relaxed">
-                Let's build something amazing together. Get in touch to discuss how I can help bring your vision to life.
+                Let&apos;s build something amazing together. Get in touch to discuss how I can help bring your vision to life.
               </p>
               <Link
                 href="/contact"

@@ -2,8 +2,8 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { Calendar, BookOpen, ArrowLeft, Search } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { Calendar, BookOpen, Loader2 } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useQuery } from '@tanstack/react-query';
 import Image from 'next/image';
 
@@ -17,14 +17,25 @@ interface Blog {
   excerpt?: string;
 }
 
-export default function BlogsPage() {
-  const [selectedCategory, setSelectedCategory] = useState<string>('all');
-  const [searchQuery, setSearchQuery] = useState('');
+const categories = [
+  { slug: 'all', label: 'All Articles' },
+  { slug: 'web-dev', label: 'Web Development' },
+  { slug: 'marketing', label: 'Marketing' },
+  { slug: 'design', label: 'Design' },
+  { slug: 'business', label: 'Business' },
+];
 
-  const { data, isLoading } = useQuery<{ success: boolean; blogs: Blog[] }>({
-    queryKey: ['blogs', 'all'],
+export default function BlogsPage() {
+  const [activeCategory, setActiveCategory] = useState('all');
+
+  const { data, isLoading, error: queryError } = useQuery({
+    queryKey: ['blogs', activeCategory],
     queryFn: async () => {
-      const response = await fetch('/api/blogs');
+      const url = activeCategory === 'all' 
+        ? '/api/blogs' 
+        : `/api/blogs?category=${activeCategory}`;
+      
+      const response = await fetch(url);
       if (!response.ok) throw new Error('Failed to fetch');
       return response.json();
     },
@@ -34,22 +45,11 @@ export default function BlogsPage() {
     retry: 1,
   });
 
-  const blogs = data?.blogs || [];
+  const blogs: Blog[] = (data?.blogs || []) as Blog[];
+  const loading = isLoading;
+  const error = queryError ? 'Error loading articles' : '';
 
-  // Get unique categories
-  const categories = ['all', ...new Set(blogs.map((blog) => blog.category))];
-
-  // Filter blogs
-  const filteredBlogs = blogs.filter((blog) => {
-    const matchesCategory = selectedCategory === 'all' || blog.category === selectedCategory;
-    const matchesSearch =
-      searchQuery === '' ||
-      blog.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      blog.category.toLowerCase().includes(searchQuery.toLowerCase());
-    return matchesCategory && matchesSearch;
-  });
-
-  const formatDate = (dateString: string) => {
+  const formatDate = (dateString: string | number | Date): string => {
     const date = new Date(dateString);
     return date.toLocaleDateString('en-US', {
       year: 'numeric',
@@ -59,156 +59,325 @@ export default function BlogsPage() {
   };
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-gray-950 via-gray-900 to-gray-950">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-        {/* Back Button */}
-        <Link
-          href="/"
-          className="inline-flex items-center gap-2 text-gray-400 hover:text-white transition-colors mb-8 group"
-        >
-          <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
-          <span>Back to Home</span>
-        </Link>
+    <div className="relative min-h-screen bg-black overflow-hidden">
+      {/* Optimized Animated Background */}
+      <div className="fixed inset-0 pointer-events-none" style={{ willChange: 'transform' }}>
+        <div 
+          className="absolute inset-0 opacity-30 animate-gradient-mesh"
+          style={{
+            background: 'radial-gradient(circle at 20% 50%, rgba(190, 255, 1, 0.15) 0%, transparent 50%), radial-gradient(circle at 80% 80%, rgba(59, 130, 246, 0.15) 0%, transparent 50%), radial-gradient(circle at 40% 20%, rgba(168, 85, 247, 0.15) 0%, transparent 50%)',
+            backgroundSize: '200% 200%',
+          }}
+        />
 
-        {/* Header */}
-        <div className="text-center mb-12 space-y-4">
-          <motion.h1
-            className="text-5xl md:text-6xl lg:text-7xl font-bold"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-          >
-            <span className="text-white">All </span>
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-400 to-orange-400">
-              Articles
-            </span>
-          </motion.h1>
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#18181b_1px,transparent_1px),linear-gradient(to_bottom,#18181b_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_0%,#000_70%,transparent_100%)] opacity-20"></div>
+        
+        <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-[#beff01]/10 rounded-full blur-2xl animate-orb-1" style={{ willChange: 'transform' }} />
+        <div className="absolute bottom-0 right-1/4 w-[600px] h-[600px] bg-blue-500/10 rounded-full blur-2xl animate-orb-2" style={{ willChange: 'transform' }} />
 
-          <motion.p
-            className="text-gray-400 text-lg max-w-2xl mx-auto"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-          >
-            Explore insights, tutorials, and stories from my journey
-          </motion.p>
-        </div>
+        <div className="absolute inset-x-0 h-px bg-gradient-to-r from-transparent via-[#beff01]/30 to-transparent animate-scan-line" />
 
-        {/* Search and Filter */}
-        <div className="mb-12 space-y-6">
-          {/* Search Bar */}
-          <div className="max-w-xl mx-auto">
-            <div className="relative">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-              <input
-                type="text"
-                placeholder="Search articles..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-12 pr-4 py-3 bg-gray-800/50 border border-gray-700 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-purple-500 transition-colors"
-              />
-            </div>
-          </div>
+        <div 
+          className="absolute inset-0 opacity-[0.015]"
+          style={{
+            backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
+            backgroundRepeat: 'repeat'
+          }}
+        />
 
-          {/* Category Filter */}
-          <div className="flex flex-wrap justify-center gap-3">
-            {categories.map((category) => (
-              <button
-                key={category}
-                onClick={() => setSelectedCategory(category)}
-                className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
-                  selectedCategory === category
-                    ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white'
-                    : 'bg-gray-800/50 border border-gray-700 text-gray-400 hover:text-white hover:border-purple-500/50'
-                }`}
-              >
-                {category.charAt(0).toUpperCase() + category.slice(1)}
-              </button>
-            ))}
-          </div>
-        </div>
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,black_100%)] opacity-40" />
+      </div>
 
-        {/* Blogs Grid */}
-        {isLoading ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {[1, 2, 3, 4, 5, 6].map((i) => (
-              <div
-                key={i}
-                className="h-[450px] rounded-2xl bg-gray-800/50 animate-pulse"
-              />
-            ))}
-          </div>
-        ) : filteredBlogs.length === 0 ? (
-          <div className="text-center py-20">
-            <h3 className="text-2xl font-bold text-white mb-4">No articles found</h3>
-            <p className="text-gray-400">Try adjusting your search or filters</p>
-          </div>
-        ) : (
-          <motion.div
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5 }}
-          >
-            {filteredBlogs.map((blog, index) => (
+      {/* Main Content */}
+      <main className="relative z-10 pt-24">
+        <section className="relative py-12 px-4 md:px-8 lg:px-16 overflow-hidden">
+          <div className="relative max-w-7xl mx-auto px-6 md:px-8 lg:px-12">
+            {/* Header */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, ease: "easeOut" }}
+              className="max-w-7xl mx-auto px-6 md:px-8 lg:px-12 py-8 md:py-12 text-center"
+            >
               <motion.div
-                key={blog.id}
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.6, delay: 0.2 }}
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#beff01]/10 border border-[#beff01]/30 backdrop-blur-sm mb-8 group hover:bg-[#beff01]/20 transition-all"
+              >
+                <div className="w-2 h-2 rounded-full bg-[#beff01] animate-pulse" />
+                <span className="text-[#beff01] text-sm font-bold uppercase tracking-wider">
+                  Blog & Insights
+                </span>
+              </motion.div>
+
+              <motion.h1
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.05 }}
+                transition={{ duration: 0.6, delay: 0.3 }}
+                className="text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-black text-white mb-8 tracking-tight leading-none"
               >
-                <Link href={`/blogs/${blog.slug}`}>
-                  <div className="group relative h-[450px] rounded-2xl overflow-hidden cursor-pointer bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 border border-gray-700/50 hover:border-purple-500/50 transition-all duration-300">
-                    {/* Blog Image */}
-                    <div className="relative h-[240px] overflow-hidden">
-                      <Image
-                        src={blog.image}
-                        alt={blog.title}
-                        fill
-                        className="object-cover transition-transform duration-500 group-hover:scale-110"
-                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/50 to-transparent" />
-                    </div>
+                Stories That
+                <br />
+                <span className="bg-gradient-to-r from-[#beff01] via-[#d4ff4d] to-[#beff01] bg-clip-text text-transparent bg-[length:200%_auto] animate-gradient">
+                  Inspire & Educate
+                </span>
+              </motion.h1>
 
-                    {/* Content */}
-                    <div className="absolute bottom-0 left-0 right-0 p-6 space-y-3">
-                      {/* Category Badge & Date */}
-                      <div className="flex items-center justify-between gap-2">
-                        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-purple-500/10 border border-purple-500/20 text-purple-400 text-xs font-medium backdrop-blur-sm">
-                          <BookOpen className="w-3 h-3" />
-                          {blog.category}
-                        </span>
-                        <span className="inline-flex items-center gap-1.5 text-gray-400 text-xs">
-                          <Calendar className="w-3 h-3" />
-                          {formatDate(blog.publicationDate)}
-                        </span>
-                      </div>
+              <motion.p
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.4 }}
+                className="text-xl md:text-2xl text-gray-400 max-w-4xl mx-auto leading-relaxed font-light mb-20"
+              >
+                Explore insights, tutorials, and lessons from my journey in web development,
+                marketing, and entrepreneurship.
+              </motion.p>
+            </motion.div>
 
-                      {/* Blog Title */}
-                      <h3 className="text-xl font-bold text-white group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-purple-400 group-hover:to-pink-400 transition-all duration-300 line-clamp-2">
-                        {blog.title}
-                      </h3>
+            {/* Category Filter */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.5 }}
+              className="mb-16 flex flex-wrap justify-center gap-4"
+            >
+              {categories.map((cat) => {
+                const isActive = activeCategory === cat.slug;
+                return (
+                  <motion.button
+                    key={cat.slug}
+                    onClick={() => setActiveCategory(cat.slug)}
+                    disabled={loading}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    className={`flex items-center gap-3 px-6 py-3 rounded-full font-bold transition-all duration-300 disabled:opacity-50 ${
+                      isActive
+                        ? 'bg-[#beff01] text-black shadow-lg shadow-[#beff01]/30'
+                        : 'bg-zinc-900/50 border border-zinc-800 text-gray-400 hover:border-[#beff01]/30 hover:bg-zinc-800/50'
+                    }`}
+                  >
+                    <span>{cat.label}</span>
+                  </motion.button>
+                );
+              })}
+            </motion.div>
 
-                      {/* Excerpt */}
-                      {blog.excerpt && (
-                        <p className="text-gray-400 text-sm line-clamp-2">
-                          {blog.excerpt}
-                        </p>
-                      )}
-                    </div>
+            {/* Loading State */}
+            {loading && (
+              <div className="flex items-center justify-center py-32">
+                <motion.div
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                >
+                  <Loader2 className="w-12 h-12 text-[#beff01]" />
+                </motion.div>
+              </div>
+            )}
 
-                    {/* Hover Effect */}
-                    <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
-                      <div className="absolute inset-0 bg-gradient-to-t from-purple-500/10 via-transparent to-transparent" />
-                    </div>
-                  </div>
-                </Link>
+            {/* Error State */}
+            {error && !loading && (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="rounded-2xl border border-red-500/30 bg-red-500/10 p-8 text-center backdrop-blur-sm"
+              >
+                <p className="text-red-400 text-lg font-medium">{error}</p>
               </motion.div>
-            ))}
-          </motion.div>
+            )}
+
+            {/* Blogs Grid */}
+            {!loading && !error && (
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={activeCategory}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.3 }}
+                  className="grid gap-8 md:grid-cols-2 lg:grid-cols-3"
+                >
+                  {blogs.map((blog: Blog, index: number) => (
+                    <BlogCard 
+                      key={blog.id} 
+                      blog={blog} 
+                      index={index}
+                      formatDate={formatDate}
+                    />
+                  ))}
+                </motion.div>
+              </AnimatePresence>
+            )}
+
+            {/* Empty State */}
+            {!loading && !error && blogs.length === 0 && (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="py-32 text-center"
+              >
+                <div className="w-20 h-20 rounded-full bg-zinc-900/50 border border-zinc-800 flex items-center justify-center mx-auto mb-6">
+                  <BookOpen className="w-10 h-10 text-gray-600" />
+                </div>
+                <p className="text-2xl text-gray-500 font-medium">
+                  No articles found in this category yet.
+                </p>
+              </motion.div>
+            )}
+          </div>
+        </section>
+      </main>
+
+      <style jsx global>{`
+        @keyframes gradient {
+          0%, 100% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+        }
+        
+        @keyframes gradient-mesh {
+          0%, 100% { background-position: 0% 0%, 100% 100%, 50% 50%; }
+          50% { background-position: 100% 100%, 0% 0%, 100% 0%; }
+        }
+        
+        @keyframes orb-1 {
+          0%, 100% { transform: translate(0, 0) scale(1); }
+          50% { transform: translate(30px, -40px) scale(1.2); }
+        }
+        
+        @keyframes orb-2 {
+          0%, 100% { transform: translate(0, 0) scale(1); }
+          50% { transform: translate(-30px, 40px) scale(1.3); }
+        }
+        
+        @keyframes scan-line {
+          0% { transform: translateY(-100vh); }
+          100% { transform: translateY(200vh); }
+        }
+        
+        .animate-gradient {
+          animation: gradient 3s ease infinite;
+        }
+        
+        .animate-gradient-mesh {
+          animation: gradient-mesh 20s ease-in-out infinite;
+        }
+        
+        .animate-orb-1 {
+          animation: orb-1 15s ease-in-out infinite;
+        }
+        
+        .animate-orb-2 {
+          animation: orb-2 18s ease-in-out infinite 2s;
+        }
+        
+        .animate-scan-line {
+          animation: scan-line 8s linear infinite;
+        }
+      `}</style>
+    </div>
+  );
+}
+
+interface BlogCardProps {
+  blog: Blog;
+  index: number;
+  formatDate: (dateString: string | number | Date) => string;
+}
+
+function BlogCard({ blog, index, formatDate }: BlogCardProps) {
+  const [isHovered, setIsHovered] = useState(false);
+
+  return (
+    <Link href={`/blogs/${blog.slug}`}>
+      <motion.div
+        initial={{ opacity: 0, y: 50 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-50px" }}
+        transition={{ 
+          duration: 0.6, 
+          delay: index * 0.1,
+          ease: [0.22, 1, 0.36, 1]
+        }}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+        className="group relative aspect-[3/4] overflow-hidden rounded-3xl bg-zinc-900/50 border border-zinc-800/50 cursor-pointer hover:border-[#beff01]/50 transition-all duration-300"
+      >
+        {/* Glow Effect */}
+        {isHovered && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="absolute -inset-1 bg-gradient-to-r from-[#beff01]/20 via-blue-500/20 to-purple-500/20 rounded-3xl blur-xl"
+          />
         )}
-      </div>
-    </main>
+
+        {/* Blog Image */}
+        <motion.div
+          className="absolute inset-0"
+          animate={{
+            scale: isHovered ? 1.1 : 1,
+          }}
+          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+        >
+          <Image
+            src={blog.image}
+            alt={blog.title}
+            fill
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            className="object-cover"
+            loading="lazy"
+            placeholder="blur"
+            blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWEREiMxUf/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=="
+          />
+          
+          {/* Gradient Overlay */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-300" />
+        </motion.div>
+
+        {/* Category Badge */}
+        <motion.div
+          initial={{ x: -20, opacity: 0 }}
+          animate={{ x: 0, opacity: 1 }}
+          transition={{ delay: index * 0.1 + 0.2 }}
+          className="absolute top-6 left-6 z-10"
+        >
+          <span className="inline-flex items-center gap-1.5 bg-[#beff01] text-black text-xs font-bold uppercase tracking-wider px-4 py-2 rounded-full shadow-xl shadow-[#beff01]/30">
+            <BookOpen className="w-3 h-3" />
+            {blog.category}
+          </span>
+        </motion.div>
+
+        {/* Date Badge */}
+        <motion.div
+          initial={{ x: 20, opacity: 0 }}
+          animate={{ x: 0, opacity: 1 }}
+          transition={{ delay: index * 0.1 + 0.3 }}
+          className="absolute top-6 right-6 z-10"
+        >
+          <span className="inline-flex items-center gap-1.5 bg-black/60 backdrop-blur-sm text-gray-300 text-xs font-medium px-3 py-2 rounded-full border border-zinc-800">
+            <Calendar className="w-3 h-3" />
+            {formatDate(blog.publicationDate)}
+          </span>
+        </motion.div>
+
+        {/* Blog Title & Excerpt */}
+        <motion.div
+          className="absolute bottom-0 left-0 right-0 p-8 z-10"
+        >
+          <h3 className="text-3xl font-black text-white mb-2 group-hover:text-[#beff01] transition-colors duration-300 tracking-tight">
+            {blog.title}
+          </h3>
+          
+        </motion.div>
+
+        {/* Hover Glow */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: isHovered ? 0.3 : 0 }}
+          transition={{ duration: 0.3 }}
+          className="absolute inset-0 bg-[#beff01] mix-blend-overlay rounded-3xl"
+        />
+      </motion.div>
+    </Link>
   );
 }

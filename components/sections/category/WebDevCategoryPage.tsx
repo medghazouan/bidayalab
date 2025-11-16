@@ -297,8 +297,8 @@ export default function WebDevCategoryPage({ projects }: Props) {
                 Ready to Build Your Next Project?
               </h2>
               <p className="text-white/90 text-lg mb-8 max-w-2xl mx-auto">
-                Let's create something amazing together. From concept to launch,
-                I'll bring your vision to life.
+                Let&apos;s create something amazing together. From concept to launch,
+                I&apos;ll bring your vision to life.
               </p>
               <Link
                 href="/contact"

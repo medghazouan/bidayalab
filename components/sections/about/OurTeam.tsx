@@ -65,7 +65,7 @@ export default function OurTeam() {
             Meet The Experts
           </h2>
           <p className="text-xl text-zinc-400 max-w-2xl mx-auto mt-6">
-            Here's a quick rundown of our team. Each member brings unique expertise
+            Here&apos;s a quick rundown of our team. Each member brings unique expertise
             and a shared commitment to your success.
           </p>
         </motion.div>

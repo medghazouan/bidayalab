@@ -439,7 +439,7 @@ export default function SocialMediaProject({ project }: { project: Project }) {
                 Ready to Grow Your Social Media?
               </h3>
               <p className="text-gray-400 mb-8 max-w-2xl mx-auto text-lg leading-relaxed">
-                Let's create engaging content that resonates with your audience and drives real business results.
+                Let&apos;s create engaging content that resonates with your audience and drives real business results.
               </p>
               <Link
                 href="/contact"

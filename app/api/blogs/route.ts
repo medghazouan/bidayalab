@@ -2,7 +2,6 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { getDatabase } from '@/lib/mongodb';
-import { ObjectId } from 'mongodb';
 
 // Define interfaces for type safety
 interface BlogQuery {
@@ -22,14 +21,19 @@ interface MongoBlog {
   updatedAt: Date;
 }
 
+interface BlogResponseItem {
+  id: string;
+  title: string;
+  slug: string;
+  image: string;
+  publicationDate: string;
+  category: string;
+  excerpt: string;
+}
+
 interface BlogsResponse {
   success: boolean;
-  blogs: Array<
-    Omit<MongoBlog, '_id'> & {
-      id: string;
-      publicationDate: string;
-    }
-  >;
+  blogs: BlogResponseItem[];
   count: number;
 }
 
@@ -60,7 +64,7 @@ export async function GET(request: NextRequest) {
     };
 
     // Fetch blogs with aggregation pipeline
-    const blogs = await db
+    const blogs = (await db
       .collection('blogs')
       .aggregate([
         { $match: query },
@@ -69,17 +73,19 @@ export async function GET(request: NextRequest) {
         { $limit: limit },
         { $project: projection },
       ])
-      .toArray();
+      .toArray()) as MongoBlog[];
 
     // Transform response
     const response: BlogsResponse = {
       success: true,
-      blogs: blogs.map((blog: any) => ({
+      blogs: blogs.map((blog: MongoBlog) => ({
         id: blog._id.toString(),
         title: blog.title,
         slug: blog.slug,
         image: blog.image,
-        publicationDate: blog.publicationDate.toISOString(),
+        publicationDate: blog.publicationDate instanceof Date 
+          ? blog.publicationDate.toISOString() 
+          : new Date(blog.publicationDate).toISOString(),
         category: blog.category,
         excerpt: blog.excerpt || '',
       })),
@@ -151,6 +157,16 @@ export async function POST(request: NextRequest) {
       .collection('blogs')
       .findOne({ _id: result.insertedId });
 
+    if (!newBlog) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: 'Failed to retrieve created blog',
+        },
+        { status: 500 }
+      );
+    }
+
     return NextResponse.json(
       {
         success: true,
@@ -159,10 +175,12 @@ export async function POST(request: NextRequest) {
           title: newBlog.title,
           slug: newBlog.slug,
           image: newBlog.image,
-          publicationDate: newBlog.publicationDate.toISOString(),
+          publicationDate: newBlog.publicationDate instanceof Date 
+            ? newBlog.publicationDate.toISOString() 
+            : new Date(newBlog.publicationDate).toISOString(),
           category: newBlog.category,
           text: newBlog.text,
-          excerpt: newBlog.excerpt,
+          excerpt: newBlog.excerpt || '',
         },
       },
       { status: 201 }

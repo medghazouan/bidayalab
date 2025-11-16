@@ -121,7 +121,7 @@ export default function WorksGrid() {
             className="text-xl md:text-2xl text-gray-400 max-w-4xl mx-auto leading-relaxed font-light mb-20"
           >
             Real projects, real results. From stunning websites to marketing campaigns
-            that convert—here's what I've built for businesses like yours.
+            that convert—here&apos;s what I&apos;ve built for businesses like yours.
           </motion.p>
         </motion.div>
 

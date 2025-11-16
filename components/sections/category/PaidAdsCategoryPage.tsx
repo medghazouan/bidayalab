@@ -310,7 +310,7 @@ export default function PaidAdsCategoryPage({ projects }: Props) {
                 Ready to Scale Your Business?
               </h2>
               <p className="text-white/90 text-lg mb-8 max-w-2xl mx-auto">
-                Let's create high-performing ad campaigns that drive conversions and
+                Let&apos;s create high-performing ad campaigns that drive conversions and
                 maximize your return on investment.
               </p>
               <Link

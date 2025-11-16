@@ -2,7 +2,8 @@
 
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Mail, Phone, Send, Loader2, CheckCircle2, AlertCircle, MessageSquare, Sparkles } from 'lucide-react';
+import { Mail, Phone, Send, Loader2, CheckCircle2, AlertCircle, Sparkles } from 'lucide-react';
+import { FaWhatsapp } from 'react-icons/fa';
 import Link from 'next/link';
 
 const contactInfo = [
@@ -27,14 +28,14 @@ const contactInfo = [
     iconColor: 'text-green-400'
   },
   {
-    icon: MessageSquare,
+    icon: FaWhatsapp,
     title: 'WhatsApp',
     info: '0751388901',
     link: 'https://wa.me/0751388901',
-    gradient: 'from-purple-500/20 via-purple-500/10 to-transparent',
-    borderColor: 'border-purple-500/30',
-    iconBg: 'bg-purple-500/10',
-    iconColor: 'text-purple-400'
+    gradient: 'from-green-500/20 via-green-500/10 to-transparent',
+    borderColor: 'border-green-500/30',
+    iconBg: 'bg-green-500/10',
+    iconColor: 'text-green-400'
   }
 ];
 
@@ -67,6 +68,7 @@ export default function ContactSection() {
       }
 
       setStatus('success');
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       setStatus('error');
       setErrorMessage(err.message || 'Something went wrong');
@@ -125,8 +127,8 @@ export default function ContactSection() {
                     Hey <span className="text-[#beff01] font-bold">{formData.name.split(' ')[0]}</span>, thank you for reaching out! 
                   </p>
                   <p className="text-gray-400 leading-relaxed text-lg mb-10">
-                    Your message just landed in my inbox, and I'm genuinely excited to read it. 
-                    I'll get back to you at <strong className="text-[#beff01]">{formData.email}</strong> within 24 hours.
+                    Your message just landed in my inbox, and I&apos;m genuinely excited to read it. 
+                    I&apos;ll get back to you at <strong className="text-[#beff01]">{formData.email}</strong> within 24 hours.
                   </p>
 
                   {/* What's Next Cards */}
@@ -136,7 +138,7 @@ export default function ContactSection() {
                         <CheckCircle2 className="w-6 h-6 text-[#beff01]" />
                       </div>
                       <h3 className="text-sm font-bold text-white mb-2">Quick Response</h3>
-                      <p className="text-xs text-gray-400 leading-relaxed">I'll personally review your message within 24 hours</p>
+                      <p className="text-xs text-gray-400 leading-relaxed">I&apos;ll personally review your message within 24 hours</p>
                     </div>
 
                     <div className="p-6 rounded-2xl bg-zinc-800/50 border border-zinc-700/50 backdrop-blur-sm">
@@ -145,7 +147,7 @@ export default function ContactSection() {
                       </div>
                       <h3 className="text-sm font-bold text-white mb-2">Direct Contact</h3>
                       <p className="text-xs text-gray-400 leading-relaxed">
-                        You'll hear back via email or WhatsApp
+                        You&apos;ll hear back via email or WhatsApp
                       </p>
                     </div>
 
@@ -153,8 +155,8 @@ export default function ContactSection() {
                       <div className="w-12 h-12 mx-auto mb-4 rounded-xl bg-[#beff01]/10 flex items-center justify-center border border-[#beff01]/30">
                         <Sparkles className="w-6 h-6 text-[#beff01]" />
                       </div>
-                      <h3 className="text-sm font-bold text-white mb-2">Let's Build</h3>
-                      <p className="text-xs text-gray-400 leading-relaxed">We'll discuss how to bring your vision to life</p>
+                      <h3 className="text-sm font-bold text-white mb-2">Let&apos;s Build</h3>
+                      <p className="text-xs text-gray-400 leading-relaxed">We&apos;ll discuss how to bring your vision to life</p>
                     </div>
                   </div>
 
@@ -202,7 +204,7 @@ export default function ContactSection() {
                 transition={{ duration: 0.6, delay: 0.3 }}
                 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black text-white mb-6 sm:mb-8 tracking-tight leading-none"
               >
-                Let's Build
+                Let&apos;s Build
                 <br />
                 <span className="bg-gradient-to-r from-[#beff01] via-[#d4ff4d] to-[#beff01] bg-clip-text text-transparent bg-[length:200%_auto] animate-gradient">
                   Something Amazing
@@ -215,7 +217,7 @@ export default function ContactSection() {
                 transition={{ duration: 0.6, delay: 0.4 }}
                 className="text-base sm:text-lg md:text-xl lg:text-2xl text-gray-400 max-w-4xl mx-auto leading-relaxed font-light mb-10 sm:mb-16 md:mb-20"
               >
-                Have a project in mind? Drop me a message and let's create something amazing together. 
+                Have a project in mind? Drop me a message and let&apos;s create something amazing together. 
                 I typically respond within 24 hours.
               </motion.p>
             </motion.div>
@@ -248,7 +250,11 @@ export default function ContactSection() {
                         className={`relative flex items-start gap-4 sm:gap-5 p-5 sm:p-6 md:p-8 rounded-2xl sm:rounded-3xl border ${item.borderColor} bg-zinc-900/50 backdrop-blur-sm hover:border-opacity-100 transition-all duration-300`}
                       >
                         <div className={`w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-xl sm:rounded-2xl ${item.iconBg} flex items-center justify-center flex-shrink-0 border ${item.borderColor} group-hover:scale-110 transition-transform`}>
-                          <Icon className={`w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 ${item.iconColor}`} strokeWidth={2.5} />
+                          {item.title === 'WhatsApp' ? (
+                            <Icon className={`w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 ${item.iconColor}`} />
+                          ) : (
+                            <Icon className={`w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 ${item.iconColor}`} strokeWidth={2.5} />
+                          )}
                         </div>
                         <div className="flex-1">
                           <h3 className="text-sm font-bold uppercase tracking-wider text-gray-500 mb-2">
@@ -270,7 +276,7 @@ export default function ContactSection() {
                   transition={{ duration: 0.5, delay: 0.8 }}
                   className="p-5 sm:p-6 md:p-8 rounded-2xl sm:rounded-3xl bg-gradient-to-br from-[#beff01]/10 to-transparent border border-[#beff01]/20 backdrop-blur-sm"
                 >
-                  <Sparkles className="w-8 h-8 text-[#beff01] mb-4" />
+                  
                   <h3 className="text-xl font-black text-white mb-3">Quick Response Guaranteed</h3>
                   <p className="text-gray-400 leading-relaxed">
                     I personally read and respond to every message. Expect to hear back within 24 hours, 
@@ -427,7 +433,7 @@ export default function ContactSection() {
                       transition={{ delay: 1.2 }}
                       className="text-xs text-center text-gray-500 leading-relaxed mt-2 sm:mt-3"
                     >
-                      By submitting this form, you agree that I'll contact you about this message. 
+                      By submitting this form, you agree that I&apos;ll contact you about this message. 
                       Your information is secure and will never be shared.
                     </motion.p>
                   </form>
