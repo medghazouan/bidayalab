@@ -5,7 +5,6 @@
 import { motion } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
-import { Project } from "@/data/projects";
 import {
   TrendingUp,
   Target,
@@ -17,6 +16,30 @@ import {
   Award,
   Clock,
 } from "lucide-react";
+
+interface Project {
+  _id: string;
+  title?: string;
+  slug?: string;
+  category?: string;
+  categorySlug?: string;
+  client?: string;
+  year?: string;
+  description?: string;
+  image?: string;
+  images?: string[];
+  technologies?: string[];
+  featured?: boolean;
+  platform?: string[];
+  budget?: string;
+  duration?: string;
+  results?: Array<{
+    metric: string;
+    value: string;
+    change: string;
+  }>;
+  [key: string]: unknown;
+}
 
 interface Props {
   projects: Project[];
@@ -155,9 +178,9 @@ export default function PaidAdsCategoryPage({ projects }: Props) {
             </motion.h2>
 
             <div className="space-y-12">
-              {projects.map((project, index) => (
+              {projects.map((project, index: number) => (
                 <motion.div
-                  key={project.id}
+                  key={project._id || index}
                   initial={{ opacity: 0, y: 30 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
@@ -229,8 +252,8 @@ export default function PaidAdsCategoryPage({ projects }: Props) {
                       {/* Campaign Image Preview */}
                       <div className="relative aspect-video rounded-2xl overflow-hidden">
                         <Image
-                          src={project.image}
-                          alt={project.title}
+                          src={project.image || '/assets/projects/work1.jpg'}
+                          alt={project.title || 'Project'}
                           fill
                           className="object-cover group-hover:scale-105 transition-transform duration-500"
                         />
@@ -248,7 +271,7 @@ export default function PaidAdsCategoryPage({ projects }: Props) {
                         </div>
 
                         <div className="grid md:grid-cols-3 gap-6">
-                          {project.results.map((result, i) => (
+                          {(project.results || []).map((result, i) => (
                             <motion.div
                               key={i}
                               whileHover={{ scale: 1.05 }}

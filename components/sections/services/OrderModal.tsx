@@ -3,20 +3,12 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Loader2, CheckCircle2, AlertCircle, Sparkles, Clock, Shield, Zap } from 'lucide-react';
-
-interface Plan {
-  _id: string;
-  name: string;
-  tagline: string;
-  price: number;
-  currency: string;
-  features: string[];
-}
+import { PricingPlan } from './PricingSection';
 
 interface OrderModalProps {
   isOpen: boolean;
   onClose: () => void;
-  plan: Plan | null;
+  plan: PricingPlan | null;
 }
 
 export default function OrderModal({ isOpen, onClose, plan }: OrderModalProps) {
@@ -48,7 +40,7 @@ export default function OrderModal({ isOpen, onClose, plan }: OrderModalProps) {
     if (isOpen) {
       // Hide navbar
       if (navbar) {
-        navbar.style.display = 'none';
+        (navbar as HTMLElement).style.display = 'none';
       }
       
       // Lock body scroll and compensate for scrollbar width
@@ -60,7 +52,7 @@ export default function OrderModal({ isOpen, onClose, plan }: OrderModalProps) {
     } else {
       // Show navbar
       if (navbar) {
-        navbar.style.display = '';
+        (navbar as HTMLElement).style.display = '';
       }
       
       // Restore body scroll
@@ -72,7 +64,7 @@ export default function OrderModal({ isOpen, onClose, plan }: OrderModalProps) {
     return () => {
       // Cleanup
       if (navbar) {
-        navbar.style.display = '';
+        (navbar as HTMLElement).style.display = '';
       }
       document.body.style.overflow = '';
       document.body.style.paddingRight = '';
@@ -108,9 +100,9 @@ export default function OrderModal({ isOpen, onClose, plan }: OrderModalProps) {
       }
 
       setStatus('success');
-    } catch (err: any) {
+    } catch (err) {
       setStatus('error');
-      setErrorMessage(err.message || 'Something went wrong');
+      setErrorMessage(err instanceof Error ? err.message : 'Something went wrong');
     } finally {
       setLoading(false);
     }
@@ -273,28 +265,44 @@ export default function OrderModal({ isOpen, onClose, plan }: OrderModalProps) {
                         </motion.h2>
 
                         {/* Tagline */}
-                        <motion.p
-                          initial={{ opacity: 0, y: 20 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ delay: 0.3 }}
-                          className="text-gray-400 text-base md:text-lg mb-10 leading-relaxed"
-                        >
-                          {plan.tagline}
-                        </motion.p>
+                        {plan.tagline && (
+                          <motion.p
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.3 }}
+                            className="text-gray-400 text-base md:text-lg mb-10 leading-relaxed"
+                          >
+                            {plan.tagline}
+                          </motion.p>
+                        )}
 
                         {/* Price Display */}
-                        <motion.div
-                          initial={{ opacity: 0, scale: 0.9 }}
-                          animate={{ opacity: 1, scale: 1 }}
-                          transition={{ delay: 0.4 }}
-                          className="mb-10"
-                        >
-                          <div className="flex items-baseline gap-3 mb-3">
-                            <span className="text-7xl font-black text-[#beff01] tracking-tight">{plan.price}</span>
-                            <span className="text-3xl text-gray-400 font-bold">{plan.currency}</span>
-                          </div>
-                          <p className="text-sm text-gray-500 font-medium">One-time investment</p>
-                        </motion.div>
+                        {plan.price ? (
+                          <motion.div
+                            initial={{ opacity: 0, scale: 0.9 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            transition={{ delay: 0.4 }}
+                            className="mb-10"
+                          >
+                            <div className="flex items-baseline gap-3 mb-3">
+                              <span className="text-7xl font-black text-[#beff01] tracking-tight">{plan.price}</span>
+                              <span className="text-3xl text-gray-400 font-bold">{plan.currency || 'USD'}</span>
+                            </div>
+                            <p className="text-sm text-gray-500 font-medium">One-time investment</p>
+                          </motion.div>
+                        ) : (
+                          <motion.div
+                            initial={{ opacity: 0, scale: 0.9 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            transition={{ delay: 0.4 }}
+                            className="mb-10"
+                          >
+                            <div className="mb-3">
+                              <span className="text-5xl font-black text-[#beff01] tracking-tight">Custom</span>
+                            </div>
+                            <p className="text-sm text-gray-500 font-medium">Pricing based on your needs</p>
+                          </motion.div>
+                        )}
 
                         {/* Features Highlight */}
                         <motion.div

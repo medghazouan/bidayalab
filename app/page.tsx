@@ -55,7 +55,7 @@ export default function HomePage() {
       </div>
 
       {/* Main Content */}
-      <main className="relative z-10 pt-24">
+      <main className="relative z-10 pt-18">
         <Hero />
         <Works />
         <Blogs />

@@ -3,27 +3,13 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getDatabase } from '@/lib/mongodb';
 
-
-interface MongoBlog {
-  _id: { toString: () => string };
-  title: string;
-  slug: string;
-  image: string;
-  publicationDate: Date;
-  category: string;
-  excerpt?: string;
-  text: string;
-  createdAt: Date;
-  updatedAt: Date;
-}
-
 // GET - Get single blog by slug
 export async function GET(
   request: NextRequest,
-  { params }: { params: { slug: string } }
+  { params }: { params: Promise<{ slug: string }> }
 ) {
   try {
-    const { slug } = params;
+    const { slug } = await params;
     const db = await getDatabase();
 
     // Search by slug
@@ -74,15 +60,16 @@ export async function GET(
 // PUT - Update blog by slug
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { slug: string } }
+  { params }: { params: Promise<{ slug: string }> }
 ) {
   try {
-    const { slug } = params;
+    const { slug } = await params;
     const body = await request.json();
 
     const db = await getDatabase();
 
     // Don't allow slug changes through this endpoint
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { slug: newSlug, ...updateData } = body;
 
     const result = await db.collection('blogs').findOneAndUpdate(
@@ -146,10 +133,10 @@ export async function PUT(
 // DELETE - Delete blog by slug
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { slug: string } }
+  { params }: { params: Promise<{ slug: string }> }
 ) {
   try {
-    const { slug } = params;
+    const { slug } = await params;
     const db = await getDatabase();
 
     const result = await db.collection('blogs').deleteOne({ slug });

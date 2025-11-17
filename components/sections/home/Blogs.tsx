@@ -18,12 +18,14 @@ interface Blog {
 }
 
 // Throttle utility for mouse move handlers
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function throttleMouseMove<T extends (...args: any[]) => void>(
   func: T,
   limit: number
 ): (...args: Parameters<T>) => void {
   let lastCall = 0;
   let rafId: number | null = null;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   return function (this: any, ...args: Parameters<T>) {
     const now = Date.now();
     if (now - lastCall >= limit) {
@@ -205,7 +207,7 @@ export default function Blogs() {
   const loading = isLoading;
 
   return (
-    <section className="relative pt-20 md:pt-32 pb-12 md:pb-16 overflow-hidden">
+    <section className="relative pt-18 md:pt-32 pb-10 md:pb-16 overflow-hidden">
       {/* Divider Above Section */}
       <div className="max-w-7xl mx-auto px-6 md:px-8 lg:px-12 pb-16">
         <div className="relative">

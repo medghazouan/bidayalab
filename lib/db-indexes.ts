@@ -1,4 +1,5 @@
 import { getDatabase } from './mongodb';
+import type { IndexDescriptionInfo } from 'mongodb';
 
 /**
  * Ensure MongoDB indexes are created
@@ -104,7 +105,7 @@ export async function ensureIndexesSafe(): Promise<void> {
 /**
  * List all existing indexes for a collection (useful for debugging)
  */
-export async function listIndexes(collectionName: string): Promise<any[]> {
+export async function listIndexes(collectionName: string): Promise<IndexDescriptionInfo[]> {
   try {
     const db = await getDatabase();
     const indexes = await db.collection(collectionName).indexes();

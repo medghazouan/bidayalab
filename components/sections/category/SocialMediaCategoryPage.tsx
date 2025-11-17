@@ -5,7 +5,6 @@
 import { motion } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
-import { Project } from "@/data/projects";
 import {
   Instagram,
   TrendingUp,
@@ -17,6 +16,35 @@ import {
   Target,
   BarChart3,
 } from "lucide-react";
+
+interface Project {
+  _id: string;
+  title?: string;
+  slug?: string;
+  category?: string;
+  categorySlug?: string;
+  client?: string;
+  year?: string;
+  description?: string;
+  image?: string;
+  images?: string[];
+  technologies?: string[];
+  featured?: boolean;
+  platforms?: string[];
+  contentTypes?: string[];
+  metrics?: {
+    followers?: string;
+    engagement?: string;
+    reach?: string;
+  };
+  samplePosts?: Array<{
+    image: string;
+    caption: string;
+    likes: string;
+    engagement: string;
+  }>;
+  [key: string]: unknown;
+}
 
 interface Props {
   projects: Project[];
@@ -156,9 +184,9 @@ export default function SocialMediaCategoryPage({ projects }: Props) {
             </motion.h2>
 
             <div className="space-y-16">
-              {projects.map((project, index) => (
+              {projects.map((project, index: number) => (
                 <motion.div
-                  key={project.id}
+                  key={project._id || index}
                   initial={{ opacity: 0, y: 30 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
@@ -269,7 +297,7 @@ export default function SocialMediaCategoryPage({ projects }: Props) {
                   {/* Platforms Tags */}
                   {project.platforms && (
                     <div className="flex flex-wrap gap-2 mb-6">
-                      {project.platforms.map((platform, i) => (
+                      {(project.platforms || []).map((platform, i) => (
                         <span
                           key={i}
                           className="bg-gradient-to-r from-pink-500/10 to-purple-500/10 border border-pink-500/20 rounded-full px-4 py-2 text-sm text-pink-400 font-bold"

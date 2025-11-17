@@ -16,12 +16,14 @@ interface Project {
 }
 
 // Throttle utility for mouse move handlers
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function throttleMouseMove<T extends (...args: any[]) => void>(
   func: T,
   limit: number
 ): (...args: Parameters<T>) => void {
   let lastCall = 0;
   let rafId: number | null = null;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   return function (this: any, ...args: Parameters<T>) {
     const now = Date.now();
     if (now - lastCall >= limit) {
@@ -196,7 +198,7 @@ export default function Works() {
   const loading = isLoading;
 
   return (
-    <section id="works-section" className="relative pt-20 md:pt-32 pb-12 md:pb-16 overflow-hidden">
+    <section id="works-section" className="relative pt-18 md:pt-32 pb-12 md:pb-16 overflow-hidden">
       {/* Divider Above Section */}
       <div className="max-w-7xl mx-auto px-6 md:px-8 lg:px-12 pb-16">
         <div className="relative">
@@ -238,7 +240,7 @@ export default function Works() {
             transition={{ duration: 0.6, delay: 0.3 }}
             className="text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-black text-white mb-8 tracking-tight leading-none"
           >
-            See What I've
+            See What I&apos;ve
             <br />
             <span className="bg-gradient-to-r from-[#beff01] via-[#d4ff4d] to-[#beff01] bg-clip-text text-transparent bg-[length:200%_auto] animate-gradient">
               Built For Others
@@ -252,7 +254,7 @@ export default function Works() {
             transition={{ duration: 0.6, delay: 0.4 }}
             className="text-xl md:text-2xl text-gray-400 max-w-4xl mx-auto leading-relaxed font-light mb-16"
           >
-            These aren't just pretty websites or random ads. Each project here helped a real business 
+            These aren&apos;t just pretty websites or random ads. Each project here helped a real business 
             <span className="text-white font-semibold"> attract more customers</span>, 
             <span className="text-[#beff01] font-semibold"> increase sales</span>, and 
             <span className="text-white font-semibold"> grow faster</span>. 

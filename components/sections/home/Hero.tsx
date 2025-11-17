@@ -13,7 +13,7 @@ export default function Hero() {
   };
 
   return (
-    <section className="relative pt-20 md:pt-32 pb-10 md:pb-16 overflow-hidden">
+    <section className="relative pt-20 md:pt-32 pb-6 md:pb-16 overflow-hidden">
       <div className="relative max-w-7xl mx-auto px-6 md:px-8 lg:px-12">
         {/* Section Header - Same as Services */}
         <motion.div

@@ -5,7 +5,6 @@
 import { motion } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
-import { Project } from "@/data/projects";
 import {
   Code2,
   Smartphone,
@@ -16,6 +15,25 @@ import {
   Layers,
   Sparkles,
 } from "lucide-react";
+
+interface Project {
+  _id: string;
+  title?: string;
+  slug?: string;
+  category?: string;
+  categorySlug?: string;
+  client?: string;
+  year?: string;
+  description?: string;
+  image?: string;
+  images?: string[];
+  technologies?: string[];
+  featured?: boolean;
+  liveUrl?: string;
+  githubUrl?: string;
+  features?: string[];
+  [key: string]: unknown;
+}
 
 interface Props {
   projects: Project[];
@@ -149,9 +167,9 @@ export default function WebDevCategoryPage({ projects }: Props) {
             </motion.h2>
 
             <div className="grid gap-8">
-              {projects.map((project, index) => (
+              {projects.map((project, index: number) => (
                 <motion.div
-                  key={project.id}
+                  key={project._id || index}
                   initial={{ opacity: 0, y: 30 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
@@ -161,9 +179,9 @@ export default function WebDevCategoryPage({ projects }: Props) {
                   <div className="grid md:grid-cols-2 gap-8 p-8">
                     {/* Project Image */}
                     <div className="relative aspect-video rounded-2xl overflow-hidden">
-                      <Image
-                        src={project.image}
-                        alt={project.title}
+                        <Image
+                          src={project.image || '/assets/projects/work1.jpg'}
+                          alt={project.title || 'Project'}
                         fill
                         className="object-cover group-hover:scale-105 transition-transform duration-500"
                       />
@@ -203,7 +221,7 @@ export default function WebDevCategoryPage({ projects }: Props) {
 
                         {/* Technologies */}
                         <div className="flex flex-wrap gap-2 mb-6">
-                          {project.technologies.map((tech, i) => (
+                          {(project.technologies || []).map((tech, i) => (
                             <span
                               key={i}
                               className="bg-white/5 border border-white/10 rounded-full px-3 py-1 text-xs text-gray-300"

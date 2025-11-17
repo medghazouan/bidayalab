@@ -61,8 +61,7 @@ async function getProjectsByCategory(categorySlug: string) {
       new Promise((_, reject) =>
         setTimeout(() => reject(new Error('Query timeout')), 10000)
       )
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    ]) as any[];
+    ]) as Array<{ _id: { toString: () => string }; [key: string]: unknown }>;
 
     // Convert MongoDB _id to string
     return projects.map((project) => ({
@@ -75,8 +74,9 @@ async function getProjectsByCategory(categorySlug: string) {
   }
 }
 
-export async function generateMetadata({ params }: { params: { slug: string } }) {
-  const category = categoryInfo[params.slug as keyof typeof categoryInfo];
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  const category = categoryInfo[slug as keyof typeof categoryInfo];
   
   if (!category) {
     return {
@@ -90,15 +90,16 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   };
 }
 
-export default async function CategoryPage({ params }: { params: { slug: string } }) {
-  const categoryProjects = await getProjectsByCategory(params.slug);
+export default async function CategoryPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  const categoryProjects = await getProjectsByCategory(slug);
 
   if (categoryProjects.length === 0) {
     notFound();
   }
 
   // Render specific category page
-  switch (params.slug) {
+  switch (slug) {
     case "web-dev":
       return <WebDevCategoryPage projects={categoryProjects} />;
     case "social-media":

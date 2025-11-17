@@ -6,14 +6,17 @@ import { ObjectId } from 'mongodb';
 // GET - Get single project by ID or slug
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = params;
+    const { id } = await params;
     const db = await getDatabase();
 
     // Build query to check both ObjectId and slug in single query
-    const query: any = { $or: [] };
+    interface MongoQuery {
+      $or: Array<{ _id?: ObjectId; slug?: string }>;
+    }
+    const query: MongoQuery = { $or: [] };
     
     // If valid ObjectId, add to query
     if (ObjectId.isValid(id) && id.length === 24) {
@@ -58,10 +61,10 @@ export async function GET(
 // PUT - Update project
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = params;
+    const { id } = await params;
     
     if (!ObjectId.isValid(id)) {
       return NextResponse.json(
@@ -124,10 +127,10 @@ export async function PUT(
 // DELETE - Delete project
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = params;
+    const { id } = await params;
     
     if (!ObjectId.isValid(id)) {
       return NextResponse.json(

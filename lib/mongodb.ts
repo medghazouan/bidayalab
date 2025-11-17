@@ -25,7 +25,7 @@ let cachedDb: Db | null = null;
 
 // Development: use global to prevent multiple connections during hot reload
 if (process.env.NODE_ENV === 'development') {
-  let globalWithMongo = global as typeof globalThis & {
+  const globalWithMongo = global as typeof globalThis & {
     _mongoClientPromise?: Promise<MongoClient>;
     _mongoClient?: MongoClient;
   };

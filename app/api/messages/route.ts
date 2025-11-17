@@ -12,12 +12,16 @@ export async function GET(request: Request) {
     const db = client.db("meddigital");
 
     const { searchParams } = new URL(request.url);
-    const status = searchParams.get('status');
+    const statusParam = searchParams.get('status');
     const page = parseInt(searchParams.get('page') || '1', 10);
     const limit = Math.min(parseInt(searchParams.get('limit') || '20', 10), 100); // Max 100
     const skip = (page - 1) * limit;
 
-    const query = status ? { status } : {};
+    // Type-safe query building
+    const query: { status?: 'new' | 'read' | 'replied' } = {};
+    if (statusParam && (statusParam === 'new' || statusParam === 'read' || statusParam === 'replied')) {
+      query.status = statusParam;
+    }
     
     // Projection to fetch only needed fields
     const projection = {
@@ -58,7 +62,7 @@ export async function GET(request: Request) {
       success: true,
       contacts: contacts.map(contact => ({
         ...contact,
-        _id: contact._id.toString()
+        _id: contact._id?.toString() || ''
       })),
       pagination: {
         page,
@@ -94,14 +98,21 @@ export async function PATCH(request: Request) {
     const result = await db
       .collection<Contact>(CONTACT_COLLECTION)
       .findOneAndUpdate(
-        { _id: new ObjectId(contactId) },
-        { $set: { status } },
+        { _id: new ObjectId(contactId) as unknown as Contact['_id'] },
+        { $set: { status: status as 'new' | 'read' | 'replied' } },
         { returnDocument: 'after' }
       );
 
+    if (!result) {
+      return NextResponse.json(
+        { success: false, error: 'Contact not found' },
+        { status: 404 }
+      );
+    }
+
     return NextResponse.json({
       success: true,
-      contact: result.value,
+      contact: result,
     });
 
   } catch (error) {

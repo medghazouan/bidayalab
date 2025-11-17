@@ -14,8 +14,11 @@ export default function SplashScreen() {
   useEffect(() => {
     // Detect Connection Speed
     const detectConnectionSpeed = () => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const connection = (navigator as any).connection || 
+                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
                         (navigator as any).mozConnection || 
+                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
                         (navigator as any).webkitConnection;
 
       if (connection) {

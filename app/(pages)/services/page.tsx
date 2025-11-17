@@ -6,12 +6,13 @@ import { motion } from 'framer-motion';
 import ServicesList from '@/components/sections/services/ServicesList';
 import PricingSection from '@/components/sections/services/PricingSection';
 import OrderModal from '@/components/sections/services/OrderModal';
+import { PricingPlan } from '@/components/sections/services/PricingSection';
 
 export default function ServicesPage() {
-  const [selectedPlan, setSelectedPlan] = useState(null);
+  const [selectedPlan, setSelectedPlan] = useState<PricingPlan | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const handleOpenOrderModal = useCallback((plan: never) => {
+   const handleOpenOrderModal = useCallback((plan: PricingPlan) => {
     setSelectedPlan(plan);
     setIsModalOpen(true);
   }, []);

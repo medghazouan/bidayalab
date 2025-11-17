@@ -32,12 +32,14 @@ const categories = [
 ];
 
 // Throttle utility for mouse move handlers
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function throttleMouseMove<T extends (...args: any[]) => void>(
   func: T,
   limit: number
 ): (...args: Parameters<T>) => void {
   let lastCall = 0;
   let rafId: number | null = null;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   return function (this: any, ...args: Parameters<T>) {
     const now = Date.now();
     if (now - lastCall >= limit) {
@@ -303,7 +305,6 @@ function ProjectCard({ project, index }: ProjectCardProps) {
         initial={{ opacity: 0, y: 50 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-50px" }}
-        style={{ willChange: 'transform, opacity' }}
         transition={{ 
           duration: 0.6, 
           delay: index * 0.1,
@@ -317,6 +318,7 @@ function ProjectCard({ project, index }: ProjectCardProps) {
           rotateX,
           rotateY,
           transformStyle: 'preserve-3d',
+          willChange: 'transform, opacity',
         }}
         className="group relative aspect-[4/3] overflow-hidden rounded-3xl bg-zinc-900/50 border border-zinc-800/50 cursor-pointer hover:border-[#beff01]/50 transition-all duration-300"
       >

@@ -68,7 +68,7 @@ export default function Achievements() {
             Our Achievements
           </h2>
           <p className="text-xl text-zinc-400 max-w-2xl mx-auto mt-6">
-            We're proud of what we've accomplished. These numbers represent our
+            We&apos;re proud of what we&apos;ve accomplished. These numbers represent our
             commitment to excellence and the value we deliver daily.
           </p>
         </motion.div>

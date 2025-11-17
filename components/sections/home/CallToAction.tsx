@@ -6,7 +6,7 @@ import { motion } from 'framer-motion';
 
 export default function CallToAction() {
   return (
-    <section className="relative pt-20 md:pt-32 pb-12 md:pb-16 overflow-hidden">
+    <section className="relative pt-18 md:pt-32 pb-10 md:pb-16 overflow-hidden">
       {/* Divider Above Section */}
       <div className="max-w-7xl mx-auto px-6 md:px-8 lg:px-12 pb-16">
         <div className="relative">

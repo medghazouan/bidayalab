@@ -78,7 +78,7 @@ export default function AboutHero() {
                   What began as curiosity turned into a passion for building things that people actually use.
                 </p>
                 <p className="text-gray-400 leading-relaxed">
-                  Over the years, we've worked with <span className="text-[#beff01] font-bold">10+ clients</span> in Marrakech and beyond, 
+                  Over the years, we&apos;ve worked with <span className="text-[#beff01] font-bold">10+ clients</span> in Marrakech and beyond, 
                   helping them turn their ideas into <span className="text-white font-semibold">real, profitable businesses</span>.
                 </p>
               </div>

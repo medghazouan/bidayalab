@@ -43,17 +43,18 @@ async function getProjectBySlug(slug: string) {
       new Promise((_, reject) =>
         setTimeout(() => reject(new Error('Query timeout')), 10000)
       )
-    ]) as unknown;
+    ]) as { _id: { toString: () => string }; [key: string]: unknown } | null;
 
-    if (!project) {
+    if (!project || !project._id) {
       return null;
     }
 
     // Convert MongoDB _id to string
-    return {
+    const projectWithStringId = {
       ...project,
       _id: project._id.toString(),
     };
+    return projectWithStringId;
   } catch (error) {
     console.error('Error fetching project:', error);
     return null;
@@ -72,8 +73,9 @@ async function getProjectData(slug: string) {
   return projectCache.get(slug)!;
 }
 
-export async function generateMetadata({ params }: { params: { slug: string } }) {
-  const project = await getProjectData(params.slug);
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  const project = await getProjectData(slug);
   
   if (!project) {
     return {
@@ -87,9 +89,10 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   };
 }
 
-export default async function ProjectPage({ params }: { params: { slug: string } }) {
+export default async function ProjectPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
   // Use the same cached data as generateMetadata
-  const project = await getProjectData(params.slug);
+  const project = await getProjectData(slug);
 
   if (!project) {
     notFound();

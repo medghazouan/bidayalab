@@ -132,7 +132,7 @@ export default function ClientTestimonials() {
 
                 {/* Content */}
                 <blockquote className="text-2xl md:text-3xl font-semibold text-white leading-relaxed">
-                  "{currentTestimonial.content}"
+                  &quot;{currentTestimonial.content}&quot;
                 </blockquote>
 
                 {/* Author */}
