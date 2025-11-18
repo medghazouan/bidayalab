@@ -198,10 +198,10 @@ export default function CallToAction() {
           >
             <Link
               href="/contact"
-              className="group relative inline-flex items-center gap-3 bg-[#beff01] text-black font-black text-xl px-14 py-7 rounded-full hover:bg-[#a8e600] transition-all overflow-hidden shadow-2xl shadow-[#beff01]/30"
+              className="group relative inline-flex items-center gap-2 sm:gap-3 bg-[#beff01] text-black font-black text-base sm:text-xl px-8 sm:px-14 py-4 sm:py-7 rounded-full hover:bg-[#a8e600] transition-all overflow-hidden shadow-2xl shadow-[#beff01]/30"
             >
               <span className="relative z-10">Let&apos;s Start Your Project Today</span>
-              <ArrowRight className="w-7 h-7 relative z-10 group-hover:translate-x-2 transition-transform" />
+              <ArrowRight className="w-5 h-5 sm:w-7 sm:h-7 relative z-10 group-hover:translate-x-1 sm:group-hover:translate-x-2 transition-transform" />
               <motion.div 
                 className="absolute inset-0 bg-gradient-to-r from-[#d4ff4d] to-[#beff01]"
                 initial={{ x: '-100%' }}

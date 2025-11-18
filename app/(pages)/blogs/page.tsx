@@ -17,25 +17,32 @@ interface Blog {
   excerpt?: string;
 }
 
-const categories = [
-  { slug: 'all', label: 'All Articles' },
-  { slug: 'web-dev', label: 'Web Development' },
-  { slug: 'marketing', label: 'Marketing' },
-  { slug: 'design', label: 'Design' },
-  { slug: 'business', label: 'Business' },
-];
+// Dynamic categories based on recent blogs
+const getDynamicCategories = (blogs: Blog[]) => {
+  const recentCategories = [...blogs]
+    .sort((a, b) => new Date(b.publicationDate).getTime() - new Date(a.publicationDate).getTime())
+    .slice(0, 3)
+    .map(blog => blog.category);
+
+  // Remove duplicates and create category objects
+  const uniqueCategories = [...new Set(recentCategories)].map(category => ({
+    slug: category.toLowerCase().replace(/\s+/g, '-'),
+    label: category
+  }));
+
+  return [
+    { slug: 'all', label: 'All Articles' },
+    ...uniqueCategories
+  ];
+};
 
 export default function BlogsPage() {
   const [activeCategory, setActiveCategory] = useState('all');
 
   const { data, isLoading, error: queryError } = useQuery({
-    queryKey: ['blogs', activeCategory],
-    queryFn: async () => {
-      const url = activeCategory === 'all' 
-        ? '/api/blogs' 
-        : `/api/blogs?category=${activeCategory}`;
-      
-      const response = await fetch(url);
+    queryKey: ['blogs'],
+    queryFn: async () => {      
+      const response = await fetch('/api/blogs');
       if (!response.ok) throw new Error('Failed to fetch');
       return response.json();
     },
@@ -46,6 +53,20 @@ export default function BlogsPage() {
   });
 
   const blogs: Blog[] = (data?.blogs || []) as Blog[];
+  
+  // Get dynamic categories from recent blogs
+  const categories = blogs.length > 0 ? getDynamicCategories(blogs) : [
+    { slug: 'all', label: 'All Articles' },
+    { slug: 'web-dev', label: 'Web Development' },
+    { slug: 'marketing', label: 'Marketing' },
+    { slug: 'design', label: 'Design' }
+  ];
+
+  // Filter blogs based on active category
+  const filteredBlogs = activeCategory === 'all' 
+    ? blogs 
+    : blogs.filter(blog => blog.category.toLowerCase().replace(/\s+/g, '-') === activeCategory);
+
   const loading = isLoading;
   const error = queryError ? 'Error loading articles' : '';
 
@@ -140,7 +161,7 @@ export default function BlogsPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.5 }}
-              className="mb-16 flex flex-wrap justify-center gap-4"
+              className="mb-16 flex flex-wrap justify-center gap-2 sm:gap-4"
             >
               {categories.map((cat) => {
                 const isActive = activeCategory === cat.slug;
@@ -151,7 +172,7 @@ export default function BlogsPage() {
                     disabled={loading}
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
-                    className={`flex items-center gap-3 px-6 py-3 rounded-full font-bold transition-all duration-300 disabled:opacity-50 ${
+                    className={`flex items-center gap-2 px-4 py-2 sm:px-6 sm:py-3 rounded-full font-bold transition-all duration-300 disabled:opacity-50 text-sm sm:text-base ${
                       isActive
                         ? 'bg-[#beff01] text-black shadow-lg shadow-[#beff01]/30'
                         : 'bg-zinc-900/50 border border-zinc-800 text-gray-400 hover:border-[#beff01]/30 hover:bg-zinc-800/50'
@@ -197,7 +218,7 @@ export default function BlogsPage() {
                   transition={{ duration: 0.3 }}
                   className="grid gap-8 md:grid-cols-2 lg:grid-cols-3"
                 >
-                  {blogs.map((blog: Blog, index: number) => (
+                  {filteredBlogs.map((blog: Blog, index: number) => (
                     <BlogCard 
                       key={blog.id} 
                       blog={blog} 
@@ -210,7 +231,7 @@ export default function BlogsPage() {
             )}
 
             {/* Empty State */}
-            {!loading && !error && blogs.length === 0 && (
+            {!loading && !error && filteredBlogs.length === 0 && (
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -334,37 +355,40 @@ function BlogCard({ blog, index, formatDate }: BlogCardProps) {
           <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-300" />
         </motion.div>
 
-        {/* Category Badge */}
-        <motion.div
-          initial={{ x: -20, opacity: 0 }}
-          animate={{ x: 0, opacity: 1 }}
-          transition={{ delay: index * 0.1 + 0.2 }}
-          className="absolute top-6 left-6 z-10"
-        >
-          <span className="inline-flex items-center gap-1.5 bg-[#beff01] text-black text-xs font-bold uppercase tracking-wider px-4 py-2 rounded-full shadow-xl shadow-[#beff01]/30">
-            <BookOpen className="w-3 h-3" />
-            {blog.category}
-          </span>
-        </motion.div>
+        {/* Category and Date Badges - Fixed overlapping on mobile */}
+        <div className="absolute top-0 left-0 right-0 z-10 p-4">
+          <div className="flex flex-col sm:flex-row justify-between items-start gap-2">
+            {/* Category Badge */}
+            <motion.div
+              initial={{ x: -20, opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              transition={{ delay: index * 0.1 + 0.2 }}
+            >
+              <span className="inline-flex items-center gap-1.5 bg-[#beff01] text-black text-xs font-bold uppercase tracking-wider px-3 py-1.5 rounded-full shadow-xl shadow-[#beff01]/30">
+                <BookOpen className="w-3 h-3" />
+                {blog.category}
+              </span>
+            </motion.div>
 
-        {/* Date Badge */}
-        <motion.div
-          initial={{ x: 20, opacity: 0 }}
-          animate={{ x: 0, opacity: 1 }}
-          transition={{ delay: index * 0.1 + 0.3 }}
-          className="absolute top-6 right-6 z-10"
-        >
-          <span className="inline-flex items-center gap-1.5 bg-black/60 backdrop-blur-sm text-gray-300 text-xs font-medium px-3 py-2 rounded-full border border-zinc-800">
-            <Calendar className="w-3 h-3" />
-            {formatDate(blog.publicationDate)}
-          </span>
-        </motion.div>
+            {/* Date Badge */}
+            <motion.div
+              initial={{ x: 20, opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              transition={{ delay: index * 0.1 + 0.3 }}
+            >
+              <span className="inline-flex items-center gap-1.5 bg-black/60 backdrop-blur-sm text-gray-300 text-xs font-medium px-3 py-1.5 rounded-full border border-zinc-800">
+                <Calendar className="w-3 h-3" />
+                {formatDate(blog.publicationDate)}
+              </span>
+            </motion.div>
+          </div>
+        </div>
 
         {/* Blog Title & Excerpt */}
         <motion.div
-          className="absolute bottom-0 left-0 right-0 p-8 z-10"
+          className="absolute bottom-0 left-0 right-0 p-4 sm:p-8 z-10"
         >
-          <h3 className="text-3xl font-black text-white mb-2 group-hover:text-[#beff01] transition-colors duration-300 tracking-tight">
+          <h3 className="text-xl sm:text-3xl font-black text-white mb-2 group-hover:text-[#beff01] transition-colors duration-300 tracking-tight">
             {blog.title}
           </h3>
           

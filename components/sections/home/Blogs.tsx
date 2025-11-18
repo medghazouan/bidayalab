@@ -2,7 +2,7 @@
 
 import { useState, useRef, useCallback } from 'react';
 import Link from 'next/link';
-import { ArrowRight, Calendar, BookOpen, ExternalLink } from 'lucide-react';
+import {  Calendar, BookOpen, ExternalLink } from 'lucide-react';
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import { useQuery } from '@tanstack/react-query';
 import Image from 'next/image';
@@ -263,9 +263,9 @@ export default function Blogs() {
             transition={{ duration: 0.6, delay: 0.4 }}
             className="text-xl md:text-2xl text-gray-400 max-w-4xl mx-auto leading-relaxed font-light mb-16"
           >
-            Discover <span className="text-[#beff01] font-semibold">insights</span>, 
-            <span className="text-white font-semibold"> tips</span>, and 
-            <span className="text-white font-semibold"> stories</span> that inspire and inform.
+            Discover insights, 
+             tips, and 
+             stories that inspire and inform.
           </motion.p>
         </motion.div>
 

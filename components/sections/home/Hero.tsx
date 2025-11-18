@@ -133,17 +133,17 @@ export default function Hero() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 1.2 }}
-            className="flex flex-col sm:flex-row gap-4 justify-center"
+            className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center"
           >
             {/* Primary CTA */}
             <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.98 }}>
               <Link
                 href="/services#pricing-section"
-                className="group relative inline-flex items-center justify-center gap-3 bg-[#beff01] text-black font-black text-lg px-12 py-6 rounded-full hover:bg-[#a8e600] transition-all overflow-hidden shadow-2xl shadow-[#beff01]/30"
+                className="group relative inline-flex items-center justify-center gap-2 sm:gap-3 bg-[#beff01] text-black font-black text-base sm:text-lg px-6 sm:px-12 py-4 sm:py-6 rounded-full hover:bg-[#a8e600] transition-all overflow-hidden shadow-2xl shadow-[#beff01]/30"
               >
                 
                 <span className="relative z-10">Let&apos;s Talk Pricing</span>
-                <ArrowRight className="w-6 h-6 relative z-10 group-hover:translate-x-1 transition-transform" />
+                <ArrowRight className="w-5 h-5 sm:w-6 sm:h-6 relative z-10 group-hover:translate-x-1 transition-transform" />
                 <motion.div 
                   className="absolute inset-0 bg-gradient-to-r from-[#d4ff4d] to-[#beff01]"
                   initial={{ x: '-100%' }}
@@ -157,10 +157,10 @@ export default function Hero() {
             <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.98 }}>
               <button
                 onClick={scrollToWorks}
-                className="group inline-flex items-center justify-center gap-3 bg-transparent border-2 border-[#beff01] text-[#beff01] font-black text-lg px-12 py-6 rounded-full hover:bg-[#beff01]/10 transition-all backdrop-blur-xl shadow-lg shadow-[#beff01]/10 hover:shadow-[#beff01]/20"
+                className="group inline-flex items-center justify-center gap-2 sm:gap-3 bg-transparent border-2 border-[#beff01] text-[#beff01] font-black text-base sm:text-lg px-6 sm:px-12 py-4 sm:py-6 rounded-full hover:bg-[#beff01]/10 transition-all backdrop-blur-xl shadow-lg shadow-[#beff01]/10 hover:shadow-[#beff01]/20"
               >
                 <span>See Real Results</span>
-                <ArrowRight className="w-6 h-6 group-hover:translate-x-1 transition-transform" />
+                <ArrowRight className="w-5 h-5 sm:w-6 sm:h-6 group-hover:translate-x-1 transition-transform" />
               </button>
             </motion.div>
           </motion.div>

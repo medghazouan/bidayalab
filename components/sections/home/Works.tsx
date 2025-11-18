@@ -255,9 +255,9 @@ export default function Works() {
             className="text-xl md:text-2xl text-gray-400 max-w-4xl mx-auto leading-relaxed font-light mb-16"
           >
             These aren&apos;t just pretty websites or random ads. Each project here helped a real business 
-            <span className="text-white font-semibold"> attract more customers</span>, 
-            <span className="text-[#beff01] font-semibold"> increase sales</span>, and 
-            <span className="text-white font-semibold"> grow faster</span>. 
+             attract more customers, 
+             increase sales, and 
+            grow faster. 
             Yours could be next.
           </motion.p>
         </motion.div>
