@@ -6,7 +6,7 @@
     "ingest": "node scripts/ingest-pdf.mjs",
     "dev": "next dev --turbo",
     "dev:webpack": "next dev",
-    "build": "next build",
+    "build": "npm install --legacy-peer-deps && next build",
     "start": "next start",
     "lint": "next lint",
     "test": "jest",
