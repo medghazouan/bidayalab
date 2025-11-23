@@ -4,6 +4,7 @@
 //import { motion } from 'framer-motion';
 import dynamic from 'next/dynamic';
 import Hero from "@/components/sections/home/Hero";
+import Chatbot from '@/components/Chatbot';
 
 // Dynamically import components that are below the fold
 const Works = dynamic(() => import('@/components/sections/home/Works'), {
@@ -60,6 +61,7 @@ export default function HomePage() {
         <Works />
         <Blogs />
         <CallToAction />
+        <Chatbot />
       </main>
 
       <style jsx global>{`
