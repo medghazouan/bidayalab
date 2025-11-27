@@ -63,6 +63,14 @@ const nextConfig = {
     serverActions: {
       bodySizeLimit: '2mb',
     },
+    serverComponentsExternalPackages: [
+      'langchain',
+      '@langchain/core',
+      '@langchain/community',
+      '@langchain/google-genai',
+      '@langchain/classic',
+      'pdf-parse'
+    ],
   },
 
   // Compress responses
