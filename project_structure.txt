@@ -1,0 +1,134 @@
+MED-ELKECHCHAD PROJECT STRUCTURE
+=====================================
+
+med-elkechchad/
+├── app/                                    # Next.js App Router directory
+│   ├── (pages)/                           # Route groups
+│   │   ├── about/
+│   │   │   └── page.tsx                   # About page component
+│   │   ├── contact/
+│   │   │   └── page.tsx                   # Contact page component
+│   │   ├── services/
+│   │   │   └── page.tsx                   # Services page component
+│   │   └── works/                         # Works/Portfolio section
+│   │       ├── [slug]/
+│   │       │   └── page.tsx               # Dynamic work detail page
+│   │       ├── category/
+│   │       │   └── [slug]/
+│   │       │       └── page.tsx           # Dynamic category page
+│   │       └── page.tsx                   # Works listing page
+│   ├── api/                               # API routes
+│   │   ├── contact/
+│   │   │   └── route.ts                   # Contact form API endpoint
+│   │   ├── messages/
+│   │   │   └── route.ts                   # Messages API endpoint
+│   │   ├── orders/
+│   │   │   └── route.ts                   # Orders API endpoint
+│   │   ├── pricing/
+│   │   │   └── route.ts                   # Pricing API endpoint
+│   │   ├── projects/
+│   │   │   ├── [id]/
+│   │   │   │   └── route.ts               # Individual project API
+│   │   │   └── route.ts                   # Projects listing API
+│   │   └── testimonials/
+│   │       ├── [id]/
+│   │       │   └── route.ts               # Individual testimonial API
+│   │       └── route.ts                   # Testimonials listing API
+│   ├── favicon.ico                        # Site favicon
+│   ├── globals.css                        # Global CSS styles
+│   ├── layout.tsx                         # Root layout component
+│   ├── page.tsx                           # Home page component
+│   └── providers.tsx                      # Context providers setup
+├── components/                            # React components
+│   ├── projects/                          # Project-specific components
+│   │   ├── PaidAdsProject.tsx             # Paid ads project component
+│   │   ├── SocialMediaProject.tsx        # Social media project component
+│   │   └── WebDevProject.tsx             # Web development project component
+│   ├── sections/                          # Page section components
+│   │   ├── about/                         # About page sections
+│   │   │   ├── AboutHero.tsx              # About hero section
+│   │   │   ├── Education.tsx              # Education section
+│   │   │   ├── Experience.tsx             # Experience section
+│   │   │   └── Testimonials.tsx           # Testimonials section
+│   │   ├── category/                      # Category page components
+│   │   │   ├── PaidAdsCategoryPage.tsx    # Paid ads category page
+│   │   │   ├── SocialMediaCategoryPage.tsx # Social media category page
+│   │   │   └── WebDevCategoryPage.tsx     # Web dev category page
+│   │   ├── contact/                       # Contact page sections
+│   │   │   └── ContactSection.tsx         # Contact form section
+│   │   ├── home/                          # Home page sections
+│   │   │   ├── CallToAction.tsx           # Call to action section
+│   │   │   ├── Hero.tsx                   # Hero section
+│   │   │   └── Works.tsx                  # Works showcase section
+│   │   ├── services/                      # Services page sections
+│   │   │   ├── OrderModal.tsx             # Order modal component
+│   │   │   ├── PricingSection.tsx         # Pricing plans section
+│   │   │   └── ServicesList.tsx           # Services list component
+│   │   ├── works/                         # Works page sections
+│   │   │   └── WorksGrid.tsx              # Works grid component
+│   │   ├── Footer.tsx                     # Site footer component
+│   │   └── Navbar.tsx                     # Navigation bar component
+│   └── SplashScreen.tsx                   # Loading splash screen component
+├── lib/                                   # Utility libraries
+│   └── mongodb.ts                         # MongoDB connection utility
+├── models/                                # TypeScript data models
+│   ├── Contact.ts                         # Contact form data model
+│   ├── Order.ts                           # Order data model
+│   ├── PricingPlan.ts                     # Pricing plan data model
+│   ├── Project.ts                         # Project data model
+│   └── Testimonial.ts                     # Testimonial data model
+├── public/                                # Static assets
+│   ├── assets/                            # Organized assets
+│   │   ├── fonts/                         # Font files (empty)
+│   │   ├── icons/                         # Icon files
+│   │   │   ├── file.svg                   # File icon
+│   │   │   ├── globe.svg                  # Globe icon
+│   │   │   ├── MEDDIGITAL.svg             # Company logo
+│   │   │   ├── next.svg                   # Next.js logo
+│   │   │   ├── vercel.svg                 # Vercel logo
+│   │   │   └── window.svg                 # Window icon
+│   │   └── images/                        # Image assets
+│   │       ├── about/                     # About page images
+│   │       │   └── profile.png            # Profile picture
+│   │       ├── company1.png               # Company image 1
+│   │       ├── company2.png               # Company image 2
+│   │       └── projects/                  # Project images
+│   │           ├── work1.jpg              # Work sample 1
+│   │           ├── work2.jpg              # Work sample 2
+│   │           ├── work3.jpg              # Work sample 3
+│   │           └── work4.jpg              # Work sample 4
+│   └── images/                            # Additional images (empty)
+├── styles/                                # Style files
+│   └── tailwind.css                       # Tailwind CSS configuration
+├── .next/                                 # Next.js build output (generated)
+│   ├── cache/                             # Build cache
+│   ├── server/                            # Server-side files
+│   ├── static/                            # Static assets
+│   └── types/                             # TypeScript definitions
+├── node_modules/                          # Dependencies (not shown in detail)
+├── eslint.config.mjs                      # ESLint configuration
+├── next-env.d.ts                          # Next.js TypeScript definitions
+├── next.config.js                         # Next.js configuration
+├── package-lock.json                      # Dependency lock file
+├── package.json                           # Project dependencies and scripts
+├── postcss.config.js                      # PostCSS configuration
+├── tailwind.config.js                     # Tailwind CSS configuration
+└── tsconfig.json                          # TypeScript configuration
+
+TOTAL FILES AND DIRECTORIES:
+- Main source files: ~50+ files
+- Build files (.next): ~4900+ files (generated)
+- Dependencies (node_modules): ~1000+ packages
+
+PROJECT TYPE: Next.js 14+ with App Router
+FRAMEWORK: React with TypeScript
+STYLING: Tailwind CSS
+DATABASE: MongoDB
+DEPLOYMENT: Vercel-ready
+
+This is a professional portfolio/agency website with:
+- Dynamic routing for projects and categories
+- API endpoints for contact, orders, and content management
+- Responsive design with Tailwind CSS
+- TypeScript for type safety
+- MongoDB integration for data persistence

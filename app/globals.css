@@ -1,0 +1,157 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg-black: #000000;
+  --primary: #beff01;
+  --primary-hover: #a8e600;
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+/* Removed smooth scroll behavior for better performance */
+/* Use JavaScript scroll with requestAnimationFrame for programmatic scrolling */
+html {
+  /* scroll-behavior: smooth; - Removed for performance */
+}
+
+html,
+body {
+  max-width: 100vw;
+  overflow-x: hidden;
+  background: var(--bg-black);
+  color: #ffffff;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* EXACT Navbar padding */
+.page-padding {
+  padding-left: 3rem;
+  padding-right: 3rem;
+}
+
+@media (max-width: 1024px) {
+  .page-padding {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .page-padding {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+
+/* Animated Gradient Background */
+.animated-gradient-bg {
+  position: relative;
+  overflow: hidden;
+}
+
+.animated-gradient-bg::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(190, 255, 1, 0.05) 0%,
+    rgba(59, 130, 246, 0.05) 50%,
+    rgba(190, 255, 1, 0.05) 100%
+  );
+  animation: gradientShift 8s ease infinite;
+  z-index: 0;
+}
+
+@keyframes gradientShift {
+  0%, 100% {
+    background: linear-gradient(
+      135deg,
+      rgba(190, 255, 1, 0.05) 0%,
+      rgba(59, 130, 246, 0.05) 50%,
+      rgba(190, 255, 1, 0.05) 100%
+    );
+  }
+  50% {
+    background: linear-gradient(
+      135deg,
+      rgba(59, 130, 246, 0.05) 0%,
+      rgba(190, 255, 1, 0.05) 50%,
+      rgba(59, 130, 246, 0.05) 100%
+    );
+  }
+}
+
+.animated-gradient-bg > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0a0a0a;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--primary);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary-hover);
+}
+
+/* Performance-optimized animations - converted from Framer Motion to CSS */
+@keyframes gradient-mesh {
+  0%, 100% { background-position: 0% 0%, 100% 100%, 50% 50%; }
+  50% { background-position: 100% 100%, 0% 0%, 100% 0%; }
+}
+
+@keyframes orb-1 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(30px, -40px) scale(1.2); }
+}
+
+@keyframes orb-2 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(-30px, 40px) scale(1.3); }
+}
+
+@keyframes scan-line {
+  0% { transform: translateY(-100vh); }
+  100% { transform: translateY(200vh); }
+}
+
+.animate-gradient-mesh {
+  animation: gradient-mesh 20s ease-in-out infinite;
+  will-change: background-position;
+}
+
+.animate-orb-1 {
+  animation: orb-1 15s ease-in-out infinite;
+  will-change: transform;
+}
+
+.animate-orb-2 {
+  animation: orb-2 18s ease-in-out infinite 2s;
+  will-change: transform;
+}
+
+.animate-scan-line {
+  animation: scan-line 8s linear infinite;
+  will-change: transform;
+}
