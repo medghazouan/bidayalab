@@ -4,7 +4,7 @@ import { Inter } from 'next/font/google';
 import './globals.css';
 import { Providers } from './providers';
 import dynamic from 'next/dynamic';
-
+import ChatbotWidget from "@/components/ChatbotWidget";
 // Dynamically import components to reduce initial bundle size
 const Navbar = dynamic(() => import('@/components/sections/Navbar'), {
   ssr: true,
@@ -49,6 +49,7 @@ export default function RootLayout({
         <Providers>
           <Navbar />
           {children}
+          <ChatbotWidget />
           <Footer />
         </Providers>
       </body>
