@@ -6,7 +6,7 @@ import { getDatabase } from '@/lib/mongodb';
 // Define proper interfaces instead of using 'any'
 interface ProjectQuery {
   featured?: boolean;
-  category?: string;
+  categorySlug?: string;  // ✅ CHANGED: from 'category' to 'categorySlug'
 }
 
 interface MongoProject {
@@ -16,6 +16,7 @@ interface MongoProject {
   description: string;
   image: string;
   category: string;
+  categorySlug: string;  // ✅ ADDED: Include categorySlug field
   featured: boolean;
   order: number;
   createdAt: Date;
@@ -23,7 +24,7 @@ interface MongoProject {
 
 interface ProjectResponse {
   success: boolean;
-  projects: Omit<MongoProject, '_id'>[] & { _id: string };
+  projects: (Omit<MongoProject, '_id'> & { _id: string })[];
   pagination: {
     page: number;
     limit: number;
@@ -47,11 +48,13 @@ export async function GET(request: Request) {
 
     // Build query object with proper typing
     const query: ProjectQuery = {};
+
     if (featured === 'true') {
       query.featured = true;
     }
+
     if (category) {
-      query.category = category;
+      query.categorySlug = category;  // ✅ CHANGED: from 'query.category' to 'query.categorySlug'
     }
 
     // Optimized projection
@@ -61,6 +64,7 @@ export async function GET(request: Request) {
       description: 1,
       image: 1,
       category: 1,
+      categorySlug: 1,  // ✅ ADDED: Include categorySlug in projection
       featured: 1,
       order: 1,
       createdAt: 1,

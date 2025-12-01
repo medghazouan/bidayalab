@@ -5,7 +5,7 @@ import { motion, AnimatePresence, useMotionValue, useSpring, useTransform } from
 import { useQuery } from '@tanstack/react-query';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Briefcase, Code, TrendingUp, Palette, Loader2 } from 'lucide-react';
+import { Code2, Workflow, Palette, Briefcase, Loader2 } from 'lucide-react';
 
 interface Project {
   _id: string;
@@ -26,9 +26,9 @@ interface Project {
 
 const categories = [
   { slug: 'all', label: 'All Projects', icon: Briefcase },
-  { slug: 'web-dev', label: 'Web Development', icon: Code },
-  { slug: 'paid-ads', label: 'Paid Ads', icon: TrendingUp },
-  { slug: 'social-media', label: 'Social Media', icon: Palette },
+  { slug: 'digital-solutions', label: 'Digital Solutions', icon: Code2 },
+  { slug: 'smart-automation', label: 'Smart Automation', icon: Workflow },
+  { slug: 'creative-branding', label: 'Creative Branding', icon: Palette },
 ];
 
 // Throttle utility for mouse move handlers
@@ -291,13 +291,13 @@ function ProjectCard({ project, index }: ProjectCardProps) {
   }, [x, y]);
 
   const getCategoryDisplay = (category: string) => {
-    const categoryMap: Record<string, string> = {
-      'web-dev': 'Web Development',
-      'paid-ads': 'Paid Ads',
-      'social-media': 'Social Media',
-    };
-    return categoryMap[category] || category;
+  const categoryMap: Record<string, string> = {
+    'digital-solutions': 'Digital Solutions',
+    'smart-automation': 'Smart Automation',
+    'creative-branding': 'Creative Branding',
   };
+  return categoryMap[category] || category;
+};
 
   return (
     <Link href={`/works/${project.slug}`}>

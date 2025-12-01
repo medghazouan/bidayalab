@@ -1,112 +1,124 @@
-// app/(pages)/works/[slug]/page.tsx
-
+// app/works/[slug]/page.tsx
 import { notFound } from "next/navigation";
-import dynamic from "next/dynamic";
 import clientPromise from "@/lib/mongodb";
+import { Document, WithId } from "mongodb";
+import GenericProjectPage from "@/components/projects/GenericProjectPage";
 
-// Code splitting - load project components dynamically
-const WebDevProject = dynamic(
-  () => import("@/components/projects/WebDevProject"),
-  { 
-    loading: () => <div className="flex items-center justify-center min-h-screen"><div className="animate-spin rounded-full h-12 w-12 border-4 border-[#beff01] border-t-transparent"></div></div>,
-    ssr: true 
-  }
-);
+interface ProjectPageProps {
+  params: Promise<{ slug: string }>; // Next.js 15 uses Promise for params
+}
 
-const SocialMediaProject = dynamic(
-  () => import("@/components/projects/SocialMediaProject"),
-  { 
-    loading: () => <div className="flex items-center justify-center min-h-screen"><div className="animate-spin rounded-full h-12 w-12 border-4 border-[#beff01] border-t-transparent"></div></div>,
-    ssr: true 
-  }
-);
+// Extend MongoDB's Document type
+type ProjectDocument = WithId<Document> & {
+  title: string;
+  slug: string;
+  category?: string;
+  categorySlug?: string;
+  description?: string;
+  image?: string;
+  images?: string[];
+  technologies?: string[];
+  client?: string;
+  year?: string;
+  duration?: string;
+  liveUrl?: string;
+  githubUrl?: string;
+  features?: string[];
+  challenge?: string;
+  solution?: string;
+  results?: string[];
+  testimonial?: {
+    text: string;
+    author: string;
+    role: string;
+  };
+  featured?: boolean;
+  order?: number;
+  createdAt?: Date;
+};
 
-const PaidAdsProject = dynamic(
-  () => import("@/components/projects/PaidAdsProject"),
-  { 
-    loading: () => <div className="flex items-center justify-center min-h-screen"><div className="animate-spin rounded-full h-12 w-12 border-4 border-[#beff01] border-t-transparent"></div></div>,
-    ssr: true 
-  }
-);
-
-// Fetch single project by slug with timeout protection
-async function getProjectBySlug(slug: string) {
+async function getProjectData(slug: string) {
   try {
     const client = await clientPromise;
-    const db = client.db('meddigital');
-    
-    // Fetch with timeout protection
-    const project = await Promise.race([
-      db
-        .collection('projects')
-        .findOne({ slug: slug }),
-      new Promise((_, reject) =>
-        setTimeout(() => reject(new Error('Query timeout')), 10000)
-      )
-    ]) as { _id: { toString: () => string }; [key: string]: unknown } | null;
+    const db = client.db(process.env.MONGODB_DB);
 
-    if (!project || !project._id) {
+    console.log('🔍 Looking for project with slug:', slug);
+
+    const project = await db
+      .collection<ProjectDocument>('projects')
+      .findOne({ slug });
+
+    console.log('📦 Found project:', project ? project.title : 'NOT FOUND');
+
+    if (!project) {
       return null;
     }
 
-    // Convert MongoDB _id to string
-    const projectWithStringId = {
-      ...project,
-      _id: project._id.toString(),
+    // Convert to plain object with _id as string
+    const { _id, ...rest } = project;
+    
+    return {
+      ...rest,
+      _id: _id.toString()
     };
-    return projectWithStringId;
   } catch (error) {
-    console.error('Error fetching project:', error);
+    console.error('❌ Error fetching project:', error);
     return null;
   }
 }
 
-// Cache project data to avoid duplicate queries using Next.js unstable_cache
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const projectCache = new Map<string, Promise<any>>();
-
-async function getProjectData(slug: string) {
-  // Simple in-memory cache to deduplicate requests within the same render
-  if (!projectCache.has(slug)) {
-    projectCache.set(slug, getProjectBySlug(slug));
-  }
-  return projectCache.get(slug)!;
-}
-
-export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
-  const { slug } = await params;
+export async function generateMetadata({ params }: ProjectPageProps) {
+  const { slug } = await params; // Must await params
   const project = await getProjectData(slug);
-  
+
   if (!project) {
-    return {
-      title: "Project Not Found | MEDDIGITAL",
+    return { 
+      title: 'Project Not Found',
+      description: 'The requested project could not be found.'
     };
   }
 
   return {
-    title: `${project.title} | MEDDIGITAL`,
-    description: project.description,
+    title: `${project.title} | Your Agency Name`,
+    description: project.description || `View ${project.title} project details`,
   };
 }
 
-export default async function ProjectPage({ params }: { params: Promise<{ slug: string }> }) {
-  const { slug } = await params;
-  // Use the same cached data as generateMetadata
+export default async function ProjectPage({ params }: ProjectPageProps) {
+  const { slug } = await params; // Must await params
+  
+  console.log('🚀 Loading project page for slug:', slug);
+  
   const project = await getProjectData(slug);
 
   if (!project) {
+    console.log('❌ Project not found, showing 404');
     notFound();
   }
 
-  // Render specific project component based on category
-  switch (project.category) {
-    case "web-dev":
-      return <WebDevProject project={project} />;
-    case "social-media":
-      return <SocialMediaProject project={project} />;
-    case "paid-ads":
-      return <PaidAdsProject project={project} />;
-    default:
-      return <WebDevProject project={project} />; // Default fallback
+  console.log('✅ Rendering project:', project.title);
+
+  return <GenericProjectPage project={project} />;
+}
+
+// Optional: Generate static paths for better performance
+export async function generateStaticParams() {
+  try {
+    const client = await clientPromise;
+    const db = client.db(process.env.MONGODB_DB);
+
+    const projects = await db
+      .collection('projects')
+      .find({}, { projection: { slug: 1 } })
+      .toArray();
+
+    console.log('📋 Generating static params for', projects.length, 'projects');
+
+    return projects.map((project) => ({
+      slug: project.slug,
+    }));
+  } catch (error) {
+    console.error('Error generating static params:', error);
+    return [];
   }
 }
