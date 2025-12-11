@@ -9,15 +9,28 @@ export async function getProjects() {
     await connectToDatabase();
     const projects = await Project.find({}).sort({ order: 1, createdAt: -1 }).lean();
     return JSON.parse(JSON.stringify(projects));
+
 }
 
+import mongoose from "mongoose";
+
 export async function getProject(id: string) {
+    const cleanId = id.trim();
+
     await connectToDatabase();
+
     try {
-        const project = await Project.findById(id).lean();
+        // Fetch ALL projects with ALL fields to bypass ID type issues
+        // Since the list is small (5 items), this is performant and robust
+        const allProjects = await Project.find({}).lean();
+
+        // Find the project in memory
+        const project = allProjects.find((p: any) => p._id.toString() === cleanId);
+
         if (!project) return null;
         return JSON.parse(JSON.stringify(project));
     } catch (error) {
+        console.error(`[getProject] Error:`, error);
         return null;
     }
 }
@@ -64,6 +77,7 @@ export async function createProject(formData: FormData) {
         platforms: parseJSON("platforms"),
         equipment: parseJSON("equipment"),
         adCreatives: parseJSON("adCreatives"),
+        testimonial: parseJSON("testimonial"),
 
         // Simple String Fields
         brandStrategy: formData.get("brandStrategy") as string,
@@ -130,6 +144,7 @@ export async function updateProject(id: string, formData: FormData) {
         platforms: parseJSON("platforms"),
         equipment: parseJSON("equipment"),
         adCreatives: parseJSON("adCreatives"),
+        testimonial: parseJSON("testimonial"),
 
         // Simple String Fields
         brandStrategy: formData.get("brandStrategy") as string,

@@ -15,7 +15,12 @@ export default function AddAdminForm() {
         setSuccess(false);
 
         try {
-            await createAdmin(formData);
+            await createAdmin({
+                name: formData.get("name") as string,
+                email: formData.get("email") as string,
+                password: formData.get("password") as string,
+                role: formData.get("role") as string
+            });
             setSuccess(true);
             // Reset form
             const form = document.getElementById("add-admin-form") as HTMLFormElement;

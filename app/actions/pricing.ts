@@ -6,9 +6,7 @@ import { revalidatePath } from "next/cache";
 
 export async function getPricingPlans() {
     await connectToDatabase();
-    console.log("Fetching pricing plans...");
-    const plans = await PricingPlan.find({}).sort({ price: 1 }).lean();
-    console.log(`Found ${plans.length} pricing plans`);
+    const plans = await PricingPlan.find({}).sort({ order: 1 }).lean();
     return JSON.parse(JSON.stringify(plans));
 }
 

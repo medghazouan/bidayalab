@@ -1,14 +1,17 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createProject, updateProject } from "@/app/actions/projects";
-import { Loader2, Plus, X, Save, ArrowLeft, Layers, Monitor, FileText, Video, Megaphone, Trash2 } from "lucide-react";
+import { Loader2, Plus, X, Save, ArrowLeft, Layers, Monitor, FileText, Video, Megaphone } from "lucide-react";
 import Link from "next/link";
 import FileUpload from "./FileUpload";
+import { IProject } from "@/models/Project";
 
 interface ProjectFormProps {
-    initialData?: any;
+    /* eslint-disable @typescript-eslint/no-explicit-any */
+    initialData?: Partial<IProject> | any;
     isEditing?: boolean;
 }
 
@@ -20,6 +23,48 @@ const CATEGORIES = [
     { id: 'visual-storytelling', label: 'Visual Storytelling', icon: Video },
 ];
 
+// Helper Component for Array Inputs
+function ArrayInput({ label, values, setter, placeholder }: { label: string, values: string[], setter: (val: string[]) => void, placeholder: string }) {
+    const handleAdd = () => setter([...values, ""]);
+    const handleChange = (index: number, value: string) => {
+        const newArray = [...values];
+        newArray[index] = value;
+        setter(newArray);
+    };
+    const handleRemove = (index: number) => {
+        const newArray = values.filter((_, i) => i !== index);
+        setter(newArray);
+    };
+
+    return (
+        <div className="space-y-3">
+            <div className="flex items-center justify-between">
+                <label className="text-xs font-bold uppercase text-zinc-500 tracking-wider">{label}</label>
+                <button
+                    type="button"
+                    onClick={handleAdd}
+                    className="text-xs font-bold text-[#beff01] uppercase tracking-wider hover:underline flex items-center gap-1"
+                >
+                    <Plus size={14} /> Add Item
+                </button>
+            </div>
+            {values.map((item, i) => (
+                <div key={i} className="relative group">
+                    <input
+                        value={item}
+                        onChange={(e) => handleChange(i, e.target.value)}
+                        className="w-full bg-black/50 border border-white/10 rounded-xl p-4 text-white focus:border-[#beff01] focus:outline-none transition-colors"
+                        placeholder={placeholder}
+                    />
+                    <button type="button" onClick={() => handleRemove(i)} className="absolute top-4 right-4 text-zinc-500 hover:text-red-400 transition-colors opacity-0 group-hover:opacity-100">
+                        <X size={16} />
+                    </button>
+                </div>
+            ))}
+        </div>
+    );
+}
+
 export default function ProjectForm({ initialData, isEditing = false }: ProjectFormProps) {
     const router = useRouter();
     const [loading, setLoading] = useState(false);
@@ -28,6 +73,7 @@ export default function ProjectForm({ initialData, isEditing = false }: ProjectF
     // Arrays
     const [technologies, setTechnologies] = useState<string[]>(initialData?.technologies || []);
     const [images, setImages] = useState<string[]>(initialData?.images || []);
+    const [image, setImage] = useState(initialData?.image || "");
 
     // Category Specific Arrays
     const [brandColors, setBrandColors] = useState<string[]>(initialData?.brandColors || []);
@@ -36,32 +82,14 @@ export default function ProjectForm({ initialData, isEditing = false }: ProjectF
     const [aiModels, setAiModels] = useState<string[]>(initialData?.aiModels || []);
     const [integrations, setIntegrations] = useState<string[]>(initialData?.integrations || []);
     const [platforms, setPlatforms] = useState<string[]>(initialData?.platforms || []);
-    const [equipment, setEquipment] = useState<string[]>(initialData?.equipment || []);
 
     // Complex Objects
-    const [results, setResults] = useState<any[]>(initialData?.results || []);
+    /* eslint-disable @typescript-eslint/no-explicit-any */
+    const [results] = useState<any[]>(initialData?.results || []);
     const [adCreatives, setAdCreatives] = useState<any[]>(initialData?.adCreatives || []);
+    const [testimonial, setTestimonial] = useState<any>(initialData?.testimonial || { quote: "", author: "", position: "" });
 
-    // Helper for simple string arrays
-    const handleArrayAdd = (setter: any, current: string[]) => setter([...current, ""]);
-    const handleArrayChange = (setter: any, current: string[], index: number, value: string) => {
-        const newArray = [...current];
-        newArray[index] = value;
-        setter(newArray);
-    };
-    const handleArrayRemove = (setter: any, current: string[], index: number) => {
-        const newArray = current.filter((_, i) => i !== index);
-        setter(newArray);
-    };
 
-    // Helper for Results
-    const handleResultAdd = () => setResults([...results, { metric: "", value: "", description: "" }]);
-    const handleResultChange = (index: number, field: string, value: string) => {
-        const newResults = [...results];
-        newResults[index] = { ...newResults[index], [field]: value };
-        setResults(newResults);
-    };
-    const handleResultRemove = (index: number) => setResults(results.filter((_, i) => i !== index));
 
     // Helper for Ad Creatives
     const handleAdCreativeAdd = () => setAdCreatives([...adCreatives, { type: "", platform: "", description: "" }]);
@@ -97,7 +125,7 @@ export default function ProjectForm({ initialData, isEditing = false }: ProjectF
                 formData.set('adCreatives', JSON.stringify(adCreatives));
             }
             if (category === 'visual-storytelling') {
-                formData.set('equipment', JSON.stringify(equipment));
+                formData.set('testimonial', JSON.stringify(testimonial));
             }
 
             formData.set('category', category);
@@ -187,24 +215,44 @@ export default function ProjectForm({ initialData, isEditing = false }: ProjectF
                             </div>
                         </div>
 
-                        <div className="grid grid-cols-2 gap-6">
+                        <div className="space-y-2">
+                            <label className="text-xs font-bold uppercase text-zinc-500 tracking-wider">Duration</label>
+                            <input name="duration" defaultValue={initialData?.duration} className="w-full bg-black/50 border border-white/10 rounded-xl p-4 text-white focus:border-[#beff01] focus:outline-none transition-colors" placeholder="e.g. 2 weeks" />
+                        </div>
+                    </div>
+
+
+
+                    {/* Media Section - Responsive Layout */}
+                    <div className={`grid grid-cols-1 ${category === 'visual-storytelling' ? 'md:grid-cols-2' : ''} gap-6`}>
+                        <div className="space-y-2">
+                            <label className="text-xs font-bold uppercase text-zinc-500 tracking-wider">Main Image</label>
+                            <FileUpload
+                                value={image}
+                                onChange={(url) => setImage(url)}
+                                label="Cover Image"
+                                folder="projects"
+                            />
+                            <input type="hidden" name="image" value={image} />
+                        </div>
+
+                        {/* Video Upload - Only for Visual Storytelling */}
+                        {category === 'visual-storytelling' && (
                             <div className="space-y-2">
-                                <label className="text-xs font-bold uppercase text-zinc-500 tracking-wider">Duration</label>
-                                <input name="duration" defaultValue={initialData?.duration} className="w-full bg-black/50 border border-white/10 rounded-xl p-4 text-white focus:border-[#beff01] focus:outline-none transition-colors" placeholder="e.g. 2 weeks" />
-                            </div>
-                            <div className="space-y-2">
-                                <label className="text-xs font-bold uppercase text-zinc-500 tracking-wider">Main Image</label>
+                                <label className="text-xs font-bold uppercase text-zinc-500 tracking-wider">Project Video</label>
                                 <FileUpload
-                                    value={initialData?.image}
+                                    value={initialData?.videoUrl}
                                     onChange={(url) => {
-                                        const input = document.getElementById('main-image-input') as HTMLInputElement;
+                                        const input = document.getElementById('video-input') as HTMLInputElement;
                                         if (input) input.value = url;
                                     }}
-                                    label="Cover Image"
+                                    label="Upload Video (MP4)"
+                                    accept="video/*"
+                                    folder="projects"
                                 />
-                                <input type="hidden" name="image" id="main-image-input" defaultValue={initialData?.image} />
+                                <input type="hidden" id="video-input" name="videoUrl" defaultValue={initialData?.videoUrl} />
                             </div>
-                        </div>
+                        )}
                     </div>
 
                     {/* Category Specific Fields */}
@@ -228,16 +276,11 @@ export default function ProjectForm({ initialData, isEditing = false }: ProjectF
                         {/* Digital Development */}
                         {category === 'digital-development' && (
                             <>
-                                <div className="grid grid-cols-2 gap-6">
-                                    <div className="space-y-2">
-                                        <label className="text-xs font-bold uppercase text-zinc-500 tracking-wider">Live URL</label>
-                                        <input name="liveUrl" defaultValue={initialData?.liveUrl} className="w-full bg-black/50 border border-white/10 rounded-xl p-4 text-white focus:border-[#beff01] focus:outline-none transition-colors" placeholder="https://..." />
-                                    </div>
-                                    <div className="space-y-2">
-                                        <label className="text-xs font-bold uppercase text-zinc-500 tracking-wider">GitHub URL</label>
-                                        <input name="githubUrl" defaultValue={initialData?.githubUrl} className="w-full bg-black/50 border border-white/10 rounded-xl p-4 text-white focus:border-[#beff01] focus:outline-none transition-colors" placeholder="https://github.com/..." />
-                                    </div>
+                                <div className="space-y-2">
+                                    <label className="text-xs font-bold uppercase text-zinc-500 tracking-wider">Live URL</label>
+                                    <input name="liveUrl" defaultValue={initialData?.liveUrl} className="w-full bg-black/50 border border-white/10 rounded-xl p-4 text-white focus:border-[#beff01] focus:outline-none transition-colors" placeholder="https://..." />
                                 </div>
+
                                 <div className="space-y-2">
                                     <label className="text-xs font-bold uppercase text-zinc-500 tracking-wider">Challenge</label>
                                     <textarea name="challenge" defaultValue={initialData?.challenge} rows={3} className="w-full bg-black/50 border border-white/10 rounded-xl p-4 text-white focus:border-[#beff01] focus:outline-none transition-colors" placeholder="The problem..." />
@@ -261,12 +304,11 @@ export default function ProjectForm({ initialData, isEditing = false }: ProjectF
                                     <label className="text-xs font-bold uppercase text-zinc-500 tracking-wider">Workflow Description</label>
                                     <textarea name="workflowDescription" defaultValue={initialData?.workflowDescription} rows={3} className="w-full bg-black/50 border border-white/10 rounded-xl p-4 text-white focus:border-[#beff01] focus:outline-none transition-colors" placeholder="How it works..." />
                                 </div>
-                                <div className="space-y-2">
-                                    <label className="text-xs font-bold uppercase text-zinc-500 tracking-wider">Time Saved</label>
-                                    <input name="timeSaved" defaultValue={initialData?.timeSaved} className="w-full bg-black/50 border border-white/10 rounded-xl p-4 text-white focus:border-[#beff01] focus:outline-none transition-colors" placeholder="e.g. 20 hrs/week" />
-                                </div>
+
                                 <ArrayInput label="AI Models" values={aiModels} setter={setAiModels} placeholder="e.g. GPT-4" />
                                 <ArrayInput label="Integrations" values={integrations} setter={setIntegrations} placeholder="e.g. Slack" />
+
+
                             </>
                         )}
 
@@ -287,6 +329,10 @@ export default function ProjectForm({ initialData, isEditing = false }: ProjectF
                                     <label className="text-xs font-bold uppercase text-zinc-500 tracking-wider">Strategy</label>
                                     <textarea name="strategy" defaultValue={initialData?.strategy} rows={3} className="w-full bg-black/50 border border-white/10 rounded-xl p-4 text-white focus:border-[#beff01] focus:outline-none transition-colors" placeholder="Campaign strategy..." />
                                 </div>
+                                <div className="space-y-2">
+                                    <label className="text-xs font-bold uppercase text-zinc-500 tracking-wider">Revenue Generated</label>
+                                    <input name="revenue" defaultValue={initialData?.revenue} className="w-full bg-black/50 border border-white/10 rounded-xl p-4 text-white focus:border-[#beff01] focus:outline-none transition-colors" placeholder="e.g. $280K" />
+                                </div>
                                 <ArrayInput label="Platforms" values={platforms} setter={setPlatforms} placeholder="e.g. Instagram" />
 
                                 {/* Ad Creatives */}
@@ -298,10 +344,22 @@ export default function ProjectForm({ initialData, isEditing = false }: ProjectF
                                         </button>
                                     </div>
                                     {adCreatives.map((creative, i) => (
-                                        <div key={i} className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 bg-black/30 rounded-xl border border-white/5 relative group">
-                                            <input value={creative.type} onChange={(e) => handleAdCreativeChange(i, 'type', e.target.value)} placeholder="Type (e.g. Video)" className="bg-black/50 border border-white/10 rounded-lg p-2 text-sm text-white" />
-                                            <input value={creative.platform} onChange={(e) => handleAdCreativeChange(i, 'platform', e.target.value)} placeholder="Platform" className="bg-black/50 border border-white/10 rounded-lg p-2 text-sm text-white" />
-                                            <input value={creative.description} onChange={(e) => handleAdCreativeChange(i, 'description', e.target.value)} placeholder="Description" className="bg-black/50 border border-white/10 rounded-lg p-2 text-sm text-white" />
+                                        <div key={i} className="grid grid-cols-1 md:grid-cols-4 gap-4 p-4 bg-black/30 rounded-xl border border-white/5 relative group items-start">
+                                            <div className="md:col-span-1">
+                                                <FileUpload
+                                                    value={creative.image || ''}
+                                                    onChange={(url) => handleAdCreativeChange(i, 'image', url)}
+                                                    label="Creative Image"
+                                                    folder="projects"
+                                                />
+                                            </div>
+                                            <div className="md:col-span-3 grid grid-cols-1 gap-4">
+                                                <div className="grid grid-cols-2 gap-4">
+                                                    <input value={creative.type} onChange={(e) => handleAdCreativeChange(i, 'type', e.target.value)} placeholder="Type (e.g. Video)" className="bg-black/50 border border-white/10 rounded-lg p-2 text-sm text-white" />
+                                                    <input value={creative.platform} onChange={(e) => handleAdCreativeChange(i, 'platform', e.target.value)} placeholder="Platform" className="bg-black/50 border border-white/10 rounded-lg p-2 text-sm text-white" />
+                                                </div>
+                                                <textarea value={creative.description} onChange={(e) => handleAdCreativeChange(i, 'description', e.target.value)} placeholder="Description" rows={2} className="bg-black/50 border border-white/10 rounded-lg p-2 text-sm text-white w-full" />
+                                            </div>
                                             <button type="button" onClick={() => handleAdCreativeRemove(i)} className="absolute -top-2 -right-2 bg-red-500/20 text-red-400 p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
                                                 <X size={14} />
                                             </button>
@@ -328,35 +386,42 @@ export default function ProjectForm({ initialData, isEditing = false }: ProjectF
                                     <label className="text-xs font-bold uppercase text-zinc-500 tracking-wider">Post Production</label>
                                     <textarea name="postProduction" defaultValue={initialData?.postProduction} rows={3} className="w-full bg-black/50 border border-white/10 rounded-xl p-4 text-white focus:border-[#beff01] focus:outline-none transition-colors" placeholder="Editing details..." />
                                 </div>
-                                <div className="space-y-2">
-                                    <label className="text-xs font-bold uppercase text-zinc-500 tracking-wider">Video URL</label>
-                                    <input name="videoUrl" defaultValue={initialData?.videoUrl} className="w-full bg-black/50 border border-white/10 rounded-xl p-4 text-white focus:border-[#beff01] focus:outline-none transition-colors" placeholder="https://youtube.com/..." />
+
+                                <div className="space-y-4 pt-4 border-t border-white/10">
+                                    <h3 className="text-sm font-bold uppercase text-zinc-500 tracking-wider">Testimonial</h3>
+                                    <div className="space-y-2">
+                                        <label className="text-xs font-bold uppercase text-zinc-500 tracking-wider">Quote</label>
+                                        <textarea
+                                            value={testimonial.quote}
+                                            onChange={(e) => setTestimonial({ ...testimonial, quote: e.target.value })}
+                                            rows={3}
+                                            className="w-full bg-black/50 border border-white/10 rounded-xl p-4 text-white focus:border-[#beff01] focus:outline-none transition-colors"
+                                            placeholder="Client quote..."
+                                        />
+                                    </div>
+                                    <div className="grid grid-cols-2 gap-4">
+                                        <div className="space-y-2">
+                                            <label className="text-xs font-bold uppercase text-zinc-500 tracking-wider">Author</label>
+                                            <input
+                                                value={testimonial.author}
+                                                onChange={(e) => setTestimonial({ ...testimonial, author: e.target.value })}
+                                                className="w-full bg-black/50 border border-white/10 rounded-xl p-4 text-white focus:border-[#beff01] focus:outline-none transition-colors"
+                                                placeholder="Name"
+                                            />
+                                        </div>
+                                        <div className="space-y-2">
+                                            <label className="text-xs font-bold uppercase text-zinc-500 tracking-wider">Position</label>
+                                            <input
+                                                value={testimonial.position}
+                                                onChange={(e) => setTestimonial({ ...testimonial, position: e.target.value })}
+                                                className="w-full bg-black/50 border border-white/10 rounded-xl p-4 text-white focus:border-[#beff01] focus:outline-none transition-colors"
+                                                placeholder="Job Title"
+                                            />
+                                        </div>
+                                    </div>
                                 </div>
-                                <ArrayInput label="Equipment" values={equipment} setter={setEquipment} placeholder="e.g. Sony A7S III" />
                             </>
                         )}
-                    </div>
-
-                    {/* Results (Universal) */}
-                    <div className="bg-zinc-900/30 border border-white/5 rounded-3xl p-8 space-y-6">
-                        <div className="flex items-center justify-between">
-                            <h2 className="text-xl font-bold text-white">Project Results</h2>
-                            <button type="button" onClick={handleResultAdd} className="text-xs font-bold text-[#beff01] uppercase tracking-wider hover:underline flex items-center gap-1">
-                                <Plus size={14} /> Add Result
-                            </button>
-                        </div>
-                        <div className="space-y-3">
-                            {results.map((result, i) => (
-                                <div key={i} className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 bg-black/30 rounded-xl border border-white/5 relative group">
-                                    <input value={result.metric} onChange={(e) => handleResultChange(i, 'metric', e.target.value)} placeholder="Metric (e.g. Views)" className="bg-black/50 border border-white/10 rounded-lg p-2 text-sm text-white" />
-                                    <input value={result.value} onChange={(e) => handleResultChange(i, 'value', e.target.value)} placeholder="Value (e.g. 1M)" className="bg-black/50 border border-white/10 rounded-lg p-2 text-sm text-white" />
-                                    <input value={result.description} onChange={(e) => handleResultChange(i, 'description', e.target.value)} placeholder="Description" className="bg-black/50 border border-white/10 rounded-lg p-2 text-sm text-white" />
-                                    <button type="button" onClick={() => handleResultRemove(i)} className="absolute -top-2 -right-2 bg-red-500/20 text-red-400 p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
-                                        <X size={14} />
-                                    </button>
-                                </div>
-                            ))}
-                        </div>
                     </div>
                 </div>
 
@@ -381,72 +446,44 @@ export default function ProjectForm({ initialData, isEditing = false }: ProjectF
                     </div>
 
                     <div className="bg-zinc-900/30 border border-white/5 rounded-3xl p-8 space-y-6">
-                        <h2 className="text-xl font-bold text-white mb-4">Common Tags</h2>
-                        <ArrayInput label="Technologies" values={technologies} setter={setTechnologies} placeholder="e.g. React" />
+                        {category !== 'visual-storytelling' && category !== 'digital-development' && category !== 'ai-automation' && category !== 'digital-marketing' && (
+                            <>
+                                <h2 className="text-xl font-bold text-white mb-4">Common Tags</h2>
+                                <ArrayInput label="Technologies" values={technologies} setter={setTechnologies} placeholder="e.g. React" />
+                            </>
+                        )}
 
                         {/* Gallery Images with File Upload */}
-                        <div className="space-y-3">
-                            <div className="flex items-center justify-between">
-                                <label className="text-xs font-bold uppercase text-zinc-500 tracking-wider">Gallery Images</label>
-                                <button type="button" onClick={() => setImages([...images, ""])} className="text-xs font-bold text-[#beff01] uppercase tracking-wider hover:underline flex items-center gap-1">
-                                    <Plus size={14} /> Add Image
-                                </button>
-                            </div>
-                            {images.map((img, i) => (
-                                <div key={i} className="relative group p-4 bg-black/30 rounded-xl border border-white/5">
-                                    <FileUpload
-                                        value={img}
-                                        onChange={(url) => {
-                                            const newImages = [...images];
-                                            newImages[i] = url;
-                                            setImages(newImages);
-                                        }}
-                                        label={`Image ${i + 1}`}
-                                    />
-                                    <button type="button" onClick={() => setImages(images.filter((_, idx) => idx !== i))} className="absolute top-2 right-2 p-1 bg-red-500/20 text-red-400 rounded-full hover:bg-red-500 hover:text-white transition-colors">
-                                        <X size={14} />
+                        {category !== 'digital-marketing' && (
+                            <div className="space-y-3">
+                                <div className="flex items-center justify-between">
+                                    <label className="text-xs font-bold uppercase text-zinc-500 tracking-wider">Gallery Images</label>
+                                    <button type="button" onClick={() => setImages([...images, ""])} className="text-xs font-bold text-[#beff01] uppercase tracking-wider hover:underline flex items-center gap-1">
+                                        <Plus size={14} /> Add Image
                                     </button>
                                 </div>
-                            ))}
-                        </div>
+                                {images.map((img, i) => (
+                                    <div key={i} className="relative group p-4 bg-black/30 rounded-xl border border-white/5">
+                                        <FileUpload
+                                            value={img}
+                                            onChange={(url) => {
+                                                const newImages = [...images];
+                                                newImages[i] = url;
+                                                setImages(newImages);
+                                            }}
+                                            label={`Image ${i + 1}`}
+                                            folder="projects"
+                                        />
+                                        <button type="button" onClick={() => setImages(images.filter((_, idx) => idx !== i))} className="absolute top-2 right-2 p-1 bg-red-500/20 text-red-400 rounded-full hover:bg-red-500 hover:text-white transition-colors">
+                                            <X size={14} />
+                                        </button>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>
-        </form>
-    );
-}
-
-// Helper Component for Array Inputs
-function ArrayInput({ label, values, setter, placeholder }: { label: string, values: string[], setter: any, placeholder: string }) {
-    const handleAdd = () => setter([...values, ""]);
-    const handleChange = (index: number, value: string) => {
-        const newArray = [...values];
-        newArray[index] = value;
-        setter(newArray);
-    };
-    const handleRemove = (index: number) => setter(values.filter((_, i) => i !== index));
-
-    return (
-        <div className="space-y-3">
-            <div className="flex items-center justify-between">
-                <label className="text-xs font-bold uppercase text-zinc-500 tracking-wider">{label}</label>
-                <button type="button" onClick={handleAdd} className="text-xs font-bold text-[#beff01] uppercase tracking-wider hover:underline flex items-center gap-1">
-                    <Plus size={14} /> Add
-                </button>
-            </div>
-            {values.map((val, i) => (
-                <div key={i} className="relative group">
-                    <input
-                        value={val}
-                        onChange={(e) => handleChange(i, e.target.value)}
-                        className="w-full bg-black/50 border border-white/10 rounded-xl p-3 text-white focus:border-[#beff01] focus:outline-none transition-colors"
-                        placeholder={placeholder}
-                    />
-                    <button type="button" onClick={() => handleRemove(i)} className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-600 hover:text-red-400 transition-colors">
-                        <X size={16} />
-                    </button>
-                </div>
-            ))}
-        </div>
+        </form >
     );
 }

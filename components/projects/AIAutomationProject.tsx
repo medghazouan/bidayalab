@@ -1,9 +1,9 @@
 "use client";
 
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useScroll, useTransform, useSpring, useMotionValue } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowLeft, Bot, Zap, Network, Sparkles, RefreshCcw, Cpu, Workflow, Power, Terminal, ShieldCheck, Activity } from "lucide-react";
+import { ArrowLeft, Network, Cpu, Workflow, Terminal, ArrowRight } from "lucide-react";
 import { IProject } from "@/models/Project";
 import { useRef } from "react";
 
@@ -14,65 +14,91 @@ export default function AIAutomationProject({ project }: { project: IProject }) 
         offset: ["start start", "end end"]
     });
 
-    const heroOpacity = useTransform(scrollYProgress, [0, 0.2], [1, 0]);
-    const heroScale = useTransform(scrollYProgress, [0, 0.2], [1, 0.95]);
+    const smoothProgress = useSpring(scrollYProgress, { stiffness: 100, damping: 30, restDelta: 0.001 });
+    const heroOpacity = useTransform(smoothProgress, [0, 0.2], [1, 0]);
+    const heroScale = useTransform(smoothProgress, [0, 0.2], [1, 0.9]);
+    const heroY = useTransform(smoothProgress, [0, 0.2], [0, 100]);
+
+    const getAssetUrl = (path: string) => {
+        if (!path) return "";
+        if (path.startsWith("/") || path.startsWith("http")) return path;
+        return `/uploads/projects/${path}`;
+    };
+
+    // Mouse tracking for hero effect
+    const mouseX = useMotionValue(0);
+    const mouseY = useMotionValue(0);
+
+    function handleMouseMove({ currentTarget, clientX, clientY }: React.MouseEvent) {
+        const { left, top } = currentTarget.getBoundingClientRect();
+        mouseX.set(clientX - left);
+        mouseY.set(clientY - top);
+    }
 
     return (
-        <div ref={containerRef} className="min-h-screen bg-[#000000] text-white font-sans selection:bg-[#beff01]/30 overflow-hidden">
+        <div ref={containerRef} className="min-h-screen bg-[#030303] text-white font-sans selection:bg-[#beff01] selection:text-black overflow-hidden relative">
 
-            {/* Background Effects */}
+            {/* Dynamic Background */}
             <div className="fixed inset-0 z-0 pointer-events-none">
-                <div className="absolute top-[-10%] left-[-10%] w-[800px] h-[800px] bg-[#beff01]/5 rounded-full blur-[120px]" />
-                <div className="absolute bottom-[-10%] right-[-10%] w-[600px] h-[600px] bg-blue-900/10 rounded-full blur-[120px]" />
-                <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-[0.05]" />
+                <div className="absolute top-[-20%] left-[-20%] w-[1000px] h-[1000px] bg-[#beff01]/5 rounded-full blur-[150px] animate-pulse" />
+                <div className="absolute bottom-[-20%] right-[-20%] w-[800px] h-[800px] bg-indigo-900/10 rounded-full blur-[150px]" />
+                <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-[0.03]" />
             </div>
 
-            {/* Sub-Navbar - Absolute & Transparent to overlay Hero */}
-            <div className="absolute top-[100px] left-0 right-0 z-30 w-full bg-transparent pointer-events-none">
-                <div className="max-w-7xl mx-auto px-6 md:px-8 lg:px-12 flex justify-between items-center py-4 pointer-events-auto">
-                    <Link href="/works" className="group flex items-center gap-2 text-xs font-bold uppercase tracking-widest hover:text-[#beff01] transition-colors">
-                        <div className="w-8 h-8 rounded bg-white/10 backdrop-blur-md flex items-center justify-center border border-white/10 group-hover:border-[#beff01]/50 transition-colors">
-                            <ArrowLeft size={14} />
-                        </div>
-                        <span className="hidden md:block shadow-black drop-shadow-md font-mono">Back</span>
-                    </Link>
-                    <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-[#beff01]/5 border border-[#beff01]/20 text-[#beff01] text-xs font-mono animate-pulse shadow-black drop-shadow-md">
-                        <Bot size={14} />
-                        <span>AI_PROTOCOL_ACTIVE</span>
+            {/* Navigation */}
+            <div className="absolute top-0 left-0 right-0 z-30 w-full max-w-7xl mx-auto px-6 md:px-8 lg:px-12 py-8 flex justify-between items-center mt-24">
+                <Link href="/works" className="group flex items-center gap-3 text-sm font-medium text-zinc-400 hover:text-white transition-colors">
+                    <div className="p-2 rounded-full bg-white/5 border border-white/10 group-hover:bg-white/10 transition-colors">
+                        <ArrowLeft size={16} className="group-hover:-translate-x-0.5 transition-transform" />
                     </div>
+                    <span>Back to Works</span>
+                </Link>
+                <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 backdrop-blur-md">
+                    <div className="w-1.5 h-1.5 rounded-full bg-[#beff01] animate-pulse" />
+                    <span className="text-xs font-mono text-[#beff01] tracking-wider">SYSTEM_ONLINE</span>
                 </div>
             </div>
 
-            <div className="relative z-10 pt-40 pb-24">
+            <div className="relative z-10 pt-48 md:pt-64 pb-24">
                 <div className="max-w-7xl mx-auto px-6 md:px-8 lg:px-12">
 
-                    {/* Hero Section */}
-                    <div className="grid lg:grid-cols-2 gap-16 items-center mb-32">
+                    {/* Creative Hero Section */}
+                    <div className="relative mb-40" onMouseMove={handleMouseMove}>
                         <motion.div
-                            style={{ opacity: heroOpacity, scale: heroScale }}
-                            initial={{ opacity: 0, x: -50 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{ duration: 0.8 }}
+                            style={{ opacity: heroOpacity, scale: heroScale, y: heroY }}
+                            className="relative z-10"
                         >
-                            <div className="inline-flex items-center gap-2 mb-6 text-[#beff01] font-mono text-xs tracking-widest border border-[#beff01]/20 px-3 py-1 rounded-full bg-[#beff01]/5">
-                                <span className="w-1.5 h-1.5 bg-[#beff01] rounded-full animate-pulse" />
-                                SYSTEM_ONLINE
+                            <div className="inline-flex items-center gap-2 mb-8 text-[#beff01] font-mono text-xs tracking-[0.2em] uppercase border border-[#beff01]/20 px-3 py-1 rounded bg-[#beff01]/5">
+                                <Terminal size={14} />
+                                <span>Case Study: {project.title}</span>
                             </div>
-                            <h1 className="text-5xl md:text-7xl font-bold mb-8 leading-[1.1] tracking-tight font-mono">
-                                {project.title}
-                            </h1>
-                            <p className="text-xl text-zinc-300 leading-relaxed max-w-xl mb-12 font-light">
-                                {project.description}
-                            </p>
 
-                            <div className="space-y-6">
-                                <div>
-                                    <h3 className="text-xs font-bold uppercase text-zinc-500 mb-3 font-mono tracking-wider">Neural Models</h3>
-                                    <div className="flex flex-wrap gap-3">
+                            <h1 className="text-6xl md:text-8xl lg:text-9xl font-black mb-8 leading-[0.85] tracking-tighter text-white mix-blend-difference">
+                                Work Less. Earn More. Let Robots Handle the Boring Stuff.
+                            </h1>
+
+                            <div className="grid lg:grid-cols-12 gap-12 items-end">
+                                <div className="lg:col-span-7">
+                                    <p className="text-xl md:text-2xl text-zinc-400 leading-relaxed font-light border-l-2 border-[#beff01] pl-6 mb-6">
+                                        Your team is wasting hours on repetitive tasks. We build custom AI systems that automate the busywork so you can focus on strategy and sales.
+                                    </p>
+                                    <p className="text-sm text-zinc-500 font-mono pl-6">
+                                        System Function: {project.description}
+                                    </p>
+                                </div>
+                                <div className="lg:col-span-5 flex flex-col gap-4">
+                                    {/* Dynamic Tech Stack in Hero */}
+                                    <div className="flex flex-wrap gap-2 justify-start lg:justify-end">
                                         {project.aiModels?.map((model, i) => (
-                                            <div key={i} className="px-3 py-1.5 bg-white/5 hover:bg-white/10 transition-colors border border-white/10 flex items-center gap-2 text-xs font-mono text-[#beff01]">
-                                                <Cpu size={12} />
+                                            <div key={i} className="px-3 py-1.5 bg-white/5 border border-white/10 rounded-full text-xs text-zinc-300 font-mono flex items-center gap-2">
+                                                <Cpu size={12} className="text-[#beff01]" />
                                                 {model}
+                                            </div>
+                                        ))}
+                                        {project.integrations?.map((integration, i) => (
+                                            <div key={i} className="px-3 py-1.5 bg-white/5 border border-white/10 rounded-full text-xs text-zinc-300 font-mono flex items-center gap-2">
+                                                <Network size={12} className="text-blue-400" />
+                                                {integration}
                                             </div>
                                         ))}
                                     </div>
@@ -80,185 +106,137 @@ export default function AIAutomationProject({ project }: { project: IProject }) 
                             </div>
                         </motion.div>
 
-                        {/* Process Visualization - Modern Glassmorphism */}
-                        <motion.div
-                            initial={{ opacity: 0, scale: 0.9 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            transition={{ duration: 0.8, delay: 0.2 }}
-                            className="relative rounded-3xl bg-white/5 border border-white/10 p-1 overflow-hidden backdrop-blur-sm"
-                        >
-                            <div className="absolute inset-0 bg-gradient-to-br from-[#beff01]/5 to-transparent opacity-50" />
-
-                            <div className="relative bg-black/40 rounded-[22px] p-8 space-y-8">
-                                {/* Header */}
-                                <div className="flex justify-between items-center border-b border-white/10 pb-6">
-                                    <div className="flex items-center gap-3">
-                                        <Activity className="text-[#beff01]" size={20} />
-                                        <span className="text-sm font-mono text-zinc-300">LIVE_PROCESS_VIEW</span>
-                                    </div>
-                                    <div className="flex gap-1.5">
-                                        <div className="w-2 h-2 rounded-full bg-zinc-700" />
-                                        <div className="w-2 h-2 rounded-full bg-zinc-700" />
-                                        <div className="w-2 h-2 rounded-full bg-[#beff01] animate-pulse" />
-                                    </div>
-                                </div>
-
-                                {/* Flow */}
-                                <div className="space-y-6 relative">
-                                    <div className="absolute left-6 top-8 bottom-8 w-0.5 bg-gradient-to-b from-zinc-800 via-[#beff01]/50 to-zinc-800" />
-
-                                    <div className="relative flex items-center gap-6 pl-12">
-                                        <div className="absolute left-[21px] w-2 h-2 rounded-full bg-zinc-600 border border-black" />
-                                        <div className="flex-1 p-4 rounded-lg bg-white/5 border border-white/5">
-                                            <div className="text-xs text-zinc-500 font-mono mb-1">INPUT_STREAM</div>
-                                            <div className="text-sm text-white">Unstructured Data Ingestion</div>
-                                        </div>
-                                    </div>
-
-                                    <div className="relative flex items-center gap-6 pl-12">
-                                        <div className="absolute left-[19px] w-3 h-3 rounded-full bg-[#beff01] shadow-[0_0_10px_#beff01]" />
-                                        <div className="flex-1 p-5 rounded-lg bg-[#beff01]/10 border border-[#beff01]/20">
-                                            <div className="text-xs text-[#beff01] font-mono mb-1">NEURAL_PROCESSING</div>
-                                            <div className="text-base font-bold text-white">{project.automationType || "Cognitive Analysis"}</div>
-                                        </div>
-                                    </div>
-
-                                    <div className="relative flex items-center gap-6 pl-12">
-                                        <div className="absolute left-[21px] w-2 h-2 rounded-full bg-zinc-600 border border-black" />
-                                        <div className="flex-1 p-4 rounded-lg bg-white/5 border border-white/5">
-                                            <div className="text-xs text-zinc-500 font-mono mb-1">ACTION_LAYER</div>
-                                            <div className="text-sm text-white">Autonomous Execution</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </motion.div>
+                        {/* Background Glitch/Grid Effect */}
+                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] -z-10 opacity-20 pointer-events-none">
+                            <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-30" />
+                            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#beff01]/10 to-transparent blur-3xl" />
+                        </div>
                     </div>
 
-                    {/* Results Grid - Data Driven */}
-                    {project.results && project.results.length > 0 && (
-                        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-32">
-                            {project.results.map((res, i) => (
-                                <div key={i} className="relative p-8 rounded-2xl bg-white/5 border border-white/10 overflow-hidden group hover:bg-white/10 transition-all duration-500">
-                                    <div className="absolute top-0 right-0 p-4 opacity-30 group-hover:opacity-100 transition-opacity">
-                                        <Terminal size={16} className="text-[#beff01]" />
+                    {/* Main Visual */}
+                    <motion.div
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        whileInView={{ opacity: 1, scale: 1 }}
+                        transition={{ duration: 1 }}
+                        viewport={{ once: true }}
+                        className="relative w-full aspect-video rounded-3xl overflow-hidden border border-white/10 mb-40 group"
+                    >
+                        {project.image && (
+                            <Image
+                                src={getAssetUrl(project.image)}
+                                alt={project.title}
+                                fill
+                                className="object-cover transition-transform duration-[2s] group-hover:scale-105"
+                            />
+                        )}
+                        <div className="absolute inset-0 bg-gradient-to-t from-[#030303] via-transparent to-transparent opacity-60" />
+
+                        {/* Overlay Data */}
+                        <div className="absolute bottom-8 left-8 right-8 flex justify-between items-end">
+                            <div className="hidden md:block">
+                                <div className="text-xs font-mono text-[#beff01] mb-2">SYSTEM_STATUS</div>
+                                <div className="text-xl font-bold">OPERATIONAL</div>
+                            </div>
+                            <div className="flex gap-2">
+                                <div className="w-2 h-2 bg-[#beff01] rounded-full animate-pulse" />
+                                <div className="w-2 h-2 bg-[#beff01] rounded-full animate-pulse delay-75" />
+                                <div className="w-2 h-2 bg-[#beff01] rounded-full animate-pulse delay-150" />
+                            </div>
+                        </div>
+                    </motion.div>
+
+                    {/* Workflow / Process Section (Dynamic Data) */}
+                    {project.workflowDescription && (
+                        <div className="grid lg:grid-cols-12 gap-16 mb-40">
+                            <div className="lg:col-span-4">
+                                <div className="sticky top-32">
+                                    <h2 className="text-4xl md:text-6xl font-black tracking-tighter mb-8">
+                                        SYSTEM <span className="text-white">PROTOCOL</span>
+                                    </h2>
+                                    <p className="text-zinc-500 text-sm font-mono uppercase tracking-widest">
+                                        Automated Workflow Execution
+                                    </p>
+                                </div>
+                            </div>
+                            <div className="lg:col-span-8">
+                                <div className="bg-zinc-900/20 border border-white/10 rounded-3xl p-8 md:p-12 relative overflow-hidden group hover:border-[#beff01]/30 transition-colors duration-500">
+                                    <div className="absolute top-0 right-0 p-8 opacity-10 group-hover:opacity-20 transition-opacity">
+                                        <Workflow size={120} />
                                     </div>
-                                    <div className="text-zinc-500 text-xs font-bold font-mono uppercase mb-4 tracking-wider">{res.metric}</div>
-                                    <div className="flex items-baseline gap-2 mb-2">
-                                        <div className="text-4xl font-black text-white tracking-tighter group-hover:text-[#beff01] transition-colors">
-                                            {res.value}
-                                        </div>
-                                        {res.change && (
-                                            <div className="text-xs font-bold text-[#beff01] bg-[#beff01]/10 px-2 py-0.5 rounded-full">
-                                                {res.change}
+                                    <div className="relative z-10">
+                                        <h3 className="text-2xl font-bold mb-6 text-white">Workflow Architecture</h3>
+                                        <p className="text-lg text-zinc-300 leading-relaxed whitespace-pre-line">
+                                            {project.workflowDescription}
+                                        </p>
+
+                                        {/* Dynamic Integration Badges */}
+                                        {(project.integrations && project.integrations.length > 0) && (
+                                            <div className="mt-8 pt-8 border-t border-white/5 flex flex-wrap gap-4">
+                                                {project.integrations.map((tool, i) => (
+                                                    <div key={i} className="flex items-center gap-2 text-sm font-mono text-zinc-400">
+                                                        <div className="w-1.5 h-1.5 bg-[#beff01] rounded-full" />
+                                                        {tool}
+                                                    </div>
+                                                ))}
                                             </div>
                                         )}
                                     </div>
-                                    <p className="text-sm text-zinc-400 leading-relaxed border-t border-white/5 pt-4 mt-2">
-                                        {res.description}
-                                    </p>
                                 </div>
-                            ))}
+                            </div>
                         </div>
                     )}
 
-                    {/* Workflow & Integrations Split */}
-                    <div className="grid lg:grid-cols-12 gap-12 mb-32">
-                        {/* Workflow Description */}
-                        <div className="lg:col-span-7">
-                            <div className="h-full p-8 md:p-12 rounded-3xl bg-zinc-900/50 border border-white/10 backdrop-blur-sm">
-                                <div className="flex items-center gap-3 mb-8">
-                                    <div className="p-2 bg-[#beff01]/10 rounded-lg">
-                                        <Workflow className="text-[#beff01]" size={24} />
-                                    </div>
-                                    <h3 className="text-2xl font-bold font-mono">Workflow Architecture</h3>
-                                </div>
-                                <div className="prose prose-invert max-w-none">
-                                    <p className="text-lg text-zinc-300 leading-relaxed font-light">
-                                        {project.workflowDescription || project.description}
-                                    </p>
+                    {/* Creative Gallery Grid */}
+                    {project.images && project.images.length > 0 && (
+                        <div className="mb-40">
+                            <div className="flex items-center justify-between mb-16">
+                                <h2 className="text-4xl md:text-6xl font-black tracking-tighter">
+                                    VISUAL <span className="text-white">LOGS</span>
+                                </h2>
+                                <div className="hidden md:block text-right font-mono text-xs text-[#beff01]">
+                                    [ {project.images.length} RECORDS FOUND ]
                                 </div>
                             </div>
-                        </div>
 
-                        {/* Integrations Matrix */}
-                        <div className="lg:col-span-5">
-                            <div className="h-full p-8 rounded-3xl bg-gradient-to-b from-white/5 to-transparent border border-white/10">
-                                <div className="flex items-center gap-3 mb-8">
-                                    <div className="p-2 bg-blue-500/10 rounded-lg">
-                                        <Network className="text-blue-400" size={24} />
-                                    </div>
-                                    <h3 className="text-2xl font-bold font-mono">Integrations</h3>
-                                </div>
-                                <div className="grid grid-cols-1 gap-4">
-                                    {project.integrations?.map((integration, i) => (
-                                        <div key={i} className="flex items-center gap-4 p-4 rounded-xl bg-black/40 border border-white/5 hover:border-[#beff01]/30 transition-colors group">
-                                            <div className="w-2 h-2 rounded-full bg-zinc-700 group-hover:bg-[#beff01] transition-colors" />
-                                            <span className="text-sm font-mono text-zinc-300 group-hover:text-white transition-colors">
-                                                {integration}
-                                            </span>
+                            <div className="columns-1 md:columns-2 gap-8 space-y-8">
+                                {project.images.map((img, i) => (
+                                    <motion.div
+                                        key={i}
+                                        initial={{ opacity: 0, y: 50 }}
+                                        whileInView={{ opacity: 1, y: 0 }}
+                                        transition={{ duration: 0.8, delay: i * 0.1 }}
+                                        viewport={{ once: true }}
+                                        className="relative break-inside-avoid group rounded-2xl overflow-hidden bg-zinc-900"
+                                    >
+                                        <Image
+                                            src={getAssetUrl(img)}
+                                            alt={`Gallery ${i}`}
+                                            width={800}
+                                            height={600}
+                                            className="w-full h-auto object-cover transition-all duration-700 group-hover:scale-105"
+                                        />
+                                        <div className="absolute inset-0 bg-[#beff01]/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 mix-blend-overlay" />
+                                        <div className="absolute bottom-4 left-4 bg-black/80 backdrop-blur px-3 py-1 rounded text-xs font-mono text-[#beff01] opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                            IMG_0{i + 1}
                                         </div>
-                                    ))}
-                                </div>
+                                    </motion.div>
+                                ))}
                             </div>
                         </div>
-                    </div>
-
-                    {/* Visual Gallery - Preserved as requested */}
-                    <div className="space-y-16">
-                        {project.images.map((img, i) => (
-                            <motion.div
-                                initial={{ opacity: 0, y: 50 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ once: true, margin: "-10%" }}
-                                key={i}
-                                className="relative aspect-video rounded-2xl overflow-hidden border border-white/10 shadow-2xl group"
-                            >
-                                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent z-10 opacity-60" />
-                                <Image
-                                    src={img}
-                                    alt={`System Interface ${i}`}
-                                    fill
-                                    className="object-cover transition-transform duration-700 group-hover:scale-105"
-                                />
-                                <div className="absolute bottom-8 left-8 z-20">
-                                    <div className="text-xs font-mono text-[#beff01] mb-2">FIGURE_0{i + 1}</div>
-                                    <div className="text-xl font-bold">System Interface Visualization</div>
-                                </div>
-                            </motion.div>
-                        ))}
-                    </div>
+                    )}
 
                 </div>
             </div>
 
-            {/* Unique CTA: AI Protocol Style */}
-            <section className="py-32 bg-[#050505] relative overflow-hidden border-t border-white/5">
-                <div className="absolute inset-0">
-                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[#beff01]/5 rounded-full blur-[100px] animate-pulse" />
-                </div>
-
-                <div className="max-w-4xl mx-auto px-6 relative z-10 text-center">
-                    <div className="inline-flex items-center gap-2 mb-8 text-[#beff01] font-mono text-sm">
-                        <span className="w-2 h-2 bg-[#beff01] rounded-full animate-pulse" />
-                        AWAITING_INPUT
-                    </div>
-
-                    <h2 className="text-5xl md:text-7xl font-bold text-white mb-8 tracking-tight font-mono">
-                        Automate the <span className="text-[#beff01]">Impossible.</span>
+            {/* Footer - Minimalist CTA */}
+            <section className="py-40 bg-[#beff01] text-black text-center relative overflow-hidden">
+                <div className="relative z-10 w-full max-w-7xl mx-auto px-6 md:px-8 lg:px-12">
+                    <h2 className="text-6xl md:text-9xl font-black uppercase tracking-tighter mb-12 leading-[0.8]">
+                        Next<br />Project?
                     </h2>
-                    <p className="text-xl text-zinc-400 mb-12 max-w-2xl mx-auto">
-                        Deploy autonomous agents that work 24/7. Scale your operations without scaling your headcount.
-                    </p>
-
-                    <div className="flex flex-col sm:flex-row justify-center gap-6">
-                        <Link href="/contact" className="group relative px-10 py-5 bg-[#beff01] text-black font-bold text-lg rounded-xl overflow-hidden transition-transform hover:scale-105">
-                            <span className="relative z-10 flex items-center gap-3 font-mono">
-                                <Power size={20} /> ACTIVATE_PROTOCOL
-                            </span>
-                            <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
-                        </Link>
-                    </div>
+                    <Link href="/contact" className="inline-flex items-center gap-4 text-xl font-bold uppercase tracking-widest hover:underline decoration-2 underline-offset-4">
+                        Let&apos;s Talk <ArrowRight />
+                    </Link>
                 </div>
             </section>
 

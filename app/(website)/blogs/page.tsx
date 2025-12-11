@@ -17,31 +17,14 @@ interface Blog {
   excerpt?: string;
 }
 
-// Dynamic categories based on recent blogs
-const getDynamicCategories = (blogs: Blog[]) => {
-  const recentCategories = [...blogs]
-    .sort((a, b) => new Date(b.publicationDate).getTime() - new Date(a.publicationDate).getTime())
-    .slice(0, 3)
-    .map(blog => blog.category);
 
-  // Remove duplicates and create category objects
-  const uniqueCategories = [...new Set(recentCategories)].map(category => ({
-    slug: category.toLowerCase().replace(/\s+/g, '-'),
-    label: category
-  }));
-
-  return [
-    { slug: 'all', label: 'All Articles' },
-    ...uniqueCategories
-  ];
-};
 
 export default function BlogsPage() {
-  const [activeCategory, setActiveCategory] = useState('all');
+
 
   const { data, isLoading, error: queryError } = useQuery({
     queryKey: ['blogs'],
-    queryFn: async () => {      
+    queryFn: async () => {
       const response = await fetch('/api/blogs');
       if (!response.ok) throw new Error('Failed to fetch');
       return response.json();
@@ -53,19 +36,6 @@ export default function BlogsPage() {
   });
 
   const blogs: Blog[] = (data?.blogs || []) as Blog[];
-  
-  // Get dynamic categories from recent blogs
-  const categories = blogs.length > 0 ? getDynamicCategories(blogs) : [
-    { slug: 'all', label: 'All Articles' },
-    { slug: 'web-dev', label: 'Web Development' },
-    { slug: 'marketing', label: 'Marketing' },
-    { slug: 'design', label: 'Design' }
-  ];
-
-  // Filter blogs based on active category
-  const filteredBlogs = activeCategory === 'all' 
-    ? blogs 
-    : blogs.filter(blog => blog.category.toLowerCase().replace(/\s+/g, '-') === activeCategory);
 
   const loading = isLoading;
   const error = queryError ? 'Error loading articles' : '';
@@ -83,7 +53,7 @@ export default function BlogsPage() {
     <div className="relative min-h-screen bg-black overflow-hidden">
       {/* Optimized Animated Background */}
       <div className="fixed inset-0 pointer-events-none" style={{ willChange: 'transform' }}>
-        <div 
+        <div
           className="absolute inset-0 opacity-30 animate-gradient-mesh"
           style={{
             background: 'radial-gradient(circle at 20% 50%, rgba(190, 255, 1, 0.15) 0%, transparent 50%), radial-gradient(circle at 80% 80%, rgba(59, 130, 246, 0.15) 0%, transparent 50%), radial-gradient(circle at 40% 20%, rgba(168, 85, 247, 0.15) 0%, transparent 50%)',
@@ -92,13 +62,13 @@ export default function BlogsPage() {
         />
 
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#18181b_1px,transparent_1px),linear-gradient(to_bottom,#18181b_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_0%,#000_70%,transparent_100%)] opacity-20"></div>
-        
+
         <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-[#beff01]/10 rounded-full blur-2xl animate-orb-1" style={{ willChange: 'transform' }} />
         <div className="absolute bottom-0 right-1/4 w-[600px] h-[600px] bg-blue-500/10 rounded-full blur-2xl animate-orb-2" style={{ willChange: 'transform' }} />
 
         <div className="absolute inset-x-0 h-px bg-gradient-to-r from-transparent via-[#beff01]/30 to-transparent animate-scan-line" />
 
-        <div 
+        <div
           className="absolute inset-0 opacity-[0.015]"
           style={{
             backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
@@ -156,34 +126,6 @@ export default function BlogsPage() {
               </motion.p>
             </motion.div>
 
-            {/* Category Filter */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.5 }}
-              className="mb-16 flex flex-wrap justify-center gap-2 sm:gap-4"
-            >
-              {categories.map((cat) => {
-                const isActive = activeCategory === cat.slug;
-                return (
-                  <motion.button
-                    key={cat.slug}
-                    onClick={() => setActiveCategory(cat.slug)}
-                    disabled={loading}
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    className={`flex items-center gap-2 px-4 py-2 sm:px-6 sm:py-3 rounded-full font-bold transition-all duration-300 disabled:opacity-50 text-sm sm:text-base ${
-                      isActive
-                        ? 'bg-[#beff01] text-black shadow-lg shadow-[#beff01]/30'
-                        : 'bg-zinc-900/50 border border-zinc-800 text-gray-400 hover:border-[#beff01]/30 hover:bg-zinc-800/50'
-                    }`}
-                  >
-                    <span>{cat.label}</span>
-                  </motion.button>
-                );
-              })}
-            </motion.div>
-
             {/* Loading State */}
             {loading && (
               <div className="flex items-center justify-center py-32">
@@ -211,17 +153,17 @@ export default function BlogsPage() {
             {!loading && !error && (
               <AnimatePresence mode="wait">
                 <motion.div
-                  key={activeCategory}
+                  key="all-blogs"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
                   transition={{ duration: 0.3 }}
                   className="grid gap-8 md:grid-cols-2 lg:grid-cols-3"
                 >
-                  {filteredBlogs.map((blog: Blog, index: number) => (
-                    <BlogCard 
-                      key={blog.id} 
-                      blog={blog} 
+                  {blogs.map((blog: Blog, index: number) => (
+                    <BlogCard
+                      key={blog.id}
+                      blog={blog}
                       index={index}
                       formatDate={formatDate}
                     />
@@ -231,7 +173,7 @@ export default function BlogsPage() {
             )}
 
             {/* Empty State */}
-            {!loading && !error && filteredBlogs.length === 0 && (
+            {!loading && !error && blogs.length === 0 && (
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -314,8 +256,8 @@ function BlogCard({ blog, index, formatDate }: BlogCardProps) {
         initial={{ opacity: 0, y: 50 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-50px" }}
-        transition={{ 
-          duration: 0.6, 
+        transition={{
+          duration: 0.6,
           delay: index * 0.1,
           ease: [0.22, 1, 0.36, 1]
         }}
@@ -341,7 +283,7 @@ function BlogCard({ blog, index, formatDate }: BlogCardProps) {
           transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
         >
           <Image
-            src={blog.image}
+            src={blog.image.startsWith('/') || blog.image.startsWith('http') ? blog.image : `/uploads/blogs/${blog.image}`}
             alt={blog.title}
             fill
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
@@ -350,7 +292,7 @@ function BlogCard({ blog, index, formatDate }: BlogCardProps) {
             placeholder="blur"
             blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWEREiMxUf/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=="
           />
-          
+
           {/* Gradient Overlay */}
           <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-300" />
         </motion.div>
@@ -369,18 +311,6 @@ function BlogCard({ blog, index, formatDate }: BlogCardProps) {
                 {blog.category}
               </span>
             </motion.div>
-
-            {/* Date Badge */}
-            <motion.div
-              initial={{ x: 20, opacity: 0 }}
-              animate={{ x: 0, opacity: 1 }}
-              transition={{ delay: index * 0.1 + 0.3 }}
-            >
-              <span className="inline-flex items-center gap-1.5 bg-black/60 backdrop-blur-sm text-gray-300 text-xs font-medium px-3 py-1.5 rounded-full border border-zinc-800">
-                <Calendar className="w-3 h-3" />
-                {formatDate(blog.publicationDate)}
-              </span>
-            </motion.div>
           </div>
         </div>
 
@@ -391,7 +321,12 @@ function BlogCard({ blog, index, formatDate }: BlogCardProps) {
           <h3 className="text-xl sm:text-3xl font-black text-white mb-2 group-hover:text-[#beff01] transition-colors duration-300 tracking-tight">
             {blog.title}
           </h3>
-          
+
+          <div className="flex items-center gap-2 text-gray-400 text-sm">
+            <Calendar className="w-4 h-4" />
+            <span>{formatDate(blog.publicationDate)}</span>
+          </div>
+
         </motion.div>
 
         {/* Hover Glow */}

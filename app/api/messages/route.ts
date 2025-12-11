@@ -3,7 +3,7 @@
 import { NextResponse } from "next/server";
 import { ObjectId } from "mongodb";
 import clientPromise from "@/lib/mongodb";
-import { CONTACT_COLLECTION, Contact } from "@/models/Contact";
+import { CONTACT_COLLECTION, IContact } from "@/models/Contact";
 
 // GET all messages
 export async function GET(request: Request) {
@@ -22,7 +22,7 @@ export async function GET(request: Request) {
     if (statusParam && (statusParam === 'new' || statusParam === 'read' || statusParam === 'replied')) {
       query.status = statusParam;
     }
-    
+
     // Projection to fetch only needed fields
     const projection = {
       name: 1,
@@ -33,11 +33,11 @@ export async function GET(request: Request) {
       createdAt: 1,
       _id: 1
     };
-    
+
     // Fetch with timeout protection
     const contacts = await Promise.race([
       db
-        .collection<Contact>(CONTACT_COLLECTION)
+        .collection<IContact>(CONTACT_COLLECTION)
         .find(query, { projection })
         .sort({ createdAt: -1 })
         .skip(skip)
@@ -46,7 +46,7 @@ export async function GET(request: Request) {
       new Promise((_, reject) =>
         setTimeout(() => reject(new Error('Query timeout')), 10000)
       )
-    ]) as Contact[];
+    ]) as IContact[];
 
     // Get total count with timeout
     const total = await Promise.race([
@@ -92,13 +92,13 @@ export async function PATCH(request: Request) {
   try {
     const client = await clientPromise;
     const db = client.db("meddigital");
-    
+
     const { contactId, status } = await request.json();
 
     const result = await db
-      .collection<Contact>(CONTACT_COLLECTION)
+      .collection<IContact>(CONTACT_COLLECTION)
       .findOneAndUpdate(
-        { _id: new ObjectId(contactId) as unknown as Contact['_id'] },
+        { _id: new ObjectId(contactId) as any },
         { $set: { status: status as 'new' | 'read' | 'replied' } },
         { returnDocument: 'after' }
       );
@@ -129,7 +129,7 @@ export async function DELETE(request: Request) {
   try {
     const client = await clientPromise;
     const db = client.db("meddigital");
-    
+
     const { searchParams } = new URL(request.url);
     const contactId = searchParams.get('id');
 

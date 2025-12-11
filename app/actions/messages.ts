@@ -6,9 +6,7 @@ import { revalidatePath } from "next/cache";
 
 export async function getMessages() {
     await connectToDatabase();
-    console.log("Fetching messages...");
     const messages = await Contact.find({}).sort({ createdAt: -1 }).lean();
-    console.log(`Found ${messages.length} messages`);
     return JSON.parse(JSON.stringify(messages));
 }
 

@@ -1,6 +1,6 @@
 'use client';
 
-import Link from 'next/link';
+
 import { ArrowRight, Zap, TrendingUp, Trophy } from 'lucide-react';
 import { motion } from 'framer-motion';
 
@@ -20,7 +20,7 @@ export default function CallToAction() {
   };
 
   return (
-    <section className="relative pt-18 md:pt-32 pb-10 md:pb-16 overflow-hidden">
+    <section className="relative py-16 md:py-24 lg:py-32 overflow-hidden">
       {/* Divider Above Section */}
       <div className="max-w-7xl mx-auto px-6 md:px-8 lg:px-12 pb-16">
         <div className="relative">
@@ -62,10 +62,10 @@ export default function CallToAction() {
             transition={{ duration: 0.6, delay: 0.3 }}
             className="text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-black text-white mb-8 tracking-tight leading-none"
           >
-            Ready To Stop
+            Let&apos;s Talk
             <br />
             <span className="bg-gradient-to-r from-[#beff01] via-[#d4ff4d] to-[#beff01] bg-clip-text text-transparent bg-[length:200%_auto] animate-gradient">
-              Playing Small?
+              About Your Revenue
             </span>
           </motion.h2>
 
@@ -76,9 +76,9 @@ export default function CallToAction() {
             transition={{ duration: 0.6, delay: 0.4 }}
             className="text-xl md:text-2xl text-gray-400 max-w-4xl mx-auto leading-relaxed font-light mb-16"
           >
-            You've got two options: Keep scrolling and hoping things change on their own,
+            You can keep guessing, or we can build a roadmap together.
             <br />
-            <span className="text-white font-bold">or take 30 seconds to start something real.</span>
+            <span className="text-white font-bold">30 minutes. No sales pitch. Just a strategy session to see if we&apos;re a fit.</span>
           </motion.p>
 
           {/* Interactive Question Cards - Simple & Creative */}
@@ -151,7 +151,7 @@ export default function CallToAction() {
               className="group relative overflow-hidden bg-[#beff01] hover:bg-[#d4ff4d] text-black font-black text-2xl px-12 py-6 rounded-full transition-all duration-300 shadow-lg shadow-[#beff01]/20 hover:shadow-2xl hover:shadow-[#beff01]/40"
             >
               <span className="relative z-10 flex items-center gap-3">
-                Let's Talk Growth
+                Book Your Strategy Call
                 <ArrowRight className="w-6 h-6 group-hover:translate-x-2 transition-transform" />
               </span>
             </motion.button>
@@ -165,7 +165,7 @@ export default function CallToAction() {
             transition={{ duration: 0.6, delay: 1.6 }}
             className="text-sm text-gray-500 mt-8 max-w-2xl mx-auto"
           >
-            <span className="font-bold text-white">No sales pitch.</span> Just you, me, and a whiteboard figuring out how to get you where you want to be. If we click, awesome. If not, I'll point you to someone who's a better fit.
+            <span className="font-bold text-white">No sales pitch.</span> Just you, me, and a whiteboard figuring out how to get you where you want to be. If we click, awesome. If not, I&apos;ll point you to someone who&apos;s a better fit.
           </motion.p>
         </motion.div>
       </div>

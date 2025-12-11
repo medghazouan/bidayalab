@@ -6,9 +6,7 @@ import { revalidatePath } from "next/cache";
 
 export async function getTestimonials() {
     await connectToDatabase();
-    console.log("Fetching testimonials...");
     const testimonials = await Testimonial.find({}).sort({ createdAt: -1 }).lean();
-    console.log(`Found ${testimonials.length} testimonials`);
     return JSON.parse(JSON.stringify(testimonials));
 }
 

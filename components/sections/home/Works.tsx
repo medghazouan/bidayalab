@@ -33,7 +33,7 @@ export default function Works() {
   const loading = isLoading;
 
   return (
-    <section id="works-section" className="relative pt-18 md:pt-32 pb-12 md:pb-16 overflow-hidden">
+    <section id="works-section" className="relative py-16 md:py-24 lg:py-32 overflow-hidden">
       {/* Divider Above Section */}
       <div className="max-w-7xl mx-auto px-6 md:px-8 lg:px-12 pb-16">
         <div className="relative">
@@ -129,7 +129,9 @@ export default function Works() {
           <>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
               {projects.map((project, index) => (
-                <ProjectCard key={`${project.id}-${index}`} project={project} index={index} />
+                <div key={`${project.id}-${index}`} id={index === 0 ? "first-project" : undefined}>
+                  <ProjectCard project={project} index={index} />
+                </div>
               ))}
             </div>
 

@@ -6,8 +6,11 @@ import { rateLimit, getClientIp, sanitizeFilename, isValidFileType, isValidFileS
 import { logger } from "@/lib/logger";
 
 // Configuration
-const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
-const ALLOWED_TYPES = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'mp4', 'mov', 'pdf'];
+const MAX_IMAGE_SIZE = 10 * 1024 * 1024; // 10MB for images
+const MAX_VIDEO_SIZE = 100 * 1024 * 1024; // 100MB for videos
+const ALLOWED_IMAGE_TYPES = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'pdf'];
+const ALLOWED_VIDEO_TYPES = ['mp4', 'mov', 'avi', 'webm'];
+const ALLOWED_TYPES = [...ALLOWED_IMAGE_TYPES, ...ALLOWED_VIDEO_TYPES];
 
 export async function POST(request: Request) {
     try {
@@ -33,6 +36,7 @@ export async function POST(request: Request) {
 
         const formData = await request.formData();
         const file = formData.get("file") as File;
+        const folder = formData.get("folder") as string || "default";
 
         if (!file) {
             return NextResponse.json(
@@ -41,11 +45,15 @@ export async function POST(request: Request) {
             );
         }
 
-        // File size validation
-        if (!isValidFileSize(file.size, MAX_FILE_SIZE)) {
-            logger.warn(`File too large: ${file.size} bytes, max: ${MAX_FILE_SIZE}`);
+        // File size validation - different limits for images and videos
+        const fileExt = file.name.split('.').pop()?.toLowerCase();
+        const isVideo = ALLOWED_VIDEO_TYPES.includes(fileExt || '');
+        const maxSize = isVideo ? MAX_VIDEO_SIZE : MAX_IMAGE_SIZE;
+
+        if (!isValidFileSize(file.size, maxSize)) {
+            logger.warn(`File too large: ${file.size} bytes, max: ${maxSize}`);
             return NextResponse.json(
-                { error: `File size exceeds maximum allowed size of ${MAX_FILE_SIZE / (1024 * 1024)}MB` },
+                { error: `File size exceeds maximum allowed size of ${maxSize / (1024 * 1024)}MB` },
                 { status: 400 }
             );
         }
@@ -59,24 +67,30 @@ export async function POST(request: Request) {
             );
         }
 
-        // Sanitize filename
+        // Sanitize filename and folder
         const timestamp = Date.now();
         const originalName = sanitizeFilename(file.name);
         const filename = `${timestamp}-${originalName}`;
+        const sanitizedFolder = sanitizeFilename(folder);
 
         // Convert file to buffer
         const bytes = await file.arrayBuffer();
         const buffer = Buffer.from(bytes);
 
         // Save file
-        const uploadDir = path.join(process.cwd(), "public", "uploads");
+        const uploadDir = path.join(process.cwd(), "public", "uploads", sanitizedFolder);
+
+        // Ensure directory exists
+        const { mkdir } = require("fs/promises");
+        await mkdir(uploadDir, { recursive: true });
+
         const filepath = path.join(uploadDir, filename);
 
         await writeFile(filepath, buffer);
 
-        const fileUrl = `/uploads/${filename}`;
+        const fileUrl = `/uploads/${sanitizedFolder}/${filename}`;
 
-        logger.info(`File uploaded successfully: ${filename}`, {
+        logger.info(`File uploaded successfully: ${filename} to ${sanitizedFolder}`, {
             user: session.user.email,
             size: file.size,
             type: file.type

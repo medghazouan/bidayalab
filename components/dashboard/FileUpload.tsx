@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Upload, X, Loader2, Image as ImageIcon } from "lucide-react";
+import { Upload, X, Loader2 } from "lucide-react";
 import Image from "next/image";
 
 interface FileUploadProps {
@@ -9,9 +9,10 @@ interface FileUploadProps {
     onChange: (url: string) => void;
     label?: string;
     accept?: string;
+    folder?: string;
 }
 
-export default function FileUpload({ value, onChange, label = "Upload File", accept = "image/*,video/*" }: FileUploadProps) {
+export default function FileUpload({ value, onChange, label = "Upload File", accept = "image/*,video/*", folder = "default" }: FileUploadProps) {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
 
@@ -24,6 +25,7 @@ export default function FileUpload({ value, onChange, label = "Upload File", acc
 
         const formData = new FormData();
         formData.append("file", file);
+        formData.append("folder", folder);
 
         try {
             const res = await fetch("/api/upload", {
@@ -44,6 +46,14 @@ export default function FileUpload({ value, onChange, label = "Upload File", acc
         }
     };
 
+    const getPreviewUrl = (path: string) => {
+        if (!path) return "";
+        if (path.startsWith("http") || path.startsWith("blob") || path.startsWith("/")) return path;
+        return `/uploads/${folder}/${path}`;
+    };
+
+    const previewUrl = value ? getPreviewUrl(value) : "";
+
     return (
         <div className="space-y-2">
             <label className="text-xs font-bold uppercase text-zinc-500 tracking-wider">{label}</label>
@@ -51,10 +61,10 @@ export default function FileUpload({ value, onChange, label = "Upload File", acc
             {value ? (
                 <div className="relative group rounded-xl overflow-hidden border border-white/10 bg-black/50">
                     {value.match(/\.(mp4|webm|ogg)$/i) ? (
-                        <video src={value} className="w-full h-48 object-cover" controls />
+                        <video src={previewUrl} className="w-full h-48 object-cover" controls />
                     ) : (
                         <div className="relative h-48 w-full">
-                            <Image src={value} alt="Uploaded" fill className="object-cover" />
+                            <Image src={previewUrl} alt="Uploaded" fill className="object-cover" />
                         </div>
                     )}
 

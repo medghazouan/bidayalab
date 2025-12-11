@@ -2,12 +2,12 @@
 
 "use client";
 
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { Menu, X } from "lucide-react";
+import { X } from "lucide-react";
 
 const navLinks = [
   { name: "HOME", href: "/home" },
@@ -45,7 +45,6 @@ export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const lastScrollYRef = useRef(0);
-  const [animateLogo, setAnimateLogo] = useState(false);
   const pathname = usePathname();
 
   useEffect(() => {
@@ -53,30 +52,16 @@ export default function Navbar() {
       const currentScrollY = window.scrollY;
       const lastScrollY = lastScrollYRef.current;
       const isScrollingDown = currentScrollY > lastScrollY;
-      const isScrollingUp = currentScrollY < lastScrollY;
+      // const isScrollingUp = currentScrollY < lastScrollY; // Unused now if logic removed
 
       // Update ref immediately for next comparison
       lastScrollYRef.current = currentScrollY;
 
       // Only update state when threshold crossed (avoids unnecessary re-renders)
       if (isScrollingDown && currentScrollY > 100) {
-        setScrolled((prev) => {
-          if (!prev) {
-            setAnimateLogo(true);
-            setTimeout(() => setAnimateLogo(false), 1500);
-            return true;
-          }
-          return prev;
-        });
-      } else if (isScrollingUp && currentScrollY < 50) {
-        setScrolled((prev) => {
-          if (prev) {
-            setAnimateLogo(true);
-            setTimeout(() => setAnimateLogo(false), 1500);
-            return false;
-          }
-          return prev;
-        });
+        setScrolled(true);
+      } else if (currentScrollY < 50) {
+        setScrolled(false);
       }
     };
 
@@ -86,11 +71,6 @@ export default function Navbar() {
     window.addEventListener("scroll", throttledHandleScroll, { passive: true });
     return () => window.removeEventListener("scroll", throttledHandleScroll);
   }, []); // Empty dependencies - using refs to avoid re-registration
-
-  useEffect(() => {
-    setAnimateLogo(true);
-    setTimeout(() => setAnimateLogo(false), 1500);
-  }, []);
 
   // Lock body scroll when mobile menu is open - optimized to avoid layout thrashing
   useEffect(() => {
@@ -150,17 +130,8 @@ export default function Navbar() {
               width={150}
               height={150}
               priority
-              className={`transition-all duration-300 ${animateLogo ? 'scale-110 rotate-12' : 'scale-100'
-                }`}
+              className="scale-100"
             />
-            {animateLogo && (
-              <motion.div
-                initial={{ scale: 1, opacity: 0.5 }}
-                animate={{ scale: 2, opacity: 0 }}
-                transition={{ duration: 1 }}
-                className="absolute inset-0 border-2 border-[#beff01] rounded-full"
-              />
-            )}
           </Link>
 
           {/* Desktop Navigation - CENTERED */}

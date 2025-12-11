@@ -43,7 +43,7 @@ export default function DashboardSidebar({ isOpen, onClose }: SidebarProps) {
                 <div className="p-5 border-b border-white/5 flex items-center justify-between flex-shrink-0">
                     <Link href="/" className="flex items-center justify-center w-full">
                         <div className="w-20 h-20 md:w-24 md:h-24 relative">
-                            <Image src="/assets/icons/newlogo.png" alt="Bidayalab" fill className="object-contain" />
+                            <Image src="/assets/icons/newlogo.png" alt="Bidayalab" fill sizes="(max-width: 768px) 100px, 150px" className="object-contain" />
                         </div>
                     </Link>
                     <button onClick={onClose} className="md:hidden text-zinc-400 hover:text-white transition-all hover:rotate-90 duration-300 absolute top-4 right-4">

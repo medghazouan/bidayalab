@@ -36,8 +36,7 @@ export default function PricingSection({ onOpenOrderModal }: PricingSectionProps
       const response = await fetch('/api/pricing');
       if (!response.ok) throw new Error('Failed to fetch');
       const result = await response.json();
-      console.log('API Response:', result); // Debug log
-      console.log('API Response Type:', typeof result, Array.isArray(result)); // Debug log
+
       return result;
     },
     staleTime: 5 * 60 * 1000, // 5 minutes
@@ -49,26 +48,26 @@ export default function PricingSection({ onOpenOrderModal }: PricingSectionProps
   // Memoize sorted plans to avoid re-sorting on every render
   const plans = useMemo(() => {
     if (!data) {
-      console.log('No data received'); // Debug log
+
       return [];
     }
 
     // Handle different response formats
     let plansArray: PricingPlan[] = [];
-    
+
     // Check if data is an array (direct plans array)
     if (Array.isArray(data)) {
-      console.log('Data is array, length:', data.length); // Debug log
+
       plansArray = data;
-    } 
+    }
     // Check if data has a plans property
     else if (data && typeof data === 'object' && 'plans' in data) {
-      console.log('Data has plans property, length:', data.plans?.length); // Debug log
+
       plansArray = data.plans || [];
     }
     // Check if data has a data property (nested structure)
     else if (data && typeof data === 'object' && 'data' in data) {
-      console.log('Data has data property'); // Debug log
+
       const nestedData = (data as Record<string, unknown>).data;
       if (Array.isArray(nestedData)) {
         plansArray = nestedData;
@@ -77,7 +76,7 @@ export default function PricingSection({ onOpenOrderModal }: PricingSectionProps
       }
     }
 
-    console.log('Final plans array:', plansArray); // Debug log
+
 
     if (!plansArray || plansArray.length === 0) {
       return [];
@@ -93,7 +92,7 @@ export default function PricingSection({ onOpenOrderModal }: PricingSectionProps
   }, [data]);
 
   const getPlanIcon = (name: string) => {
-    switch(name.toLowerCase()) {
+    switch (name.toLowerCase()) {
       case 'starter': return <Rocket className="w-6 h-6" />;
       case 'growth': return <Crown className="w-6 h-6" />;
       case 'custom': return <Shield className="w-6 h-6" />;
@@ -194,11 +193,11 @@ export default function PricingSection({ onOpenOrderModal }: PricingSectionProps
           {plans.map((plan, index) => {
             const isCustom = plan.isCustom;
             const isGrowth = plan.name === 'Growth';
-            
+
             // Desktop: Starter (left), Growth (center scaled), Custom (right)
             // Mobile: Growth first
             const shouldScale = isGrowth;
-            
+
             return (
               <div
                 key={plan._id}
@@ -218,8 +217,8 @@ export default function PricingSection({ onOpenOrderModal }: PricingSectionProps
                 {/* Card */}
                 <div className={`
                   relative h-full rounded-3xl overflow-hidden
-                  ${isGrowth 
-                    ? 'bg-gradient-to-br from-[#beff01]/20 via-[#beff01]/10 to-black border-2 border-[#beff01] shadow-2xl shadow-[#beff01]/30' 
+                  ${isGrowth
+                    ? 'bg-gradient-to-br from-[#beff01]/20 via-[#beff01]/10 to-black border-2 border-[#beff01] shadow-2xl shadow-[#beff01]/30'
                     : 'bg-zinc-900/50 backdrop-blur-sm border border-zinc-800'
                   }
                   transition-all duration-300
@@ -240,8 +239,8 @@ export default function PricingSection({ onOpenOrderModal }: PricingSectionProps
                     <div className="flex items-center justify-between mb-6">
                       <div className={`
                         w-14 h-14 rounded-2xl flex items-center justify-center
-                        ${isGrowth 
-                          ? 'bg-[#beff01] text-black shadow-lg shadow-[#beff01]/50' 
+                        ${isGrowth
+                          ? 'bg-[#beff01] text-black shadow-lg shadow-[#beff01]/50'
                           : 'bg-zinc-800 text-[#beff01]'
                         }
                         group-hover:scale-110 transition-transform duration-300
@@ -301,8 +300,8 @@ export default function PricingSection({ onOpenOrderModal }: PricingSectionProps
                     {/* Features */}
                     <ul className="space-y-4 mb-10">
                       {plan.features.map((feature, idx) => (
-                        <li 
-                          key={idx} 
+                        <li
+                          key={idx}
                           className="flex items-start gap-3 group/item"
                           style={{
                             animation: `fadeInUp 0.5s ease-out ${idx * 0.05}s both`
@@ -310,8 +309,8 @@ export default function PricingSection({ onOpenOrderModal }: PricingSectionProps
                         >
                           <div className={`
                             w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5
-                            ${isGrowth 
-                              ? 'bg-[#beff01]/20 border border-[#beff01]' 
+                            ${isGrowth
+                              ? 'bg-[#beff01]/20 border border-[#beff01]'
                               : 'bg-zinc-800 border border-zinc-700'
                             }
                             group-hover/item:scale-110 transition-transform
@@ -326,14 +325,14 @@ export default function PricingSection({ onOpenOrderModal }: PricingSectionProps
                     </ul>
 
                     {/* CTA Button */}
-                    <button 
+                    <button
                       onClick={() => handleOrderClick(plan)}
                       className={`
                         relative w-full py-4 rounded-2xl font-bold text-base
                         overflow-hidden group/btn
                         transition-all duration-300
-                        ${isGrowth 
-                          ? 'bg-[#beff01] text-black hover:bg-[#a8e600] shadow-lg shadow-[#beff01]/30 hover:shadow-2xl hover:shadow-[#beff01]/40' 
+                        ${isGrowth
+                          ? 'bg-[#beff01] text-black hover:bg-[#a8e600] shadow-lg shadow-[#beff01]/30 hover:shadow-2xl hover:shadow-[#beff01]/40'
                           : 'bg-zinc-800 text-white hover:bg-zinc-700 border border-zinc-700 hover:border-[#beff01]/50'
                         }
                       `}

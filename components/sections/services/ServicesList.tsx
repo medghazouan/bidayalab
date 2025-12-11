@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Code, TrendingUp, Palette, Megaphone, Camera, Bot, Cpu, Zap, Video, ArrowUpRight, Layers, Globe, BarChart3, Aperture, Sparkles } from 'lucide-react';
+import { Code, Palette, Megaphone, Camera, Bot, Layers, Globe, BarChart3, Aperture, Sparkles } from 'lucide-react';
 
 const services = [
   {
@@ -109,7 +109,7 @@ export default function ServicesList() {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
   return (
-    <section className="relative min-h-screen py-20 px-4 md:px-8 lg:px-16 overflow-hidden">
+    <section className="relative min-h-screen py-16 md:py-24 lg:py-32 px-4 md:px-8 lg:px-16 overflow-hidden">
       {/* Background Elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-1/3 right-1/4 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl"></div>

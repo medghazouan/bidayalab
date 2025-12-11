@@ -1,5 +1,7 @@
 import mongoose, { Schema, Document } from 'mongoose';
 
+export const CONTACT_COLLECTION = 'contact';
+
 export interface IContact extends Document {
   name: string;
   email: string;

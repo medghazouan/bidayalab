@@ -4,6 +4,7 @@ import { z } from "zod"
 import bcrypt from "bcryptjs"
 import { connectToDatabase } from "@/lib/mongoose"
 import Admin from "@/models/Admin"
+import { rateLimit } from "@/lib/rate-limit"
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
     providers: [
@@ -19,6 +20,12 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
                 if (parsedCredentials.success) {
                     const { email, password } = parsedCredentials.data
+
+                    // Rate Limiting (Brute Force Protection)
+                    // In-memory rate limiting to prevent spamming attempts on an account
+                    if (!rateLimit({ ip: email, limit: 5, windowMs: 60 * 1000 })) {
+                        throw new Error("Too many login attempts. Please try again later.");
+                    }
 
                     await connectToDatabase();
                     const user = await Admin.findOne({ email });
@@ -42,31 +49,31 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         }),
     ],
     pages: {
-        signIn: "/login",
+        signIn: "/portal-access",
     },
     callbacks: {
         authorized({ auth, request: { nextUrl } }) {
             const isLoggedIn = !!auth?.user
-            const isOnDashboard = nextUrl.pathname.startsWith("/dashboard")
+            const isOnDashboard = nextUrl.pathname.startsWith("/studio-admin")
 
             if (isOnDashboard) {
                 if (isLoggedIn) return true
                 return false // Redirect unauthenticated users to login page
-            } else if (isLoggedIn && nextUrl.pathname === "/login") {
-                return Response.redirect(new URL("/dashboard", nextUrl))
+            } else if (isLoggedIn && nextUrl.pathname === "/portal-access") {
+                return Response.redirect(new URL("/studio-admin", nextUrl))
             }
 
             return true
         },
         jwt({ token, user }) {
             if (user) {
-                token.role = user.role
+                token.role = (user as any).role
             }
             return token
         },
         session({ session, token }) {
             if (session.user) {
-                session.user.role = token.role as string
+                (session.user as any).role = token.role as string
             }
             return session
         },

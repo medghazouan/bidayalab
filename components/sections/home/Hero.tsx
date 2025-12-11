@@ -1,23 +1,18 @@
 'use client';
 
-import Link from 'next/link';
+
+import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
-import { ArrowRight, Monitor, TrendingUp, Palette, Bot, Clapperboard } from 'lucide-react';
+import { ArrowRight, Monitor } from 'lucide-react';
 
 export default function Hero() {
-  const scrollToWorks = () => {
-    const worksSection = document.getElementById('works-section');
-    if (worksSection) {
-      worksSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-  };
+  const router = useRouter();
 
-  const scrollToContact = () => {
-    const contactSection = document.getElementById('contact-section');
-    if (contactSection) {
-      // Scroll with some offset to show the form nicely
-      const offset = 100;
-      const elementPosition = contactSection.getBoundingClientRect().top;
+  const scrollToWorks = () => {
+    const firstProject = document.getElementById('first-project');
+    if (firstProject) {
+      const offset = 100; // Adjust based on header height
+      const elementPosition = firstProject.getBoundingClientRect().top;
       const offsetPosition = elementPosition + window.pageYOffset - offset;
 
       window.scrollTo({
@@ -27,8 +22,12 @@ export default function Hero() {
     }
   };
 
+  const scrollToContact = () => {
+    router.push('/contact#contact-form');
+  };
+
   return (
-    <section className="relative pt-20 md:pt-32 pb-6 md:pb-16 overflow-hidden">
+    <section className="relative pt-24 md:pt-36 lg:pt-40 pb-12 md:pb-24 lg:pb-32 overflow-hidden">
       <div className="relative max-w-7xl mx-auto px-6 md:px-8 lg:px-12">
         {/* Header - Centered (Keep Original) */}
         <motion.div
@@ -55,10 +54,10 @@ export default function Hero() {
             transition={{ duration: 0.6, delay: 0.3 }}
             className="text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-black text-white mb-8 tracking-tight leading-none"
           >
-            Your Business
+            Is Your Website
             <br />
             <span className="bg-gradient-to-r from-[#beff01] via-[#d4ff4d] to-[#beff01] bg-clip-text text-transparent bg-[length:200%_auto] animate-gradient">
-              Deserves Better
+              Costing You Money?
             </span>
           </motion.h1>
 
@@ -68,16 +67,15 @@ export default function Hero() {
             transition={{ duration: 0.6, delay: 0.4 }}
             className="text-xl md:text-2xl text-gray-400 max-w-4xl mx-auto leading-relaxed font-light"
           >
-            We&apos;re Bidayalab , and we help ambitious business owners like you turn their online presence into a
-            powerful growth engine.
-            No fluff, no empty promises—just real results that move your business forward.
+            You&apos;ve got a great product. Now you need a digital partner who cares about your bottom line as much as you do.
+            No fluff, no empty promises just real results that move your business forward.
           </motion.p>
         </motion.div>
 
         {/* Two-Column Layout: Capabilities + CTAs (Left) | Insight Card (Right) */}
-        <div className="flex flex-col lg:flex-row gap-12 lg:gap-16 items-start">
+        <div className="flex flex-col lg:flex-row gap-12 lg:gap-24 items-stretch">
           {/* LEFT COLUMN - Capabilities + CTAs */}
-          <div className="w-full lg:w-1/2">
+          <div className="w-full lg:w-1/2 flex flex-col justify-center">
             {/* Capabilities List */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -91,11 +89,11 @@ export default function Hero() {
 
               <div className="space-y-6">
                 {[
-                  { id: "01", title: "Digital Development", psycho: "Code that prints money. Fast, scalable, and built to convert." },
-                  { id: "02", title: "Growth Marketing", psycho: "We don't buy clicks. We buy customers who stay." },
-                  { id: "03", title: "Creative Studio", psycho: "Design so good, they can't ignore you. Period." },
-                  { id: "04", title: "AI Automation", psycho: "Work less. Earn more. Let robots handle the boring stuff." },
-                  { id: "05", title: "Visual Storytelling", psycho: "Stories that sell. Content that builds cults." }
+                  { id: "01", title: "Websites That Convert", psycho: "Code that prints money. Fast, scalable, and built to convert." },
+                  { id: "02", title: "Campaigns That Pay Back", psycho: "We don&apos;t buy clicks. We buy customers who stay." },
+                  { id: "03", title: "Brands They Can't Ignore", psycho: "Design so good, they can't ignore you. Period." },
+                  { id: "04", title: "Systems That Save Time", psycho: "Work less. Earn more. Let robots handle the boring stuff." },
+                  { id: "05", title: "Stories That Sell", psycho: "Stories that sell. Content that builds cults." }
                 ].map((item, index) => (
                   <ServiceItem key={index} item={item} index={index} />
                 ))}
@@ -104,15 +102,15 @@ export default function Hero() {
           </div>
 
           {/* RIGHT COLUMN - Insight Card + Social Proof */}
-          <div className="hidden lg:flex lg:w-1/2 flex-col">
-            <div className="sticky top-32 flex flex-col gap-8">
+          <div className="w-full lg:w-1/2 flex flex-col h-full">
+            <div className="flex flex-col gap-8 h-full">
               {/* Insight Card */}
-              <div className="relative rounded-3xl overflow-hidden bg-zinc-900/50 border border-zinc-800 backdrop-blur-sm p-12 flex flex-col justify-center min-h-[500px]">
+              <div className="relative rounded-3xl overflow-hidden bg-zinc-900/50 border border-zinc-800 backdrop-blur-sm p-12 flex flex-col justify-center flex-1">
                 <div className="absolute inset-0 bg-gradient-to-br from-[#beff01]/5 to-transparent" />
 
                 <div className="relative z-10">
                   <h3 className="text-4xl font-black text-white mb-6 leading-tight">
-                    We don't just deliver services.
+                    We don&apos;t just deliver services.
                     <br />
                     <span className="text-[#beff01]">We deliver unfair advantages.</span>
                   </h3>
@@ -154,36 +152,36 @@ export default function Hero() {
           </div>
         </div>
 
-        {/* CTA Buttons - Centered Below */}
+        {/* CTA Buttons - Side by Side on Desktop */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 1.4 }}
-          className="mt-16 max-w-2xl mx-auto"
+          className="mt-16 w-full max-w-4xl mx-auto"
         >
-          <div className="flex flex-col gap-4">
-            {/* Primary CTA - High Conversion */}
+          <div className="flex flex-col md:flex-row gap-4 items-stretch md:items-center justify-center">
+            {/* Primary CTA - Contact Page */}
             <motion.div
               whileHover={{ scale: 1.02, y: -2 }}
               whileTap={{ scale: 0.98 }}
-              className="relative group"
+              className="relative group flex-1"
             >
               <button
                 onClick={scrollToContact}
-                className="relative block w-full"
+                className="relative block w-full h-full"
               >
                 {/* Glow Effect */}
                 <div className="absolute -inset-1 bg-gradient-to-r from-[#beff01] to-green-500 rounded-2xl blur-lg opacity-50 group-hover:opacity-100 transition-opacity duration-500" />
 
                 {/* Main Button */}
-                <div className="relative bg-gradient-to-r from-[#beff01] to-[#d4ff4d] text-black rounded-2xl p-6 overflow-hidden">
+                <div className="relative bg-gradient-to-r from-[#beff01] to-[#d4ff4d] text-black rounded-2xl p-6 h-full flex flex-col justify-between overflow-hidden">
                   {/* Animated Background Pattern */}
                   <div className="absolute inset-0 opacity-10">
                     <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_120%,rgba(0,0,0,0.3),transparent)]" />
                   </div>
 
-                  <div className="relative flex items-center justify-between">
-                    <div className="flex-1 text-left">
+                  <div className="relative flex items-center justify-between gap-4">
+                    <div className="text-left">
                       <div className="flex items-center gap-2 mb-1">
                         <span className="text-xs font-black uppercase tracking-wider opacity-70">Limited Slots</span>
                         <div className="flex gap-1">
@@ -197,16 +195,14 @@ export default function Hero() {
                           ))}
                         </div>
                       </div>
-                      <h3 className="text-2xl md:text-3xl font-black leading-tight">
-                        Let's Build Your Empire
+                      <h3 className="text-lg md:text-xl lg:text-2xl font-black leading-tight">
+                        Start a Project
                       </h3>
-                      <p className="text-sm font-bold opacity-80 mt-1">Free 30-min strategy call • No pitch, just value</p>
+                      <p className="text-xs md:text-sm font-bold opacity-80 mt-1">Free strategy call</p>
                     </div>
 
-                    <div className="ml-4">
-                      <div className="w-14 h-14 rounded-full bg-black/10 backdrop-blur-sm flex items-center justify-center group-hover:bg-black/20 transition-all group-hover:scale-110">
-                        <ArrowRight className="w-7 h-7 text-black group-hover:translate-x-1 transition-transform" />
-                      </div>
+                    <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-black/10 backdrop-blur-sm flex items-center justify-center group-hover:bg-black/20 transition-all group-hover:scale-110 flex-shrink-0">
+                      <ArrowRight className="w-5 h-5 md:w-6 md:h-6 text-black group-hover:translate-x-1 transition-transform" />
                     </div>
                   </div>
 
@@ -221,43 +217,42 @@ export default function Hero() {
               </button>
             </motion.div>
 
-            {/* Secondary CTA - Social Proof Driven */}
+            {/* Secondary CTA - View Work */}
             <motion.div
               whileHover={{ scale: 1.02, y: -2 }}
               whileTap={{ scale: 0.98 }}
+              className="flex-1"
             >
               <button
                 onClick={scrollToWorks}
-                className="w-full group relative bg-zinc-900/80 border-2 border-zinc-800 hover:border-[#beff01]/50 rounded-2xl p-5 backdrop-blur-xl transition-all duration-300 hover:bg-zinc-800/80"
+                className="w-full h-full group relative bg-zinc-900/80 border-2 border-zinc-800 hover:border-[#beff01]/50 rounded-2xl p-6 backdrop-blur-xl transition-all duration-300 hover:bg-zinc-800/80 flex flex-col justify-between"
               >
-                <div className="flex items-center justify-between">
-                  <div className="flex-1 text-left">
+                <div className="flex items-center justify-between w-full gap-4">
+                  <div className="text-left">
                     <div className="flex items-center gap-2 mb-1">
                       <div className="flex -space-x-2">
                         {[1, 2, 3].map((i) => (
                           <div
                             key={i}
-                            className="w-6 h-6 rounded-full bg-gradient-to-br from-[#beff01] to-green-500 border-2 border-zinc-900"
+                            className="w-4 h-4 md:w-5 md:h-5 rounded-full bg-gradient-to-br from-[#beff01] to-green-500 border-2 border-zinc-900"
                           />
                         ))}
                       </div>
-                      <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">20+ Success Stories</span>
+                      <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">20+ Clients</span>
                     </div>
-                    <h3 className="text-xl md:text-2xl font-black text-white">
-                      See Real Results
+                    <h3 className="text-lg md:text-xl lg:text-2xl font-black text-white">
+                      View Our Work
                     </h3>
-                    <p className="text-sm text-gray-400 mt-1">Portfolio that proves we deliver</p>
+                    <p className="text-xs md:text-sm text-gray-400 mt-1">Real results, no fluff</p>
                   </div>
 
-                  <div className="ml-4">
-                    <motion.div
-                      animate={{ x: [0, 5, 0] }}
-                      transition={{ duration: 2, repeat: Infinity }}
-                      className="w-12 h-12 rounded-full bg-white/5 border border-white/10 flex items-center justify-center group-hover:bg-[#beff01]/10 group-hover:border-[#beff01]/30 transition-all"
-                    >
-                      <Monitor className="w-6 h-6 text-gray-400 group-hover:text-[#beff01] transition-colors" />
-                    </motion.div>
-                  </div>
+                  <motion.div
+                    animate={{ x: [0, 5, 0] }}
+                    transition={{ duration: 2, repeat: Infinity }}
+                    className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-white/5 border border-white/10 flex items-center justify-center group-hover:bg-[#beff01]/10 group-hover:border-[#beff01]/30 transition-all flex-shrink-0"
+                  >
+                    <Monitor className="w-5 h-5 md:w-6 md:h-6 text-gray-400 group-hover:text-[#beff01] transition-colors" />
+                  </motion.div>
                 </div>
               </button>
             </motion.div>
@@ -279,7 +274,7 @@ export default function Hero() {
   );
 }
 
-function ServiceItem({ item, index }: { item: any, index: number }) {
+function ServiceItem({ item, index }: { item: { id: string; title: string; psycho: string }, index: number }) {
   return (
     <motion.div
       initial={{ opacity: 0, x: -20 }}
@@ -301,15 +296,7 @@ function ServiceItem({ item, index }: { item: any, index: number }) {
             {item.psycho}
           </p>
 
-          {/* Desktop Hover Reveal - Absolute positioned to appear in the right column area (simulated via fixed or portal if needed, but here we keep it simple or use the parent state if we could. 
-              Since we can't easily lift state without changing the parent to a client component with state, we'll use a CSS-based approach or just keep the item simple and let the user imagine the connection, 
-              OR we can make the item itself reveal the text inline for a cleaner effect.) 
-              
-              Actually, the user wants a "psycho way to talk". Let's make the text appear INLINE on hover, pushing content down? 
-              No, that's jerky. 
-              
-              Let's make the "Psycho" text appear right below the title on hover for desktop too.
-          */}
+
           <div className="hidden lg:grid grid-rows-[0fr] group-hover:grid-rows-[1fr] transition-[grid-template-rows] duration-500 ease-out">
             <div className="overflow-hidden">
               <p className="text-xl text-gray-400 mt-4 font-medium leading-relaxed border-l-2 border-[#beff01] pl-6">

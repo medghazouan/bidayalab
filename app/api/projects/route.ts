@@ -68,7 +68,7 @@ export async function GET(request: Request) {
 
     // Use aggregation pipeline
     const result = await db
-      .collection('projects')
+      .collection('works')
       .aggregate([
         { $match: query },
         { $sort: { order: 1, createdAt: -1 } },

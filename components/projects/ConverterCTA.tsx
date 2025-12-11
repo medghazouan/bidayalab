@@ -32,7 +32,7 @@ export default function ConverterCTA() {
             transition={{ delay: 0.1 }}
             className="text-5xl md:text-7xl font-bold tracking-tight text-white mb-8 max-w-4xl"
           >
-            Let's build something <span className="text-[#beff01]">extraordinary</span> together.
+            Let&apos;s build something <span className="text-[#beff01]">extraordinary</span> together.
           </motion.h2>
 
           <motion.p

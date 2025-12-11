@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // Centralized logging utility for production
 
 type LogLevel = 'info' | 'warn' | 'error' | 'debug';

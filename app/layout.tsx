@@ -11,12 +11,20 @@ const inter = Inter({
 });
 
 export const metadata = {
-  title: 'BIDAYA - Web Development & Digital Marketing',
-  description: 'Professional web development and digital marketing services',
+  title: 'BIDAYA | Turn Your Online Presence Into Profit',
+  description: "Don't just build a website. Build a revenue engine. Bidayalab combines world-class development, design, and AI to scale your business.",
   icons: {
     icon: '/assets/icons/logo.svg',
     shortcut: '/assets/icons/logo.svg',
     apple: '/assets/icons/logo.svg',
+  },
+  openGraph: {
+    title: 'BIDAYA | Turn Your Online Presence Into Profit',
+    description: "Don't just build a website. Build a revenue engine. Bidayalab combines world-class development, design, and AI to scale your business.",
+    url: 'https://bidayalab.com',
+    siteName: 'Bidayalab',
+    locale: 'en_US',
+    type: 'website',
   },
 };
 

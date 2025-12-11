@@ -90,7 +90,7 @@ export default function ContactSection() {
   };
 
   return (
-    <section className="relative py-8 sm:py-10 md:py-12 px-4 md:px-8 lg:px-16 overflow-hidden">
+    <section className="relative pt-24 md:pt-36 lg:pt-40 pb-16 md:pb-24 px-4 md:px-8 lg:px-16 overflow-hidden">
       <div className="relative max-w-7xl mx-auto px-6 md:px-8 lg:px-12">
 
         {/* Success State */}
@@ -287,6 +287,7 @@ export default function ContactSection() {
 
               {/* Right: Modern Contact Form */}
               <motion.div
+                id="contact-form"
                 initial={{ opacity: 0, x: 50 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.6, delay: 0.6 }}
@@ -298,7 +299,7 @@ export default function ContactSection() {
                 <div className="relative bg-zinc-900/80 backdrop-blur-xl border border-white/10 rounded-[2.5rem] p-6 sm:p-8 md:p-10 shadow-2xl">
                   <div className="mb-8">
                     <h3 className="text-2xl font-bold text-white mb-2">Send a Message</h3>
-                    <p className="text-zinc-400 text-sm">Fill out the form below and I'll get back to you shortly.</p>
+                    <p className="text-zinc-400 text-sm">Fill out the form below and I&apos;ll get back to you shortly.</p>
                   </div>
 
                   <form onSubmit={handleSubmit} className="space-y-6">

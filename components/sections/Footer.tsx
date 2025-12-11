@@ -1,11 +1,27 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Linkedin, Instagram, Facebook } from 'lucide-react';
-import { BsTiktok } from 'react-icons/bs';
+import { Linkedin, Instagram } from 'lucide-react';
+import { getSettings } from '@/app/actions/settings';
 
 export default function Footer() {
+  const [socialLinks, setSocialLinks] = useState({ linkedinUrl: "", instagramUrl: "" });
+
+  useEffect(() => {
+    const fetchSettings = async () => {
+      const data = await getSettings();
+      if (data) {
+        setSocialLinks({
+          linkedinUrl: data.linkedinUrl || "",
+          instagramUrl: data.instagramUrl || ""
+        });
+      }
+    };
+    fetchSettings();
+  }, []);
+
   return (
     <footer className="relative bg-transparent border-t border-white/5 py-20 overflow-hidden">
       {/* Background Glows */}
@@ -25,19 +41,13 @@ export default function Footer() {
             />
           </Link>
 
-          {/* Description */}
-          <p className="text-zinc-400 max-w-lg leading-relaxed text-base font-light">
-            We build digital experiences that drive growth. From stunning visuals to powerful software, we bring your vision to life.
-          </p>
-
           {/* Social Icons */}
           <div className="flex items-center gap-4 mt-4">
             {[
-              { icon: Linkedin, href: "https://linkedin.com/company/bidayalab" },
-              { icon: Instagram, href: "https://instagram.com/bidayalab" },
-              { icon: Facebook, href: "https://facebook.com/bidayalab" },
-              { icon: BsTiktok, href: "https://tiktok.com/@bidayalab" }
+              { icon: Linkedin, href: socialLinks.linkedinUrl },
+              { icon: Instagram, href: socialLinks.instagramUrl },
             ].map((social, index) => {
+              if (!social.href) return null;
               const Icon = social.icon;
               return (
                 <Link

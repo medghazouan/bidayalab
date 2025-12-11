@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion';
 
-import { Briefcase, Calendar, MapPin, ArrowRight } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 
 const services = [
 
@@ -46,7 +46,7 @@ const services = [
 
 export default function Services() {
   return (
-    <section className="relative py-20 md:py-32  overflow-hidden">
+    <section className="relative py-16 md:py-24 lg:py-32 overflow-hidden">
       {/* Background */}
       <div className="absolute inset-0 bg-gradient-to-t from-[#beff01]/5 via-transparent to-transparent pointer-events-none" />
 

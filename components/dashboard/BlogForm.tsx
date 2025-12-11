@@ -3,16 +3,20 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createBlog, updateBlog } from "@/app/actions/blogs";
-import { Loader2, Save, ArrowLeft, Image as ImageIcon } from "lucide-react";
+import { Loader2, Save, ArrowLeft } from "lucide-react";
 import Link from "next/link";
+import { useSession } from "next-auth/react";
 import FileUpload from "./FileUpload";
+import { IBlog } from "@/models/Blog";
 
 interface BlogFormProps {
-    initialData?: any;
+    /* eslint-disable @typescript-eslint/no-explicit-any */
+    initialData?: Partial<IBlog> | any;
     isEditing?: boolean;
 }
 
 export default function BlogForm({ initialData, isEditing = false }: BlogFormProps) {
+    const { data: session } = useSession();
     const router = useRouter();
     const [loading, setLoading] = useState(false);
     const [image, setImage] = useState(initialData?.image || "");
@@ -97,7 +101,12 @@ export default function BlogForm({ initialData, isEditing = false }: BlogFormPro
 
                         <div className="space-y-2">
                             <label className="text-xs font-bold uppercase text-zinc-500 tracking-wider">Author</label>
-                            <input name="author" defaultValue={initialData?.author || "Admin"} className="w-full bg-black/50 border border-white/10 rounded-xl p-4 text-white focus:border-[#beff01] focus:outline-none transition-colors" />
+                            <input
+                                name="author"
+                                defaultValue={initialData?.author || session?.user?.name || "Admin"}
+                                readOnly
+                                className="w-full bg-black/50 border border-white/10 rounded-xl p-4 text-zinc-400 focus:outline-none cursor-not-allowed"
+                            />
                         </div>
                     </div>
 
@@ -111,6 +120,7 @@ export default function BlogForm({ initialData, isEditing = false }: BlogFormPro
                                 if (input) input.value = url;
                             }}
                             label="Cover Image"
+                            folder="blogs"
                         />
                         <input type="hidden" name="image" id="blog-image-input" value={image} />
                     </div>

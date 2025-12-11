@@ -21,6 +21,7 @@ export interface IAdCreative {
   type: string;     // e.g. "Video", "Carousel"
   platform: string; // e.g. "Instagram Reels"
   description: string;
+  image?: string;
 }
 
 export interface IProject extends Document {
@@ -63,6 +64,7 @@ export interface IProject extends Document {
   budget?: string;
   targetAudience?: string;
   strategy?: string;
+  revenue?: string;            // Single revenue number
   adCreatives?: IAdCreative[];
 
   // Category: Visual Storytelling
@@ -71,6 +73,11 @@ export interface IProject extends Document {
   postProduction?: string;
   videoUrl?: string;          // YouTube/Vimeo link
   equipment?: string[];
+  testimonial?: {
+    quote: string;
+    author: string;
+    position: string;
+  };
 
   // Shared Results
   results?: IResult[];
@@ -92,7 +99,8 @@ const ResultSchema = new Schema({
 const AdCreativeSchema = new Schema({
   type: { type: String },
   platform: { type: String },
-  description: { type: String }
+  description: { type: String },
+  image: { type: String }
 }, { _id: false });
 
 const ProjectSchema = new Schema<IProject>({
@@ -145,6 +153,7 @@ const ProjectSchema = new Schema<IProject>({
   budget: { type: String },
   targetAudience: { type: String },
   strategy: { type: String },
+  revenue: { type: String },
   adCreatives: [AdCreativeSchema],
 
   // Visual Specifics
@@ -153,11 +162,16 @@ const ProjectSchema = new Schema<IProject>({
   postProduction: { type: String },
   videoUrl: { type: String },
   equipment: [{ type: String }],
+  testimonial: {
+    quote: { type: String },
+    author: { type: String },
+    position: { type: String }
+  },
 
   // Universal Results
   results: [ResultSchema],
 
-}, { timestamps: true });
+}, { timestamps: true, collection: 'works' });
 
 // Model Export
 export default mongoose.models.Project || mongoose.model<IProject>('Project', ProjectSchema);

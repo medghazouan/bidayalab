@@ -5,9 +5,11 @@ import { useRouter } from "next/navigation";
 import { createPricingPlan, updatePricingPlan } from "@/app/actions/pricing";
 import { Loader2, Save, ArrowLeft, Plus, X, Layers, Clock, FileText, Monitor, Video } from "lucide-react";
 import Link from "next/link";
+import { IPricingPlan } from "@/models/PricingPlan";
 
 interface PricingFormProps {
-    initialData?: any;
+    /* eslint-disable @typescript-eslint/no-explicit-any */
+    initialData?: Partial<IPricingPlan> | any;
     isEditing?: boolean;
 }
 
@@ -100,8 +102,8 @@ export default function PricingForm({ initialData, isEditing = false }: PricingF
                                         type="button"
                                         onClick={() => setSelectedCategory(cat.id)}
                                         className={`flex items-center gap-3 p-4 rounded-xl border transition-all text-left ${selectedCategory === cat.id
-                                                ? 'bg-[#beff01]/10 border-[#beff01] text-white'
-                                                : 'bg-black/50 border-white/10 text-zinc-400 hover:bg-white/5'
+                                            ? 'bg-[#beff01]/10 border-[#beff01] text-white'
+                                            : 'bg-black/50 border-white/10 text-zinc-400 hover:bg-white/5'
                                             }`}
                                     >
                                         <cat.icon size={20} className={selectedCategory === cat.id ? 'text-[#beff01]' : ''} />

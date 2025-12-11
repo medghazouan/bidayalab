@@ -17,16 +17,16 @@ export async function GET(
       $or: Array<{ _id?: ObjectId; slug?: string }>;
     }
     const query: MongoQuery = { $or: [] };
-    
+
     // If valid ObjectId, add to query
     if (ObjectId.isValid(id) && id.length === 24) {
       query.$or.push({ _id: new ObjectId(id) });
     }
-    
+
     // Also search by slug
     query.$or.push({ slug: id });
 
-    const project = await db.collection('projects').findOne(query);
+    const project = await db.collection('works').findOne(query);
 
     if (!project) {
       return NextResponse.json(
@@ -36,8 +36,8 @@ export async function GET(
     }
 
     return NextResponse.json(
-      { 
-        success: true, 
+      {
+        success: true,
         data: {
           ...project,
           _id: project._id.toString(),
@@ -65,7 +65,7 @@ export async function PUT(
 ) {
   try {
     const { id } = await params;
-    
+
     if (!ObjectId.isValid(id)) {
       return NextResponse.json(
         { success: false, error: 'Invalid project ID' },
@@ -76,15 +76,15 @@ export async function PUT(
     const body = await request.json();
     const db = await getDatabase();
 
-    const result = await db.collection('projects').findOneAndUpdate(
+    const result = await db.collection('works').findOneAndUpdate(
       { _id: new ObjectId(id) },
-      { 
-        $set: { 
-          ...body, 
-          updatedAt: new Date() 
-        } 
+      {
+        $set: {
+          ...body,
+          updatedAt: new Date()
+        }
       },
-      { 
+      {
         returnDocument: 'after',
         projection: {
           title: 1,
@@ -108,8 +108,8 @@ export async function PUT(
     }
 
     const updatedProject = result.value;
-    return NextResponse.json({ 
-      success: true, 
+    return NextResponse.json({
+      success: true,
       data: {
         ...updatedProject,
         _id: updatedProject._id.toString(),
@@ -131,7 +131,7 @@ export async function DELETE(
 ) {
   try {
     const { id } = await params;
-    
+
     if (!ObjectId.isValid(id)) {
       return NextResponse.json(
         { success: false, error: 'Invalid project ID' },
@@ -140,8 +140,8 @@ export async function DELETE(
     }
 
     const db = await getDatabase();
-    const result = await db.collection('projects').deleteOne({ 
-      _id: new ObjectId(id) 
+    const result = await db.collection('works').deleteOne({
+      _id: new ObjectId(id)
     });
 
     if (result.deletedCount === 0) {
@@ -151,9 +151,9 @@ export async function DELETE(
       );
     }
 
-    return NextResponse.json({ 
-      success: true, 
-      data: { deleted: true } 
+    return NextResponse.json({
+      success: true,
+      data: { deleted: true }
     });
   } catch (error) {
     console.error('❌ Error deleting project:', error);

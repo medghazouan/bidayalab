@@ -5,9 +5,11 @@ import { useRouter } from "next/navigation";
 import { createTestimonial, updateTestimonial } from "@/app/actions/testimonials";
 import { Loader2, Save, ArrowLeft, Star } from "lucide-react";
 import Link from "next/link";
+import { ITestimonial } from "@/models/Testimonial";
 
 interface TestimonialFormProps {
-    initialData?: any;
+    /* eslint-disable @typescript-eslint/no-explicit-any */
+    initialData?: Partial<ITestimonial> | any;
     isEditing?: boolean;
 }
 

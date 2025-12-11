@@ -6,6 +6,7 @@ import { Calendar, BookOpen, ArrowLeft, Share2 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useQuery } from '@tanstack/react-query';
 import Image from 'next/image';
+import BlogCard from '@/components/cards/BlogCard';
 
 interface Blog {
   id: string;
@@ -34,6 +35,18 @@ export default function SingleBlogPage() {
     retry: 1,
   });
 
+  const { data: relatedData } = useQuery<{ success: boolean; blogs: Blog[] }>({
+    queryKey: ['blogs', 'related', slug],
+    queryFn: async () => {
+      const response = await fetch('/api/blogs?limit=4');
+      if (!response.ok) throw new Error('Failed to fetch related blogs');
+      return response.json();
+    },
+    staleTime: 5 * 60 * 1000,
+  });
+
+  const relatedBlogs = relatedData?.blogs?.filter(b => b.slug !== slug).slice(0, 3) || [];
+
   const blog = data?.blog;
 
   const formatDate = (dateString: string) => {
@@ -54,7 +67,7 @@ export default function SingleBlogPage() {
           url: window.location.href,
         });
       } catch (err) {
-        console.log('Error sharing:', err);
+
       }
     } else {
       navigator.clipboard.writeText(window.location.href);
@@ -67,7 +80,7 @@ export default function SingleBlogPage() {
       <div className="relative min-h-screen bg-black overflow-hidden">
         {/* Animated Background */}
         <div className="fixed inset-0 pointer-events-none" style={{ willChange: 'transform' }}>
-          <div 
+          <div
             className="absolute inset-0 opacity-30 animate-gradient-mesh"
             style={{
               background: 'radial-gradient(circle at 20% 50%, rgba(190, 255, 1, 0.15) 0%, transparent 50%), radial-gradient(circle at 80% 80%, rgba(59, 130, 246, 0.15) 0%, transparent 50%), radial-gradient(circle at 40% 20%, rgba(168, 85, 247, 0.15) 0%, transparent 50%)',
@@ -102,7 +115,7 @@ export default function SingleBlogPage() {
       <div className="relative min-h-screen bg-black overflow-hidden">
         {/* Animated Background */}
         <div className="fixed inset-0 pointer-events-none" style={{ willChange: 'transform' }}>
-          <div 
+          <div
             className="absolute inset-0 opacity-30 animate-gradient-mesh"
             style={{
               background: 'radial-gradient(circle at 20% 50%, rgba(190, 255, 1, 0.15) 0%, transparent 50%), radial-gradient(circle at 80% 80%, rgba(59, 130, 246, 0.15) 0%, transparent 50%), radial-gradient(circle at 40% 20%, rgba(168, 85, 247, 0.15) 0%, transparent 50%)',
@@ -140,7 +153,7 @@ export default function SingleBlogPage() {
       {/* Optimized Animated Background */}
       <div className="fixed inset-0 pointer-events-none" style={{ willChange: 'transform' }}>
         {/* Static Gradient Mesh */}
-        <div 
+        <div
           className="absolute inset-0 opacity-30 animate-gradient-mesh"
           style={{
             background: 'radial-gradient(circle at 20% 50%, rgba(190, 255, 1, 0.15) 0%, transparent 50%), radial-gradient(circle at 80% 80%, rgba(59, 130, 246, 0.15) 0%, transparent 50%), radial-gradient(circle at 40% 20%, rgba(168, 85, 247, 0.15) 0%, transparent 50%)',
@@ -150,7 +163,7 @@ export default function SingleBlogPage() {
 
         {/* Static Grid Pattern */}
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#18181b_1px,transparent_1px),linear-gradient(to_bottom,#18181b_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_0%,#000_70%,transparent_100%)] opacity-20"></div>
-        
+
         {/* Animated orbs */}
         <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-[#beff01]/10 rounded-full blur-3xl animate-orb-1" style={{ willChange: 'transform' }} />
         <div className="absolute bottom-0 right-1/4 w-[600px] h-[600px] bg-blue-500/10 rounded-full blur-3xl animate-orb-2" style={{ willChange: 'transform' }} />
@@ -159,7 +172,7 @@ export default function SingleBlogPage() {
         <div className="absolute inset-x-0 h-px bg-gradient-to-r from-transparent via-[#beff01]/30 to-transparent animate-scan-line" />
 
         {/* Noise Texture Overlay */}
-        <div 
+        <div
           className="absolute inset-0 opacity-[0.015]"
           style={{
             backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
@@ -172,7 +185,7 @@ export default function SingleBlogPage() {
       </div>
 
       {/* Main Content */}
-      <article className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+      <article className="relative z-10 max-w-7xl mx-auto px-6 md:px-8 lg:px-12 py-20">
         {/* Back Button */}
         <Link
           href="/blogs"
@@ -229,7 +242,7 @@ export default function SingleBlogPage() {
           transition={{ duration: 0.5, delay: 0.2 }}
         >
           <Image
-            src={blog.image}
+            src={blog.image.startsWith('/') || blog.image.startsWith('http') ? blog.image : `/uploads/blogs/${blog.image}`}
             alt={blog.title}
             fill
             className="object-cover"
@@ -252,27 +265,30 @@ export default function SingleBlogPage() {
           />
         </motion.div>
 
-        {/* Divider */}
-        <div className="my-16">
-          <div className="h-px bg-gradient-to-r from-transparent via-zinc-800 to-transparent" />
-        </div>
 
-        {/* Back to Blogs CTA */}
-        <motion.div
-          className="text-center"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.4 }}
-        >
-          <Link
-            href="/blogs"
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#beff01] text-black font-semibold hover:bg-[#a8d601] transition-all duration-300 group shadow-[0_0_20px_rgba(190,255,1,0.3)]"
-          >
-            <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
-            <span>Explore More Articles</span>
-          </Link>
-        </motion.div>
       </article>
+
+      {/* Related Articles Section */}
+      {relatedBlogs.length > 0 && (
+        <section className="relative z-10 max-w-7xl mx-auto px-6 md:px-8 lg:px-12 pb-32">
+          <div className="h-px w-full bg-gradient-to-r from-transparent via-zinc-800 to-transparent mb-16" />
+
+          <div className="flex items-center justify-between mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-white">Related Articles</h2>
+            <Link href="/blogs" className="text-[#beff01] hover:underline hidden md:block">View All</Link>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {relatedBlogs.map((blog, index) => (
+              <BlogCard key={blog.id} blog={blog} index={index} />
+            ))}
+          </div>
+
+          <div className="mt-12 text-center md:hidden">
+            <Link href="/blogs" className="text-[#beff01] hover:underline">View All Articles</Link>
+          </div>
+        </section>
+      )}
 
       <style jsx global>{`
         @keyframes gradient-mesh {
