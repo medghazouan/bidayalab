@@ -1,9 +1,13 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Code, Palette, Megaphone, Camera, Bot, Layers, Globe, BarChart3, Aperture, Sparkles } from 'lucide-react';
+import { SiAdobeillustrator, SiAdobephotoshop, SiFigma, SiReact, SiNextdotjs, SiTailwindcss, SiTypescript, SiNodedotjs, SiGoogleads, SiMeta, SiInstagram, SiTiktok, SiDavinciresolve, SiAdobepremierepro, SiOpenai, SiZapier, SiPython } from "react-icons/si";
+import { FaGoogle, FaPenNib } from "react-icons/fa";
+import { TbBrandGoogleAnalytics } from "react-icons/tb";
 
 const services = [
   {
+    id: "brand-identity",
     icon: Palette,
     secondaryIcon: Layers,
     title: "Brand & Visual Identity",
@@ -16,6 +20,12 @@ const services = [
       "Motion Graphics - Animated videos, logo animations, explainer videos",
       "Brand Strategy - Brand guidelines, color palettes, typography systems"
     ],
+    techStack: [
+      { icon: SiAdobeillustrator, name: "Illustrator" },
+      { icon: SiAdobephotoshop, name: "Photoshop" },
+      { icon: SiFigma, name: "Figma" },
+      { icon: FaPenNib, name: "Procreate" }
+    ],
     gradient: "from-purple-500/20 via-fuchsia-500/10 to-transparent",
     glowColor: "purple-500",
     iconBg: "bg-purple-500/10",
@@ -24,6 +34,7 @@ const services = [
     accentColor: "#c084fc"
   },
   {
+    id: "digital-development",
     icon: Code,
     secondaryIcon: Globe,
     title: "Web & Software Engineering",
@@ -36,6 +47,13 @@ const services = [
       "UI/UX Design - User interface design, user experience optimization",
       "Web Maintenance - Updates, security, performance optimization"
     ],
+    techStack: [
+      { icon: SiReact, name: "React" },
+      { icon: SiNextdotjs, name: "Next.js" },
+      { icon: SiTypescript, name: "TypeScript" },
+      { icon: SiTailwindcss, name: "Tailwind" },
+      { icon: SiNodedotjs, name: "Node.js" }
+    ],
     gradient: "from-blue-500/20 via-cyan-500/10 to-transparent",
     glowColor: "blue-500",
     iconBg: "bg-blue-500/10",
@@ -44,6 +62,7 @@ const services = [
     accentColor: "#60a5fa"
   },
   {
+    id: "growth-marketing",
     icon: Megaphone,
     secondaryIcon: BarChart3,
     title: "Growth & Performance Marketing",
@@ -56,6 +75,13 @@ const services = [
       "Analytics & Reporting - Campaign tracking, ROI analysis, performance reports",
       "SEO Optimization - Search engine optimization, keyword research, content strategy"
     ],
+    techStack: [
+      { icon: SiGoogleads, name: "Google Ads" },
+      { icon: SiMeta, name: "Meta Ads" },
+      { icon: TbBrandGoogleAnalytics, name: "Analytics" },
+      { icon: SiInstagram, name: "Instagram" },
+      { icon: SiTiktok, name: "TikTok" }
+    ],
     gradient: "from-emerald-500/20 via-green-500/10 to-transparent",
     glowColor: "emerald-500",
     iconBg: "bg-emerald-500/10",
@@ -64,6 +90,7 @@ const services = [
     accentColor: "#34d399"
   },
   {
+    id: "creative-content",
     icon: Camera,
     secondaryIcon: Aperture,
     title: "Cinematic Production & Photography",
@@ -76,6 +103,12 @@ const services = [
       "Drone Videography - Aerial shots, real estate tours, landscape footage",
       "Post-Production - Video editing, color grading, sound design, retouching"
     ],
+    techStack: [
+      { icon: SiDavinciresolve, name: "DaVinci" },
+      { icon: SiAdobepremierepro, name: "Premiere" },
+      { icon: SiAdobephotoshop, name: "Lightroom" }, // Using PS icon as Lightroom sub
+      { icon: Camera, name: "Sony Alpha" }
+    ],
     gradient: "from-orange-500/20 via-red-500/10 to-transparent",
     glowColor: "orange-500",
     iconBg: "bg-orange-500/10",
@@ -84,6 +117,7 @@ const services = [
     accentColor: "#fb923c"
   },
   {
+    id: "ai-automation",
     icon: Bot,
     secondaryIcon: Sparkles,
     title: "Artificial Intelligence & Automation",
@@ -95,6 +129,12 @@ const services = [
       "Machine Learning Solutions - Predictive analytics, recommendation systems",
       "Workflow Automation - Business process automation, Zapier/Make integrations",
       "AI-Powered Apps - Custom AI applications, intelligent systems"
+    ],
+    techStack: [
+      { icon: SiOpenai, name: "OpenAI" },
+      { icon: SiPython, name: "Python" },
+      { icon: SiZapier, name: "Zapier" },
+      { icon: Bot, name: "LLMs" }
     ],
     gradient: "from-[#beff01]/20 via-yellow-500/10 to-transparent",
     glowColor: "yellow-500",
@@ -122,7 +162,7 @@ export default function ServicesList() {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
-          className="max-w-7xl mx-auto px-6 md:px-8 lg:px-12 py-8 md:py-12 text-center mb-16"
+          className="max-w-7xl mx-auto px-6 md:px-8 lg:px-12 py-8 md:py-12 text-center mb-8"
         >
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
@@ -149,15 +189,7 @@ export default function ServicesList() {
             </span>
           </motion.h1>
 
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-            className="text-xl md:text-2xl text-gray-400 max-w-4xl mx-auto leading-relaxed font-light"
-          >
-            From stunning websites to powerful marketing campaigns—We help businesses like yours
-            stand out online and attract more customers.
-          </motion.p>
+
         </motion.div>
 
         {/* Services Grid - Redesigned */}
@@ -170,13 +202,15 @@ export default function ServicesList() {
             return (
               <motion.div
                 key={index}
+                // @ts-ignore
+                id={service.id}
                 initial={{ opacity: 0, y: 50 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-50px" }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
                 onMouseEnter={() => setHoveredIndex(index)}
                 onMouseLeave={() => setHoveredIndex(null)}
-                className="group relative h-full"
+                className="group relative h-full scroll-mt-32"
               >
                 {/* Card Container */}
                 <div className={`
@@ -229,6 +263,30 @@ export default function ServicesList() {
                         </div>
                       ))}
                     </div>
+
+                    {/* Tech Stack - Modern Grid */}
+                    <div className="mt-8 pt-6 border-t border-white/5">
+                      <div className="text-[10px] font-bold uppercase tracking-widest text-zinc-600 mb-4 flex items-center gap-2">
+                        <div className={`w-1 h-1 rounded-full ${service.iconBg} ${service.iconColor}`} />
+                        Powered By
+                      </div>
+                      <div className="flex flex-wrap gap-3">
+                        {service.techStack.map((tech, i) => (
+                          <div key={i} className="group/icon relative w-10 h-10 rounded-xl bg-white/5 border border-white/5 flex items-center justify-center hover:bg-white/10 hover:border-white/20 transition-all duration-300 hover:scale-110 cursor-help">
+                            <tech.icon className={`w-5 h-5 text-zinc-500 group-hover/icon:text-white transition-colors duration-300`} />
+
+                            {/* Glow Effect */}
+                            <div className={`absolute inset-0 rounded-xl bg-gradient-to-br ${service.gradient} opacity-0 group-hover/icon:opacity-50 blur-md transition-opacity duration-300 -z-10`} />
+
+                            {/* Tooltip */}
+                            <div className="absolute -top-10 left-1/2 -translate-x-1/2 px-3 py-1.5 bg-[#0a0a0a] border border-white/10 rounded-lg text-[10px] font-bold uppercase tracking-widest text-white opacity-0 group-hover/icon:opacity-100 transition-all duration-300 transform translate-y-2 group-hover/icon:translate-y-0 whitespace-nowrap pointer-events-none z-50 shadow-xl">
+                              {tech.name}
+                              <div className="absolute bottom-[-4px] left-1/2 -translate-x-1/2 w-2 h-2 bg-[#0a0a0a] border-r border-b border-white/10 transform rotate-45" />
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
                   </div>
 
                   {/* Decorative Elements */}
@@ -253,6 +311,15 @@ export default function ServicesList() {
         
         .animate-gradient {
           animation: gradient 3s ease infinite;
+        }
+
+        @keyframes scan-fast {
+            0% { left: -100%; }
+            100% { left: 200%; }
+        }
+
+        .group:hover .group-hover\:animate-scan-fast {
+            animation: scan-fast 1.5s linear infinite;
         }
       `}</style>
     </section>

@@ -1,6 +1,8 @@
 import { Inter } from 'next/font/google';
 import './globals.css';
 import { Providers } from './providers';
+import BidayalabAssistant from '@/components/chat/BidayalabAssistant';
+import GlobalSchema from '@/components/seo/GlobalSchema';
 
 // Optimized font loading with display swap to prevent render blocking
 const inter = Inter({
@@ -43,7 +45,9 @@ export default function RootLayout({
       </head>
       <body className={inter.className}>
         <Providers>
+          <GlobalSchema />
           {children}
+          <BidayalabAssistant />
         </Providers>
       </body>
     </html>

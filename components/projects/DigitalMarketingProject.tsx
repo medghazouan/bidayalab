@@ -1,26 +1,41 @@
 "use client";
 
-import { motion, useScroll } from "framer-motion";
+import { motion, useScroll, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowLeft, TrendingUp, Target, ArrowUpRight, DollarSign, Activity } from "lucide-react";
+import { ArrowLeft, TrendingUp, Target, ArrowUpRight, DollarSign, Activity, Globe, X } from "lucide-react";
 import { IProject } from "@/models/Project";
-import { useRef } from "react";
+import { useRef, useState } from "react";
+import { FaGoogle, FaFacebook, FaInstagram, FaYoutube, FaLinkedin, FaTiktok, FaTwitter, FaPinterest, FaSnapchat, FaSpotify } from "react-icons/fa";
+import { SiGoogleads } from "react-icons/si";
 
 export default function DigitalMarketingProject({ project }: { project: IProject }) {
+    const [selectedImage, setSelectedImage] = useState<{ src: string, type: string, description: string } | null>(null);
     const containerRef = useRef(null);
     useScroll({
         target: containerRef,
         offset: ["start start", "end end"]
     });
 
-
-
-
     const getAssetUrl = (path: string) => {
         if (!path) return "";
         if (path.startsWith("/") || path.startsWith("http")) return path;
         return `/uploads/projects/${path}`;
+    };
+
+    const getPlatformIcon = (platform: string) => {
+        const lower = platform.toLowerCase();
+        if (lower.includes('google')) return <FaGoogle />;
+        if (lower.includes('facebook') || lower.includes('meta')) return <FaFacebook />;
+        if (lower.includes('instagram')) return <FaInstagram />;
+        if (lower.includes('youtube')) return <FaYoutube />;
+        if (lower.includes('linkedin')) return <FaLinkedin />;
+        if (lower.includes('tiktok')) return <FaTiktok />;
+        if (lower.includes('twitter') || lower.includes('x')) return <FaTwitter />;
+        if (lower.includes('pinterest')) return <FaPinterest />;
+        if (lower.includes('snapchat')) return <FaSnapchat />;
+        if (lower.includes('spotify')) return <FaSpotify />;
+        return <Globe size={16} />;
     };
 
     return (
@@ -34,19 +49,23 @@ export default function DigitalMarketingProject({ project }: { project: IProject
             </div>
 
             {/* Navigation - Matched to Creative Studio */}
-            <div className="absolute top-0 left-0 right-0 z-30 w-full max-w-7xl mx-auto px-6 md:px-8 lg:px-12 py-8 flex justify-between items-center mt-24">
-                <Link href="/works" className="group flex items-center gap-2 text-xs font-bold uppercase tracking-widest hover:text-[#beff01] transition-colors">
-                    <ArrowLeft size={16} /> Back
+            {/* Navigation - Standardized */}
+            <div className="absolute top-0 left-0 right-0 z-50 w-full max-w-7xl mx-auto px-6 md:px-8 lg:px-12 py-8 flex justify-between items-center mt-24">
+                <Link href="/works" className="group flex items-center gap-3 text-sm font-medium text-zinc-400 hover:text-white transition-colors">
+                    <div className="p-2 rounded-full bg-white/5 border border-white/10 group-hover:bg-white/10 transition-colors">
+                        <ArrowLeft size={16} className="group-hover:-translate-x-0.5 transition-transform" />
+                    </div>
+                    <span>Back to Works</span>
                 </Link>
-                <div className="flex items-center gap-2">
-                    <div className="w-2 h-2 bg-[#beff01] rounded-full animate-pulse" />
-                    <span className="text-xs font-bold uppercase tracking-wider">Live Campaign</span>
+                <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-md">
+                    <div className="w-1.5 h-1.5 bg-[#beff01] rounded-full animate-pulse" />
+                    <span className="text-xs font-medium text-[#beff01] uppercase tracking-wider">Live Campaign</span>
                 </div>
             </div>
 
             {/* Hero Section */}
-            <section className="relative pt-40 pb-20 px-6 md:px-12 min-h-screen flex flex-col justify-center">
-                <div className="max-w-[1800px] mx-auto w-full grid lg:grid-cols-12 gap-16 items-center">
+            <section className="relative pt-48 md:pt-64 pb-20 min-h-screen flex flex-col justify-center">
+                <div className="max-w-7xl mx-auto w-full px-6 md:px-8 lg:px-12 grid lg:grid-cols-12 gap-16 items-center">
 
                     {/* Left: Content */}
                     <div className="lg:col-span-7 relative z-10">
@@ -55,11 +74,14 @@ export default function DigitalMarketingProject({ project }: { project: IProject
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.8, ease: "easeOut" }}
                         >
-                            <div className="flex flex-wrap gap-2 mb-8">
+                            <div className="flex flex-wrap gap-4 mb-10">
                                 {project.platforms?.map((p, i) => (
-                                    <span key={i} className="px-4 py-1.5 rounded-full border border-white/20 bg-white/5 text-white text-xs font-bold uppercase tracking-wider backdrop-blur-sm">
-                                        {p}
-                                    </span>
+                                    <div key={i}
+                                        className="w-14 h-14 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-2xl text-zinc-400 hover:text-[#beff01] hover:bg-[#beff01]/10 hover:border-[#beff01]/30 hover:scale-110 hover:-rotate-6 transition-all duration-300 cursor-help shadow-lg backdrop-blur-md group"
+                                        title={p}
+                                    >
+                                        <span className="filter drop-shadow-md">{getPlatformIcon(p)}</span>
+                                    </div>
                                 ))}
                             </div>
 
@@ -67,7 +89,7 @@ export default function DigitalMarketingProject({ project }: { project: IProject
                                 Case Study: {project.title}
                             </div>
 
-                            <h1 className="text-7xl md:text-9xl font-black mb-8 leading-[0.85] tracking-tighter uppercase">
+                            <h1 className="text-5xl sm:text-7xl md:text-9xl font-black mb-8 leading-[0.9] md:leading-[0.85] tracking-tighter uppercase break-words">
                                 <span className="block text-transparent bg-clip-text bg-gradient-to-r from-white via-white to-zinc-500">
                                     We Don&apos;t Buy Clicks. We Buy Customers.
                                 </span>
@@ -100,7 +122,14 @@ export default function DigitalMarketingProject({ project }: { project: IProject
                         >
                             {/* Cover Image */}
                             {project.image && (
-                                <div className="relative aspect-[4/5] w-full">
+                                <div
+                                    className="relative aspect-[2/3] md:aspect-[4/5] w-full cursor-zoom-in"
+                                    onClick={() => setSelectedImage({
+                                        src: getAssetUrl(project.image),
+                                        type: "Cover Image",
+                                        description: project.title
+                                    })}
+                                >
                                     <Image
                                         src={getAssetUrl(project.image)}
                                         alt={project.title}
@@ -144,8 +173,8 @@ export default function DigitalMarketingProject({ project }: { project: IProject
             </section>
 
             {/* Strategy & Stats Grid */}
-            <section className="py-24 bg-[#050505] border-y border-white/5">
-                <div className="max-w-[1800px] mx-auto px-6 md:px-12">
+            <section className="py-16 md:py-24 bg-[#050505] border-y border-white/5">
+                <div className="max-w-7xl mx-auto px-6 md:px-8 lg:px-12">
                     <div className="grid lg:grid-cols-3 gap-12">
 
                         {/* Strategy Column */}
@@ -174,8 +203,8 @@ export default function DigitalMarketingProject({ project }: { project: IProject
 
             {/* Creative Showcase (Using Rich Ad Creatives) */}
             {project.adCreatives && project.adCreatives.length > 0 && (
-                <section className="py-32 px-6 md:px-12 border-t border-white/5">
-                    <div className="max-w-[1800px] mx-auto">
+                <section className="py-16 md:py-24 border-t border-white/5">
+                    <div className="max-w-7xl mx-auto px-6 md:px-8 lg:px-12">
                         <div className="flex items-end justify-between mb-16">
                             <div>
                                 <h2 className="text-5xl md:text-7xl font-black text-white mb-4 uppercase tracking-tighter">
@@ -193,13 +222,21 @@ export default function DigitalMarketingProject({ project }: { project: IProject
 
                         <div className="grid md:grid-cols-3 gap-8">
                             {project.adCreatives.map((creative, i) => (
-                                <div key={i} className="group relative bg-[#0a0a0a] border border-zinc-800 rounded-2xl overflow-hidden hover:border-[#beff01] transition-colors">
+                                <div
+                                    key={i}
+                                    className="group relative bg-[#0a0a0a] border border-zinc-800 rounded-2xl overflow-hidden hover:border-[#beff01] transition-colors cursor-zoom-in"
+                                    onClick={() => setSelectedImage({
+                                        src: getAssetUrl(creative.image || project.images?.[i] || ''),
+                                        type: creative.type,
+                                        description: creative.description
+                                    })}
+                                >
                                     <div className="aspect-[4/5] relative bg-zinc-900">
                                         {/* Placeholder for creative preview if no image */}
                                         <div className="absolute inset-0 flex items-center justify-center text-zinc-700 font-black text-9xl opacity-20 group-hover:opacity-10 transition-opacity">
                                             {i + 1}
                                         </div>
-                                        {/* Use creative.image if available, fallback to project.images[i] for backward compatibility */}
+                                        {/* Updated to check creative.image first */}
                                         {(creative.image || (project.images && project.images[i])) && (
                                             <Image
                                                 src={getAssetUrl(creative.image || project.images?.[i] || '')}
@@ -212,10 +249,8 @@ export default function DigitalMarketingProject({ project }: { project: IProject
 
                                         <div className="absolute bottom-0 left-0 right-0 p-8">
                                             <div className="flex items-center gap-2 mb-4">
+                                                {/* Removed Platform Badge as per request */}
                                                 <span className="px-3 py-1 bg-[#beff01] text-black text-xs font-bold uppercase rounded">
-                                                    {creative.platform}
-                                                </span>
-                                                <span className="px-3 py-1 bg-white/10 text-white text-xs font-bold uppercase rounded backdrop-blur-sm">
                                                     {creative.type}
                                                 </span>
                                             </div>
@@ -227,12 +262,58 @@ export default function DigitalMarketingProject({ project }: { project: IProject
                                 </div>
                             ))}
                         </div>
+                        {/* Lightbox */}
+                        <AnimatePresence>
+                            {selectedImage && (
+                                <motion.div
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    exit={{ opacity: 0 }}
+                                    onClick={() => setSelectedImage(null)}
+                                    className="fixed inset-0 z-[100] bg-black/95 backdrop-blur-xl flex items-center justify-center p-4 md:p-8 cursor-zoom-out"
+                                >
+                                    <button
+                                        onClick={() => setSelectedImage(null)}
+                                        className="absolute top-8 right-8 text-white/50 hover:text-[#beff01] transition-colors z-[110]"
+                                    >
+                                        <X size={32} />
+                                    </button>
+
+                                    <motion.div
+                                        initial={{ scale: 0.9, opacity: 0 }}
+                                        animate={{ scale: 1, opacity: 1 }}
+                                        exit={{ scale: 0.9, opacity: 0 }}
+                                        onClick={(e) => e.stopPropagation()}
+                                        className="relative max-w-7xl w-full max-h-[90vh] flex flex-col md:flex-row gap-8 bg-zinc-900/50 rounded-3xl border border-white/10 p-2 overflow-hidden"
+                                    >
+                                        <div className="relative flex-1 aspect-square md:aspect-auto min-h-[40vh] md:min-h-[80vh] rounded-2xl overflow-hidden bg-black/50">
+                                            <Image
+                                                src={selectedImage.src}
+                                                alt={selectedImage.type}
+                                                fill
+                                                className="object-contain"
+                                            />
+                                        </div>
+                                        <div className="md:w-80 lg:w-96 p-6 flex flex-col justify-center shrink-0">
+                                            <div className="text-[#beff01] text-xs font-bold uppercase tracking-widest mb-4">
+                                                {selectedImage.type}
+                                            </div>
+                                            <div className="w-12 h-0.5 bg-white/20 mb-6" />
+                                            <p className="text-lg md:text-xl text-zinc-300 font-light leading-relaxed">
+                                                {selectedImage.description}
+                                            </p>
+                                        </div>
+                                    </motion.div>
+                                </motion.div>
+                            )}
+                        </AnimatePresence>
+
                     </div>
                 </section>
             )}
 
             {/* CTA Section */}
-            <section className="py-40 bg-[#beff01] text-black text-center relative overflow-hidden">
+            <section className="py-20 md:py-32 bg-[#beff01] text-black text-center relative overflow-hidden">
                 <div className="relative z-10 w-full max-w-7xl mx-auto px-6 md:px-8 lg:px-12">
                     <h2 className="text-5xl md:text-8xl font-black uppercase tracking-tighter mb-12 leading-[0.9]">
                         WANT TO BECOME THE BENCHMARK IN YOUR MARKET?

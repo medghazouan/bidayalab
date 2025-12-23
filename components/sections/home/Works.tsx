@@ -53,7 +53,7 @@ export default function Works() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8, ease: "easeOut" }}
-          className="max-w-7xl mx-auto px-6 md:px-8 lg:px-12 py-8 md:py-12 text-center"
+          className="max-w-7xl mx-auto px-6 md:px-8 lg:px-12 py-8 md:py-12 text-center mb-2"
         >
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
@@ -64,7 +64,7 @@ export default function Works() {
           >
             <div className="w-2 h-2 rounded-full bg-[#beff01] animate-pulse" />
             <span className="text-[#beff01] text-sm font-bold uppercase tracking-wider">
-              Real Projects, Real Results
+              Our Latest Work
             </span>
           </motion.div>
 
@@ -73,28 +73,15 @@ export default function Works() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.3 }}
-            className="text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-black text-white mb-8 tracking-tight leading-none"
+            className="font-black text-white mb-2 tracking-tight leading-none flex flex-col items-center"
           >
-            See What I&apos;ve
-            <br />
-            <span className="bg-gradient-to-r from-[#beff01] via-[#d4ff4d] to-[#beff01] bg-clip-text text-transparent bg-[length:200%_auto] animate-gradient">
-              Built For Others
+            <span className="text-6xl md:text-7xl lg:text-8xl xl:text-9xl whitespace-nowrap block">Our Latest</span>
+            <span className="bg-gradient-to-r from-[#beff01] via-[#d4ff4d] to-[#beff01] bg-clip-text text-transparent bg-[length:200%_auto] animate-gradient text-[9vw] sm:text-[8vw] md:text-6xl lg:text-8xl xl:text-9xl leading-[0.8] whitespace-nowrap block mt-2">
+              Digital Case Studies
             </span>
           </motion.h2>
 
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-            className="text-xl md:text-2xl text-gray-400 max-w-4xl mx-auto leading-relaxed font-light mb-16"
-          >
-            These aren&apos;t just pretty websites or random ads. Each project here helped a real business
-            attract more customers,
-            increase sales, and
-            grow faster.
-            Yours could be next.
-          </motion.p>
+
         </motion.div>
 
         {/* Projects Grid */}

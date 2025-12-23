@@ -56,7 +56,7 @@ export default function Blogs() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8, ease: "easeOut" }}
-          className="max-w-7xl mx-auto px-6 md:px-8 lg:px-12 py-8 md:py-12 text-center"
+          className="max-w-7xl mx-auto px-6 md:px-8 lg:px-12 py-8 md:py-12 text-center mb-2"
         >
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
@@ -67,7 +67,7 @@ export default function Blogs() {
           >
             <div className="w-2 h-2 rounded-full bg-[#beff01] animate-pulse" />
             <span className="text-[#beff01] text-sm font-bold uppercase tracking-wider">
-              Insights & Articles
+              Insights & Strategy
             </span>
           </motion.div>
 
@@ -76,26 +76,15 @@ export default function Blogs() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.3 }}
-            className="text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-black text-white mb-8 tracking-tight leading-none"
+            className="font-black text-white mb-2 tracking-tight leading-none flex flex-col items-center"
           >
-            Latest from the
-            <br />
-            <span className="bg-gradient-to-r from-[#beff01] via-[#d4ff4d] to-[#beff01] bg-clip-text text-transparent bg-[length:200%_auto] animate-gradient">
-              Blog
+            <span className="text-5xl md:text-7xl lg:text-8xl xl:text-9xl whitespace-nowrap block">Insights on AI</span>
+            <span className="bg-gradient-to-r from-[#beff01] via-[#d4ff4d] to-[#beff01] bg-clip-text text-transparent bg-[length:200%_auto] animate-gradient text-[9vw] sm:text-[8vw] md:text-6xl lg:text-8xl xl:text-9xl leading-[0.8] whitespace-nowrap block mt-2">
+              and Digital Growth
             </span>
           </motion.h2>
 
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-            className="text-xl md:text-2xl text-gray-400 max-w-4xl mx-auto leading-relaxed font-light mb-16"
-          >
-            Discover insights,
-            tips, and
-            stories that inspire and inform.
-          </motion.p>
+
         </motion.div>
 
         {/* Blogs Grid */}

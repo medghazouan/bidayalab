@@ -1,4 +1,5 @@
 /** @type {import('tailwindcss').Config} */
+// Force cache refresh after folder structure change
 module.exports = {
   content: [
     './app/**/*.{js,ts,jsx,tsx,mdx}',
@@ -9,7 +10,7 @@ module.exports = {
     // Global Utilities
     'bg-black/95',
     'bg-transparent',
-    
+
     // Primary Brand Color (Lime)
     'text-[#beff01]',
     'hover:text-[#beff01]',

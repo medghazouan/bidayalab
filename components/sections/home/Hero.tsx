@@ -1,311 +1,263 @@
 'use client';
 
-
 import { useRouter } from 'next/navigation';
-import { motion } from 'framer-motion';
-import { ArrowRight, Monitor } from 'lucide-react';
+import { motion, useMotionTemplate, useMotionValue } from 'framer-motion';
+import { MouseEvent } from 'react';
+import {
+    ArrowRight, Code2, Rocket, Bot, Zap,
+    Globe, BarChart3, Workflow, MoveRight, Layers, Cpu
+} from 'lucide-react';
 
 export default function Hero() {
-  const router = useRouter();
+    const router = useRouter();
 
-  const scrollToWorks = () => {
-    const firstProject = document.getElementById('first-project');
-    if (firstProject) {
-      const offset = 100; // Adjust based on header height
-      const elementPosition = firstProject.getBoundingClientRect().top;
-      const offsetPosition = elementPosition + window.pageYOffset - offset;
+    const scrollToContact = () => {
+        router.push('/contact#contact-form');
+    };
 
-      window.scrollTo({
-        top: offsetPosition,
-        behavior: 'smooth'
-      });
-    }
-  };
-
-  const scrollToContact = () => {
-    router.push('/contact#contact-form');
-  };
-
-  return (
-    <section className="relative pt-24 md:pt-36 lg:pt-40 pb-12 md:pb-24 lg:pb-32 overflow-hidden">
-      <div className="relative max-w-7xl mx-auto px-6 md:px-8 lg:px-12">
-        {/* Header - Centered (Keep Original) */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
-          className="text-center mb-20"
-        >
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#beff01]/10 border border-[#beff01]/30 backdrop-blur-sm mb-8 group hover:bg-[#beff01]/20 transition-all"
-          >
-            <div className="w-2 h-2 rounded-full bg-[#beff01] animate-pulse" />
-            <span className="text-[#beff01] text-sm font-bold uppercase tracking-wider">
-              YOUR DIGITAL GROWTH PARTNER IN MOROCCO
-            </span>
-          </motion.div>
-
-          <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.3 }}
-            className="text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-black text-white mb-8 tracking-tight leading-none"
-          >
-            Is Your Website
-            <br />
-            <span className="bg-gradient-to-r from-[#beff01] via-[#d4ff4d] to-[#beff01] bg-clip-text text-transparent bg-[length:200%_auto] animate-gradient">
-              Costing You Money?
-            </span>
-          </motion.h1>
-
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-            className="text-xl md:text-2xl text-gray-400 max-w-4xl mx-auto leading-relaxed font-light"
-          >
-            You&apos;ve got a great product. Now you need a digital partner who cares about your bottom line as much as you do.
-            No fluff, no empty promises just real results that move your business forward.
-          </motion.p>
-        </motion.div>
-
-        {/* Two-Column Layout: Capabilities + CTAs (Left) | Insight Card (Right) */}
-        <div className="flex flex-col lg:flex-row gap-12 lg:gap-24 items-stretch">
-          {/* LEFT COLUMN - Capabilities + CTAs */}
-          <div className="w-full lg:w-1/2 flex flex-col justify-center">
-            {/* Capabilities List */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.8 }}
-              className="mb-12"
-            >
-              <p className="text-[#beff01] mb-8 text-sm uppercase tracking-[0.2em] font-bold">
-                Our Capabilities
-              </p>
-
-              <div className="space-y-6">
-                {[
-                  { id: "01", title: "Websites That Convert", psycho: "Code that prints money. Fast, scalable, and built to convert." },
-                  { id: "02", title: "Campaigns That Pay Back", psycho: "We don&apos;t buy clicks. We buy customers who stay." },
-                  { id: "03", title: "Brands They Can't Ignore", psycho: "Design so good, they can't ignore you. Period." },
-                  { id: "04", title: "Systems That Save Time", psycho: "Work less. Earn more. Let robots handle the boring stuff." },
-                  { id: "05", title: "Stories That Sell", psycho: "Stories that sell. Content that builds cults." }
-                ].map((item, index) => (
-                  <ServiceItem key={index} item={item} index={index} />
-                ))}
-              </div>
-            </motion.div>
-          </div>
-
-          {/* RIGHT COLUMN - Insight Card + Social Proof */}
-          <div className="w-full lg:w-1/2 flex flex-col h-full">
-            <div className="flex flex-col gap-8 h-full">
-              {/* Insight Card */}
-              <div className="relative rounded-3xl overflow-hidden bg-zinc-900/50 border border-zinc-800 backdrop-blur-sm p-12 flex flex-col justify-center flex-1">
-                <div className="absolute inset-0 bg-gradient-to-br from-[#beff01]/5 to-transparent" />
-
-                <div className="relative z-10">
-                  <h3 className="text-4xl font-black text-white mb-6 leading-tight">
-                    We don&apos;t just deliver services.
-                    <br />
-                    <span className="text-[#beff01]">We deliver unfair advantages.</span>
-                  </h3>
-                  <p className="text-gray-400 text-lg leading-relaxed">
-                    Every capability we offer is designed to solve one specific problem: <span className="text-white font-bold">How to make your business dominant in a crowded market.</span>
-                  </p>
-
-                  <div className="mt-12 flex items-center gap-4">
-                    <div className="w-12 h-12 rounded-full bg-[#beff01] flex items-center justify-center">
-                      <ArrowRight className="w-6 h-6 text-black -rotate-45" />
-                    </div>
-                    <span className="text-sm font-bold text-gray-300 uppercase tracking-wider">
-                      Hover the list to see how
-                    </span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Social Proof */}
-              <div className="flex flex-col gap-4">
-                <div className="flex items-center gap-3 bg-zinc-900/50 border border-zinc-800/50 rounded-full px-6 py-3 backdrop-blur-xl w-fit">
-                  <div className="flex -space-x-2">
-                    {[1, 2, 3, 4].map((i) => (
-                      <div
-                        key={i}
-                        className="w-8 h-8 rounded-full bg-gradient-to-br from-[#beff01] to-green-500 border-2 border-black flex items-center justify-center"
-                      />
-                    ))}
-                  </div>
-                  <span className="text-gray-300 text-sm">
-                    <span className="text-[#beff01] font-bold">20+ businesses</span> already growing with us
-                  </span>
-                </div>
-                <div className="flex items-center gap-2 text-gray-400 text-sm px-2">
-                  <span>Based in Marrakech, serving clients worldwide</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* CTA Buttons - Side by Side on Desktop */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 1.4 }}
-          className="mt-16 w-full max-w-4xl mx-auto"
-        >
-          <div className="flex flex-col md:flex-row gap-4 items-stretch md:items-center justify-center">
-            {/* Primary CTA - Contact Page */}
-            <motion.div
-              whileHover={{ scale: 1.02, y: -2 }}
-              whileTap={{ scale: 0.98 }}
-              className="relative group flex-1"
-            >
-              <button
-                onClick={scrollToContact}
-                className="relative block w-full h-full"
-              >
-                {/* Glow Effect */}
-                <div className="absolute -inset-1 bg-gradient-to-r from-[#beff01] to-green-500 rounded-2xl blur-lg opacity-50 group-hover:opacity-100 transition-opacity duration-500" />
-
-                {/* Main Button */}
-                <div className="relative bg-gradient-to-r from-[#beff01] to-[#d4ff4d] text-black rounded-2xl p-6 h-full flex flex-col justify-between overflow-hidden">
-                  {/* Animated Background Pattern */}
-                  <div className="absolute inset-0 opacity-10">
-                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_120%,rgba(0,0,0,0.3),transparent)]" />
-                  </div>
-
-                  <div className="relative flex items-center justify-between gap-4">
-                    <div className="text-left">
-                      <div className="flex items-center gap-2 mb-1">
-                        <span className="text-xs font-black uppercase tracking-wider opacity-70">Limited Slots</span>
-                        <div className="flex gap-1">
-                          {[1, 2, 3].map((i) => (
-                            <motion.div
-                              key={i}
-                              className="w-1.5 h-1.5 rounded-full bg-black/40"
-                              animate={{ scale: [1, 1.3, 1] }}
-                              transition={{ duration: 1.5, repeat: Infinity, delay: i * 0.2 }}
-                            />
-                          ))}
-                        </div>
-                      </div>
-                      <h3 className="text-lg md:text-xl lg:text-2xl font-black leading-tight">
-                        Start a Project
-                      </h3>
-                      <p className="text-xs md:text-sm font-bold opacity-80 mt-1">Free strategy call</p>
-                    </div>
-
-                    <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-black/10 backdrop-blur-sm flex items-center justify-center group-hover:bg-black/20 transition-all group-hover:scale-110 flex-shrink-0">
-                      <ArrowRight className="w-5 h-5 md:w-6 md:h-6 text-black group-hover:translate-x-1 transition-transform" />
-                    </div>
-                  </div>
-
-                  {/* Shimmer Effect */}
-                  <motion.div
-                    className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent"
-                    initial={{ x: '-100%' }}
-                    whileHover={{ x: '100%' }}
-                    transition={{ duration: 0.8 }}
-                  />
-                </div>
-              </button>
-            </motion.div>
-
-            {/* Secondary CTA - View Work */}
-            <motion.div
-              whileHover={{ scale: 1.02, y: -2 }}
-              whileTap={{ scale: 0.98 }}
-              className="flex-1"
-            >
-              <button
-                onClick={scrollToWorks}
-                className="w-full h-full group relative bg-zinc-900/80 border-2 border-zinc-800 hover:border-[#beff01]/50 rounded-2xl p-6 backdrop-blur-xl transition-all duration-300 hover:bg-zinc-800/80 flex flex-col justify-between"
-              >
-                <div className="flex items-center justify-between w-full gap-4">
-                  <div className="text-left">
-                    <div className="flex items-center gap-2 mb-1">
-                      <div className="flex -space-x-2">
-                        {[1, 2, 3].map((i) => (
-                          <div
-                            key={i}
-                            className="w-4 h-4 md:w-5 md:h-5 rounded-full bg-gradient-to-br from-[#beff01] to-green-500 border-2 border-zinc-900"
-                          />
-                        ))}
-                      </div>
-                      <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">20+ Clients</span>
-                    </div>
-                    <h3 className="text-lg md:text-xl lg:text-2xl font-black text-white">
-                      View Our Work
-                    </h3>
-                    <p className="text-xs md:text-sm text-gray-400 mt-1">Real results, no fluff</p>
-                  </div>
-
-                  <motion.div
-                    animate={{ x: [0, 5, 0] }}
-                    transition={{ duration: 2, repeat: Infinity }}
-                    className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-white/5 border border-white/10 flex items-center justify-center group-hover:bg-[#beff01]/10 group-hover:border-[#beff01]/30 transition-all flex-shrink-0"
-                  >
-                    <Monitor className="w-5 h-5 md:w-6 md:h-6 text-gray-400 group-hover:text-[#beff01] transition-colors" />
-                  </motion.div>
-                </div>
-              </button>
-            </motion.div>
-          </div>
-        </motion.div>
-      </div>
-
-      <style jsx>{`
-        @keyframes gradient {
-          0%, 100% { background-position: 0% 50%; }
-          50% { background-position: 100% 50%; }
+    const pillars = [
+        {
+            id: "01",
+            tag: "ARCHITECTURE",
+            title: "Digital Ecosystems",
+            description: "We engineering high-performance, SEO-dominating digital foundations using Next.js and headless architecture.",
+            icon: Layers,
+            features: ["Next.js Enterprise", "Global Edge CDN", "3D Web Experiences"]
+        },
+        {
+            id: "02",
+            tag: "INTELLIGENCE",
+            title: "AI Workforce",
+            description: "Replace repetitive drudgery with intelligent agents. We build custom AI workflows that automate sales, support, and operations.",
+            icon: Cpu,
+            features: ["Language Models", "Autonomous Agents", "Workflow Automation"]
+        },
+        {
+            id: "03",
+            tag: "GROWTH",
+            title: "Revenue Engineering",
+            description: "Creativity without conversion is vanity. We fuse brand storytelling with hard-data analytics to scale your bottom line.",
+            icon: Rocket,
+            features: ["Conversion Ops", "Performance Marketing", "Brand Strategy"]
         }
-        
-        .animate-gradient {
-          animation: gradient 3s ease infinite;
+    ];
+
+    return (
+        // REMOVED: bg-black from section to allow global background
+        <section className="relative pt-24 md:pt-36 lg:pt-40 pb-6 md:pb-12 overflow-hidden selection:bg-[#beff01] selection:text-black">
+
+            {/* 
+          1. AMBIENCE 
+          (Removed noise overlay/solid bg. Kept subtle glows for depth/blending) 
+      */}
+            <div className="absolute inset-0 pointer-events-none">
+                {/* Glows - adjusted opacity for blending */}
+                <div className="absolute top-[-20%] right-[-10%] w-[800px] h-[800px] bg-[#beff01]/5 rounded-full blur-[140px] animate-pulse-slow mix-blend-screen" />
+                <div className="absolute bottom-[-10%] left-[-10%] w-[600px] h-[600px] bg-blue-500/5 rounded-full blur-[120px] animate-pulse-slow delay-1000 mix-blend-screen" />
+            </div>
+
+            <div className="relative z-10 w-full max-w-7xl mx-auto px-4 md:px-8 lg:px-12">
+
+                {/* 
+            2. ORIGINAL HEADER RESTORED EXACTLY 
+        */}
+                <div className="text-center mb-12 md:mb-16">
+                    {/* Eyebrow */}
+                    <motion.div
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ duration: 0.6, delay: 0.2 }}
+                        className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/5 border border-white/10 backdrop-blur-md mb-8 group hover:bg-white/10 transition-all cursor-default"
+                    >
+                        <div className="w-1.5 h-1.5 rounded-full bg-[#beff01] animate-pulse shadow-[0_0_10px_#beff01]" />
+                        <span className="text-[#beff01] text-[10px] md:text-sm font-bold uppercase tracking-wider">
+                            DIGITAL TRANSFORMATION STARTS HERE
+                        </span>
+                    </motion.div>
+
+                    {/* PRESERVED TITLE (Exact Original Classes) */}
+                    <motion.h1
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.6, delay: 0.3 }}
+                        className="text-[40px] sm:text-5xl md:text-7xl lg:text-8xl xl:text-9xl font-black text-white mb-8 tracking-tighter leading-none"
+                    >
+                        <span className="block whitespace-nowrap">Full-Service Digital.</span>
+                        <span className="block whitespace-nowrap bg-gradient-to-r from-[#beff01] via-[#d4ff4d] to-[#beff01] bg-clip-text text-transparent bg-[length:200%_auto] animate-gradient">
+                            AI-Driven Results.
+                        </span>
+                    </motion.h1>
+
+                    {/* 
+             WHO WE ARE - "Ultra Creative" Fusion Grid
+             Using a sophisticated layout merging typography styles
+          */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.6, delay: 0.4 }}
+                        className="w-full mb-16 relative group"
+                    >
+                        {/* Subtle animated background gradient */}
+                        <div className="absolute -inset-1 rounded-[2.5rem] bg-gradient-to-r from-[#beff01]/10 via-blue-500/10 to-[#beff01]/10 blur-xl opacity-20 group-hover:opacity-40 transition duration-1000"></div>
+
+                        <div className="relative p-8 md:p-12 rounded-[2.5rem] border border-white/10 bg-black/20 backdrop-blur-md overflow-hidden hover:bg-black/30 transition-colors duration-500">
+
+                            <div className="flex flex-col gap-6 text-center">
+                                {/* Label */}
+                                <div className="flex justify-center">
+                                    <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-[10px] uppercase tracking-[0.2em] text-[#beff01]">
+                                        <span className="w-1 h-1 rounded-full bg-[#beff01]" />
+                                        We Are Bidayalab
+                                    </span>
+                                </div>
+
+                                {/* Headline */}
+                                <h2 className="text-2xl md:text-4xl leading-snug font-light text-white">
+                                    We engineer the intersection of <br className="hidden md:block" />
+                                    <span className="font-serif italic text-white/80">human creativity</span> <span className="text-zinc-600 px-1 font-thin">&</span> <span className="font-mono text-[#beff01] font-normal">artificial intelligence</span>
+                                </h2>
+
+                                {/* Paragraph */}
+                                <p className="text-zinc-400 text-sm md:text-lg max-w-2xl mx-auto leading-relaxed">
+                                    Building digital ecosystems that scale revenue, automate drudgery, and define the future of your industry.
+                                </p>
+                            </div>
+                        </div>
+                    </motion.div>
+
+                    {/* CTA Buttons */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.6, delay: 0.5 }}
+                        className="flex flex-col sm:flex-row gap-5 justify-center items-center"
+                    >
+                        <button onClick={scrollToContact} className="group relative px-10 py-5 bg-[#beff01] text-black font-black uppercase tracking-wider rounded-full overflow-hidden hover:scale-105 transition-transform duration-300 shadow-[0_0_50px_-15px_rgba(190,255,1,0.4)]">
+                            <div className="absolute inset-0 bg-white/40 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
+                            <span className="relative flex items-center gap-2">
+                                Start a Project <ArrowRight className="w-5 h-5 group-hover:-rotate-45 transition-transform duration-300" />
+                            </span>
+                        </button>
+
+                        <button onClick={() => router.push('/works')} className="group flex items-center gap-2 text-zinc-400 hover:text-white transition-colors px-6 py-4 rounded-full hover:bg-white/5 border border-transparent hover:border-white/10 uppercase tracking-wide font-bold text-sm">
+                            View Case Studies <MoveRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                        </button>
+                    </motion.div>
+                </div>
+
+                {/* 3. WHAT WE OFFER (3 Pillars with Spotlight - Enhanced for Transparent BG) */}
+                <div className="mb-12 md:mb-24">
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        whileInView={{ opacity: 1 }}
+                        viewport={{ once: true }}
+                        className="flex items-center gap-6 mb-16 px-4 justify-center opacity-60"
+                    >
+                        <div className="h-px bg-gradient-to-r from-transparent via-white/20 to-transparent w-32" />
+                        <span className="text-[#beff01] font-mono text-xs uppercase tracking-[0.4em] text-center shadow-[0_0_20px_rgba(190,255,1,0.3)]">Our Capabilities</span>
+                        <div className="h-px bg-gradient-to-r from-transparent via-white/20 to-transparent w-32" />
+                    </motion.div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
+                        {pillars.map((pillar, index) => (
+                            <SpotlightCard key={index} delay={index * 0.1}>
+                                <div className="relative h-full flex flex-col z-20">
+                                    {/* Number Watermark */}
+                                    <div className="absolute -top-4 -right-4 text-9xl font-black text-white/[0.03] group-hover:text-[#beff01]/[0.1] transition-colors select-none font-sans pointer-events-none">
+                                        {pillar.id}
+                                    </div>
+
+                                    {/* Icon */}
+                                    <div className="w-14 h-14 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-[#beff01] mb-8 group-hover:scale-110 group-hover:bg-[#beff01] group-hover:text-black group-hover:shadow-[0_0_30px_rgba(190,255,1,0.3)] transition-all duration-500">
+                                        <pillar.icon size={26} strokeWidth={1.5} />
+                                    </div>
+
+                                    {/* Tag */}
+                                    <div className="inline-flex items-center gap-2 mb-4">
+                                        <div className="w-1 h-1 rounded-full bg-[#beff01] shadow-[0_0_10px_#beff01]" />
+                                        <span className="text-[#beff01] text-[11px] font-bold font-mono tracking-[0.2em] uppercase opacity-90">
+                                            {pillar.tag}
+                                        </span>
+                                    </div>
+
+                                    {/* Content */}
+                                    <h3 className="text-2xl md:text-3xl font-bold text-white mb-4 group-hover:text-[#beff01] transition-colors">
+                                        {pillar.title}
+                                    </h3>
+                                    <p className="text-zinc-400 text-sm leading-relaxed mb-8 flex-grow opacity-80 group-hover:opacity-100 transition-opacity">
+                                        {pillar.description}
+                                    </p>
+
+                                    {/* Features List */}
+                                    <div className="mt-auto pt-6 border-t border-white/5">
+                                        <ul className="space-y-3">
+                                            {pillar.features.map((feature, i) => (
+                                                <li key={i} className="flex items-center gap-3 text-xs text-zinc-500 font-mono group-hover:text-zinc-300 transition-colors">
+                                                    <div className="w-1 h-1 bg-[#beff01]/50 rounded-full" />
+                                                    {feature}
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </div>
+                                </div>
+                            </SpotlightCard>
+                        ))}
+                    </div>
+                </div>
+
+            </div>
+
+            <style jsx global>{`
+        @keyframes pulse-slow {
+          0%, 100% { opacity: 0.5; }
+          50% { opacity: 0.2; }
+        }
+        .animate-pulse-slow {
+          animation: pulse-slow 8s ease-in-out infinite;
         }
       `}</style>
-    </section >
-  );
+        </section>
+    );
 }
 
-function ServiceItem({ item, index }: { item: { id: string; title: string; psycho: string }, index: number }) {
-  return (
-    <motion.div
-      initial={{ opacity: 0, x: -20 }}
-      whileInView={{ opacity: 1, x: 0 }}
-      viewport={{ once: true }}
-      transition={{ delay: index * 0.1 }}
-      className="group relative border-b border-white/10 last:border-none"
-    >
-      <div className="flex items-baseline gap-6 cursor-pointer py-6">
-        <span className="text-sm font-mono text-gray-600 group-hover:text-[#beff01] transition-colors duration-300">
-          {item.id}
-        </span>
-        <div className="flex-1">
-          <h3 className="text-3xl md:text-5xl font-black text-white group-hover:text-[#beff01] transition-colors duration-300">
-            {item.title}
-          </h3>
-          {/* Mobile Only Description */}
-          <p className="lg:hidden text-gray-400 mt-2 text-sm">
-            {item.psycho}
-          </p>
+// Helper for Mouse Spotlight Effect
+function SpotlightCard({ children, delay = 0 }: { children: React.ReactNode, delay?: number }) {
+    const mouseX = useMotionValue(0);
+    const mouseY = useMotionValue(0);
 
+    function handleMouseMove({ currentTarget, clientX, clientY }: MouseEvent) {
+        const { left, top } = currentTarget.getBoundingClientRect();
+        const x = clientX - left;
+        const y = clientY - top;
+        mouseX.set(x);
+        mouseY.set(y);
+    }
 
-          <div className="hidden lg:grid grid-rows-[0fr] group-hover:grid-rows-[1fr] transition-[grid-template-rows] duration-500 ease-out">
-            <div className="overflow-hidden">
-              <p className="text-xl text-gray-400 mt-4 font-medium leading-relaxed border-l-2 border-[#beff01] pl-6">
-                {item.psycho}
-              </p>
+    return (
+        <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay }}
+            className="group relative border border-white/10 bg-white/[0.02] rounded-[2.5rem] overflow-hidden backdrop-blur-md hover:bg-white/[0.04] transition-colors"
+            onMouseMove={handleMouseMove}
+        >
+            <motion.div
+                className="pointer-events-none absolute -inset-px rounded-[2.5rem] opacity-0 transition duration-300 group-hover:opacity-100"
+                style={{
+                    background: useMotionTemplate`
+              radial-gradient(
+                600px circle at ${mouseX}px ${mouseY}px,
+                rgba(190, 255, 1, 0.1),
+                transparent 80%
+              )
+            `,
+                }}
+            />
+            <div className="relative h-full p-8 md:px-10 md:py-12 z-10">
+                {children}
             </div>
-          </div>
-        </div>
-      </div>
-    </motion.div>
-  );
+        </motion.div>
+    );
 }

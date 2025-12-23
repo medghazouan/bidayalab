@@ -29,18 +29,22 @@ export default function VisualStorytellingProject({ project }: { project: IProje
         <div ref={containerRef} className="relative bg-[#050505] min-h-screen text-white font-sans selection:bg-[#beff01] selection:text-black overflow-x-hidden">
 
             {/* Navigation Overlay */}
-            <div className="absolute top-0 left-0 right-0 z-50 w-full max-w-7xl mx-auto px-6 md:px-8 lg:px-12 py-8 flex justify-between items-center mt-24 mix-blend-difference">
-                <Link href="/works" className="group flex items-center gap-3 text-xs font-bold uppercase tracking-widest hover:text-[#beff01] transition-colors">
-                    <ArrowLeft size={16} /> <span className="hidden md:inline">Back to Works</span>
+            {/* Navigation Overlay - Standardized */}
+            <div className="absolute top-0 left-0 right-0 z-50 w-full max-w-7xl mx-auto px-6 md:px-8 lg:px-12 py-8 flex justify-between items-center mt-24">
+                <Link href="/works" className="group flex items-center gap-3 text-sm font-medium text-zinc-400 hover:text-white transition-colors">
+                    <div className="p-2 rounded-full bg-white/5 border border-white/10 group-hover:bg-white/10 transition-colors">
+                        <ArrowLeft size={16} className="group-hover:-translate-x-0.5 transition-transform" />
+                    </div>
+                    <span>Back to Works</span>
                 </Link>
-                <div className="flex items-center gap-2">
-                    <div className="w-2 h-2 bg-[#beff01] rounded-full animate-pulse" />
-                    <span className="text-xs font-bold uppercase tracking-wider">Visual Storytelling</span>
+                <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-md">
+                    <div className="w-1.5 h-1.5 bg-[#beff01] rounded-full animate-pulse" />
+                    <span className="text-xs font-medium text-[#beff01] uppercase tracking-wider">Visual Storytelling</span>
                 </div>
             </div>
 
             {/* Cinematic Hero Section */}
-            <section className="relative min-h-screen w-full overflow-hidden flex items-end pb-12 md:pb-32 pt-48 md:pt-40">
+            <section className="relative min-h-screen w-full overflow-hidden flex items-end pb-12 md:pb-24 pt-48 md:pt-64">
                 <motion.div
                     style={{ opacity: heroOpacity, scale: heroScale }}
                     className="absolute inset-0 z-0"
@@ -104,7 +108,7 @@ export default function VisualStorytellingProject({ project }: { project: IProje
             </section>
 
             {/* Narrative & Production Specs */}
-            <section className="relative z-10 py-32 px-6 md:px-8 lg:px-12 max-w-7xl mx-auto">
+            <section className="relative z-10 py-16 md:py-24 px-6 md:px-8 lg:px-12 max-w-7xl mx-auto">
                 <div className="grid lg:grid-cols-12 gap-16 lg:gap-24 items-start">
 
                     {/* The Story */}
@@ -159,7 +163,7 @@ export default function VisualStorytellingProject({ project }: { project: IProje
 
             {/* Main Feature Film */}
             {project.videoUrl && (
-                <section className="py-12">
+                <section className="py-16 md:py-24">
                     <div className="max-w-7xl mx-auto px-6 md:px-8 lg:px-12">
                         <div className="relative aspect-[4/3] md:aspect-video w-full rounded-[2rem] overflow-hidden border border-white/10 bg-zinc-900 shadow-2xl group">
                             {getAssetUrl(project.videoUrl).startsWith('/uploads/') ? (
@@ -184,7 +188,7 @@ export default function VisualStorytellingProject({ project }: { project: IProje
 
             {/* Visual Gallery - Masonry / Collage Style */}
             {project.images && project.images.length > 0 && (
-                <section className="py-32 px-6 md:px-8 lg:px-12 max-w-7xl mx-auto">
+                <section className="py-16 md:py-24 px-6 md:px-8 lg:px-12 max-w-7xl mx-auto">
                     <div className="flex items-end justify-between mb-16">
                         <h2 className="text-5xl md:text-8xl font-black uppercase tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-white to-zinc-600">
                             Behind<br />The Lens
@@ -220,7 +224,7 @@ export default function VisualStorytellingProject({ project }: { project: IProje
             )}
 
             {/* CTA Section - Preserved "Perfect" Design */}
-            <section className="py-40 bg-[#beff01] text-black text-center relative overflow-hidden">
+            <section className="py-20 md:py-32 bg-[#beff01] text-black text-center relative overflow-hidden">
                 <div className="relative z-10 w-full max-w-7xl mx-auto px-6 md:px-8 lg:px-12">
                     <h2 className="text-5xl md:text-8xl font-black uppercase tracking-tighter mb-12 leading-[0.9]">
                         READY TO TELL YOUR STORY?

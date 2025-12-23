@@ -49,18 +49,18 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         }),
     ],
     pages: {
-        signIn: "/portal-access",
+        signIn: "/admin",
     },
     callbacks: {
         authorized({ auth, request: { nextUrl } }) {
             const isLoggedIn = !!auth?.user
-            const isOnDashboard = nextUrl.pathname.startsWith("/studio-admin")
+            const isOnDashboard = nextUrl.pathname.startsWith("/dashboard")
 
             if (isOnDashboard) {
                 if (isLoggedIn) return true
                 return false // Redirect unauthenticated users to login page
-            } else if (isLoggedIn && nextUrl.pathname === "/portal-access") {
-                return Response.redirect(new URL("/studio-admin", nextUrl))
+            } else if (isLoggedIn && nextUrl.pathname === "/admin") {
+                return Response.redirect(new URL("/dashboard", nextUrl))
             }
 
             return true

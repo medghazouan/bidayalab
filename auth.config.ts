@@ -7,14 +7,14 @@ export const authConfig = {
     callbacks: {
         authorized({ auth, request: { nextUrl } }) {
             const isLoggedIn = !!auth?.user;
-            const isOnDashboard = nextUrl.pathname.startsWith('/studio-admin');
+            const isOnDashboard = nextUrl.pathname.startsWith('/dashboard');
             if (isOnDashboard) {
                 if (isLoggedIn) return true;
                 return false; // Redirect unauthenticated users to login page
             } else if (isLoggedIn) {
                 // Redirect logged-in users away from login page
-                if (nextUrl.pathname === '/portal-access') {
-                    return Response.redirect(new URL('/studio-admin', nextUrl));
+                if (nextUrl.pathname === '/admin') {
+                    return Response.redirect(new URL('/dashboard', nextUrl));
                 }
             }
             return true;

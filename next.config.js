@@ -3,9 +3,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
+
 
   // ⚡ PERFORMANCE: Enable Turbopack for 10x faster compilation
   // Use with: npm run dev --turbo

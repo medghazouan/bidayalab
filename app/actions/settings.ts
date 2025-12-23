@@ -18,7 +18,13 @@ export async function getSettings() {
     }
 }
 
-export async function updateSettings(data: { linkedinUrl: string; instagramUrl: string }) {
+export async function updateSettings(data: {
+    linkedinUrl: string;
+    instagramUrl: string;
+    email: string;
+    phone: string;
+    whatsapp: string;
+}) {
     try {
         await connectToDatabase();
         let settings = await Settings.findOne();
@@ -27,6 +33,9 @@ export async function updateSettings(data: { linkedinUrl: string; instagramUrl: 
         } else {
             settings.linkedinUrl = data.linkedinUrl;
             settings.instagramUrl = data.instagramUrl;
+            settings.email = data.email;
+            settings.phone = data.phone;
+            settings.whatsapp = data.whatsapp;
             await settings.save();
         }
         revalidatePath("/");

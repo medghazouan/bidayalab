@@ -1,13 +1,16 @@
 "use client";
 
-import { motion, useScroll, useTransform, useSpring } from "framer-motion";
+import { motion, useScroll, useTransform, useSpring, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowLeft, ArrowUpRight, CheckCircle2, Zap, BarChart3, Smartphone } from "lucide-react";
+import { ArrowLeft, ArrowUpRight, CheckCircle2, Zap, BarChart3, Smartphone, Code2, Database, Layout, Globe, Cpu, Server, Shield, X, Maximize2 } from "lucide-react";
 import { IProject } from "@/models/Project";
-import { useRef } from "react";
+import { useRef, useState } from "react";
+import { FaReact, FaNodeJs, FaPython, FaAws, FaDocker, FaVuejs, FaAngular, FaFigma, FaSass, FaGitAlt } from "react-icons/fa";
+import { SiNextdotjs, SiTypescript, SiTailwindcss, SiMongodb, SiPostgresql, SiGraphql, SiRedis, SiFirebase, SiSupabase, SiPrisma } from "react-icons/si";
 
 export default function DigitalDevelopmentProject({ project }: { project: IProject }) {
+    const [selectedImage, setSelectedImage] = useState<string | null>(null);
     const containerRef = useRef(null);
     const { scrollYProgress } = useScroll({
         target: containerRef,
@@ -24,6 +27,76 @@ export default function DigitalDevelopmentProject({ project }: { project: IProje
         return `/uploads/projects/${path}`;
     };
 
+    const getTechIcon = (tech: string) => {
+        const lower = tech.toLowerCase();
+        if (lower.includes('react')) return <FaReact />;
+        if (lower.includes('node')) return <FaNodeJs />;
+        if (lower.includes('next')) return <SiNextdotjs />;
+        if (lower.includes('type')) return <SiTypescript />;
+        if (lower.includes('tail')) return <SiTailwindcss />;
+        if (lower.includes('mongo')) return <SiMongodb />;
+        if (lower.includes('postgre')) return <SiPostgresql />;
+        if (lower.includes('sql')) return <Database size={18} />;
+        if (lower.includes('graph')) return <SiGraphql />;
+        if (lower.includes('aws')) return <FaAws />;
+        if (lower.includes('docker')) return <FaDocker />;
+        if (lower.includes('vue')) return <FaVuejs />;
+        if (lower.includes('angular')) return <FaAngular />;
+        if (lower.includes('svelt')) return <Code2 size={18} />;
+        if (lower.includes('figma')) return <FaFigma />;
+        if (lower.includes('sass') || lower.includes('scss')) return <FaSass />;
+        if (lower.includes('git')) return <FaGitAlt />;
+        if (lower.includes('redis')) return <SiRedis />;
+        if (lower.includes('firebase')) return <SiFirebase />;
+        if (lower.includes('supabase')) return <SiSupabase />;
+        if (lower.includes('prisma')) return <SiPrisma />;
+        return <Code2 size={18} />;
+    };
+
+    const getCTAContent = (category: string) => {
+        switch (category) {
+            case 'digital-development':
+                return {
+                    text: <>Ready to <br /> Scale?</>,
+                    button: "Start Engineering",
+                    subtext: "Let's build your competitive advantage."
+                };
+            case 'digital-marketing':
+                return {
+                    text: <>Ready to <br /> Dominate?</>,
+                    button: "Start Growth Campaign",
+                    subtext: "Stop guessing. Start converting."
+                };
+            case 'creative-studio':
+                return {
+                    text: <>Ready to <br /> Stand Out?</>,
+                    button: "Start Branding",
+                    subtext: "Design that demands attention."
+                };
+            case 'ai-automation':
+                return {
+                    text: <>Ready to <br /> Automate?</>,
+                    button: "Optimize Now",
+                    subtext: "Save time. Reduce costs. Scale faster."
+                };
+            case 'visual-storytelling':
+                return {
+                    text: <>Ready to <br /> Inspire?</>,
+                    button: "Start Production",
+                    subtext: "Tell a story they won't forget."
+                };
+            default:
+                return {
+                    text: <>Ready to <br /> Build?</>,
+                    button: "Start Project",
+                    subtext: "Let's bring your vision to life."
+                };
+        }
+    };
+
+    // Get CTA content
+    const cta = getCTAContent(project.category);
+
     return (
         <div ref={containerRef} className="min-h-screen bg-[#050505] text-zinc-300 font-sans selection:bg-[#beff01] selection:text-black relative overflow-x-hidden">
 
@@ -38,8 +111,9 @@ export default function DigitalDevelopmentProject({ project }: { project: IProje
                     </div>
                     <span>Back to Works</span>
                 </Link>
-                <div className="px-4 py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-md text-xs font-medium text-[#beff01] uppercase tracking-wider">
-                    {project.category.replace('-', ' ')}
+                <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-md">
+                    <div className="w-1.5 h-1.5 bg-[#beff01] rounded-full animate-pulse" />
+                    <span className="text-xs font-medium text-[#beff01] uppercase tracking-wider">{project.category.replace('-', ' ')}</span>
                 </div>
             </div>
 
@@ -183,6 +257,41 @@ export default function DigitalDevelopmentProject({ project }: { project: IProje
                 </div>
             </section>
 
+            {/* Tech Stack - Moved and Redesigned */}
+            {project.technologies && project.technologies.length > 0 && (
+                <section className="py-16 md:py-24 bg-[#0a0a0a] border-y border-white/5">
+                    <div className="max-w-7xl mx-auto px-6 md:px-8 lg:px-12">
+                        <div className="flex flex-col md:flex-row items-start justify-between mb-20 gap-8">
+                            <div className="text-left">
+                                <div className="inline-flex items-center gap-2 text-[#beff01] font-medium text-sm uppercase tracking-wider mb-4">
+                                    <div className="w-1.5 h-1.5 rounded-full bg-[#beff01]" />
+                                    Architecture & Foundation
+                                </div>
+                                <h2 className="text-4xl md:text-6xl font-black text-white tracking-tighter">
+                                    MODERN <br /> TECH STACK
+                                </h2>
+                            </div>
+                            <p className="text-zinc-400 max-w-md text-left">
+                                Built on a modern, scalable foundation ensuring performance, security, and future growth.
+                            </p>
+                        </div>
+
+                        <div className="flex flex-wrap justify-start gap-6">
+                            {project.technologies.map((tech, i) => (
+                                <div key={i} className="flex flex-col items-center gap-3">
+                                    <div className="w-20 h-20 rounded-2xl bg-zinc-900 border border-white/10 flex items-center justify-center text-3xl text-zinc-400 hover:text-[#beff01] hover:border-[#beff01]/50 hover:scale-110 hover:-rotate-3 transition-all duration-300 shadow-xl group cursor-help" title={tech}>
+                                        <span className="filter drop-shadow-lg group-hover:drop-shadow-[0_0_10px_rgba(190,255,1,0.5)] transition-all">
+                                            {getTechIcon(tech)}
+                                        </span>
+                                    </div>
+                                    <span className="text-xs font-bold uppercase tracking-wider text-zinc-500 group-hover:text-white transition-colors">{tech}</span>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </section>
+            )}
+
             {/* Problem & Solution */}
             {/* Problem & Solution */}
             <section className="py-16 md:py-24">
@@ -259,6 +368,8 @@ export default function DigitalDevelopmentProject({ project }: { project: IProje
 
 
 
+
+
             {/* Metrics Dashboard */}
             {
                 project.results && project.results.length > 0 && (
@@ -289,7 +400,7 @@ export default function DigitalDevelopmentProject({ project }: { project: IProje
             }
 
             {/* Gallery Grid - Creative Masonry */}
-            <section className="py-16 md:py-24">
+            <section className="py-24 md:py-32">
                 <div className="max-w-7xl mx-auto px-6 md:px-8 lg:px-12">
                     <div className="flex flex-col md:flex-row items-start justify-between mb-24 gap-8">
                         <div>
@@ -306,73 +417,85 @@ export default function DigitalDevelopmentProject({ project }: { project: IProje
                         </p>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16">
-                        {/* Column 1 */}
-                        <div className="space-y-8 md:space-y-16">
-                            {project.images.slice(1).filter((_, i) => i % 2 === 0).map((img, i) => (
-                                <div key={`col1-${i}`} className="group relative rounded-2xl overflow-hidden border border-white/10 bg-zinc-900 shadow-2xl">
-                                    {/* Browser Header */}
-                                    <div className="h-12 bg-zinc-900 border-b border-white/5 flex items-center px-4 gap-2">
-                                        <div className="flex gap-1.5">
-                                            <div className="w-3 h-3 rounded-full bg-zinc-700 group-hover:bg-[#ff5f56] transition-colors duration-300" />
-                                            <div className="w-3 h-3 rounded-full bg-zinc-700 group-hover:bg-[#ffbd2e] transition-colors duration-300" />
-                                            <div className="w-3 h-3 rounded-full bg-zinc-700 group-hover:bg-[#27c93f] transition-colors duration-300" />
-                                        </div>
-                                        <div className="ml-4 px-3 py-1 bg-black/20 rounded text-[10px] font-mono text-zinc-600 w-full max-w-[200px] opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                            {project.title} / View
-                                        </div>
+                    <div className="columns-1 md:columns-2 gap-8 space-y-8">
+                        {project.images.slice(1).map((img, i) => (
+                            <div
+                                key={i}
+                                className="group break-inside-avoid relative rounded-2xl overflow-hidden border border-white/10 bg-zinc-900 shadow-2xl cursor-zoom-in hover:border-[#beff01]/50 transition-colors duration-500"
+                                onClick={() => setSelectedImage(getAssetUrl(img))}
+                            >
+                                {/* Browser Header */}
+                                <div className="h-10 bg-zinc-900 border-b border-white/5 flex items-center px-4 gap-2">
+                                    <div className="flex gap-1.5">
+                                        <div className="w-2.5 h-2.5 rounded-full bg-zinc-700 group-hover:bg-[#ff5f56] transition-colors duration-300" />
+                                        <div className="w-2.5 h-2.5 rounded-full bg-zinc-700 group-hover:bg-[#ffbd2e] transition-colors duration-300" />
+                                        <div className="w-2.5 h-2.5 rounded-full bg-zinc-700 group-hover:bg-[#27c93f] transition-colors duration-300" />
                                     </div>
-                                    <div className="relative aspect-[4/3] w-full">
-                                        <Image
-                                            src={getAssetUrl(img)}
-                                            alt={`Gallery Image ${i}`}
-                                            fill
-                                            className="object-cover object-top transition-transform duration-700 group-hover:scale-105"
-                                        />
+                                    <div className="ml-auto opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-[#beff01]">
+                                        <Maximize2 size={14} />
                                     </div>
                                 </div>
-                            ))}
-                        </div>
-
-                        {/* Column 2 - Staggered */}
-                        <div className="space-y-8 md:space-y-16 md:pt-32">
-                            {project.images.slice(1).filter((_, i) => i % 2 === 1).map((img, i) => (
-                                <div key={`col2-${i}`} className="group relative rounded-2xl overflow-hidden border border-white/10 bg-zinc-900 shadow-2xl">
-                                    {/* Browser Header */}
-                                    <div className="h-12 bg-zinc-900 border-b border-white/5 flex items-center px-4 gap-2">
-                                        <div className="flex gap-1.5">
-                                            <div className="w-3 h-3 rounded-full bg-zinc-700 group-hover:bg-[#ff5f56] transition-colors duration-300" />
-                                            <div className="w-3 h-3 rounded-full bg-zinc-700 group-hover:bg-[#ffbd2e] transition-colors duration-300" />
-                                            <div className="w-3 h-3 rounded-full bg-zinc-700 group-hover:bg-[#27c93f] transition-colors duration-300" />
-                                        </div>
-                                        <div className="ml-4 px-3 py-1 bg-black/20 rounded text-[10px] font-mono text-zinc-600 w-full max-w-[200px] opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                            {project.title} / View
-                                        </div>
-                                    </div>
-                                    <div className="relative aspect-[4/3] w-full">
-                                        <Image
-                                            src={getAssetUrl(img)}
-                                            alt={`Gallery Image ${i}`}
-                                            fill
-                                            className="object-cover object-top transition-transform duration-700 group-hover:scale-105"
-                                        />
-                                    </div>
+                                <div className="relative aspect-[4/3] w-full">
+                                    <Image
+                                        src={getAssetUrl(img)}
+                                        alt={`Gallery Image ${i}`}
+                                        fill
+                                        className="object-cover object-top transition-transform duration-700 group-hover:scale-105"
+                                    />
+                                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300" />
                                 </div>
-                            ))}
-                        </div>
+                            </div>
+                        ))}
                     </div>
                 </div>
             </section>
+
+            {/* Lightbox */}
+            <AnimatePresence>
+                {selectedImage && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        onClick={() => setSelectedImage(null)}
+                        className="fixed inset-0 z-[100] bg-black/95 backdrop-blur-xl flex items-center justify-center p-4 md:p-8 cursor-zoom-out"
+                    >
+                        <button
+                            onClick={() => setSelectedImage(null)}
+                            className="absolute top-8 right-8 text-white/50 hover:text-[#beff01] transition-colors z-[110]"
+                        >
+                            <X size={32} />
+                        </button>
+
+                        <motion.div
+                            initial={{ scale: 0.9, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            exit={{ scale: 0.9, opacity: 0 }}
+                            onClick={(e) => e.stopPropagation()}
+                            className="relative max-w-7xl w-full max-h-[90vh] flex items-center justify-center p-2 overflow-hidden"
+                        >
+                            <div className="relative w-full h-[85vh] rounded-xl overflow-hidden shadow-2xl border border-white/10">
+                                <Image
+                                    src={selectedImage}
+                                    alt="Gallery Preview"
+                                    fill
+                                    className="object-contain"
+                                />
+                            </div>
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
 
 
             {/* CTA - Minimalist Typography */}
             <section className="py-20 md:py-32 bg-[#beff01] text-black text-center relative overflow-hidden">
                 <div className="relative z-10 w-full max-w-7xl mx-auto px-6 md:px-8 lg:px-12">
-                    <h2 className="text-6xl md:text-9xl font-black uppercase tracking-tighter mb-12 leading-[0.8]">
-                        Ready to<br />Build?
+                    <h2 className="text-6xl md:text-8xl lg:text-9xl font-black uppercase tracking-tighter mb-12 leading-[0.85]">
+                        {cta.text}
                     </h2>
-                    <Link href="/contact" className="inline-flex items-center gap-4 text-xl font-bold uppercase tracking-widest hover:underline decoration-2 underline-offset-4">
-                        Start Project <ArrowUpRight size={24} />
+                    <Link href="/contact" className="inline-flex items-center gap-4 text-xl md:text-2xl font-bold uppercase tracking-widest hover:underline decoration-4 underline-offset-8 group">
+                        {cta.button} <ArrowUpRight size={32} className="group-hover:translate-x-2 group-hover:-translate-y-2 transition-transform" />
                     </Link>
                 </div>
             </section>

@@ -36,12 +36,28 @@ export async function changePassword(currentPassword: string, newPassword: strin
     }
 }
 
+import { z } from "zod";
+
+const CreateAdminSchema = z.object({
+    name: z.string().min(2, "Name must be at least 2 characters"),
+    email: z.string().email("Invalid email address"),
+    password: z.string().min(6, "Password must be at least 6 characters"),
+    role: z.enum(["admin", "editor"]),
+});
+
 export async function createAdmin(data: { name: string; email: string; password: string; role: string }) {
     try {
         const session = await auth();
         /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
         if ((session?.user as any)?.role !== "admin") {
             return { success: false, error: "Unauthorized: Only admins can create new users" };
+        }
+
+        // Validate input with Zod
+        const validatedFields = CreateAdminSchema.safeParse(data);
+        if (!validatedFields.success) {
+            const errorMsg = Object.values(validatedFields.error.flatten().fieldErrors).flat().join(", ");
+            return { success: false, error: errorMsg || "Invalid input data" };
         }
 
         await connectToDatabase();

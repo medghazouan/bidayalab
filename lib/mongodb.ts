@@ -17,6 +17,7 @@ const options: MongoClientOptions = {
   retryWrites: true,
   retryReads: true,
   compressors: ['snappy', 'zlib'], // Enable compression for better network performance
+  family: 4, // Force IPv4 to resolve ENOTFOUND errors on some networks
 };
 
 let client: MongoClient;

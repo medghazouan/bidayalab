@@ -149,7 +149,7 @@ export default function PricingSection({ onOpenOrderModal }: PricingSectionProps
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
-          className="max-w-7xl mx-auto px-6 md:px-8 lg:px-12 py-8 md:py-12 text-center"
+          className="max-w-7xl mx-auto px-6 md:px-8 lg:px-12 py-8 md:py-12 text-center mb-8"
         >
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
@@ -176,15 +176,7 @@ export default function PricingSection({ onOpenOrderModal }: PricingSectionProps
             </span>
           </motion.h1>
 
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-            className="text-xl md:text-2xl text-gray-400 max-w-4xl mx-auto leading-relaxed font-light mb-20"
-          >
-            Choose a plan that fits your business goals. No hidden fees, no surprises—
-            just honest pricing for quality work.
-          </motion.p>
+
 
         </motion.div>
 
@@ -328,8 +320,8 @@ export default function PricingSection({ onOpenOrderModal }: PricingSectionProps
                     <button
                       onClick={() => handleOrderClick(plan)}
                       className={`
-                        relative w-full py-4 rounded-2xl font-bold text-base
-                        overflow-hidden group/btn
+                        w-full py-4 rounded-2xl font-bold text-base
+                        relative overflow-hidden group/btn
                         transition-all duration-300
                         ${isGrowth
                           ? 'bg-[#beff01] text-black hover:bg-[#a8e600] shadow-lg shadow-[#beff01]/30 hover:shadow-2xl hover:shadow-[#beff01]/40'

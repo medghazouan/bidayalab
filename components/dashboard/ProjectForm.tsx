@@ -305,8 +305,7 @@ export default function ProjectForm({ initialData, isEditing = false }: ProjectF
                                     <textarea name="workflowDescription" defaultValue={initialData?.workflowDescription} rows={3} className="w-full bg-black/50 border border-white/10 rounded-xl p-4 text-white focus:border-[#beff01] focus:outline-none transition-colors" placeholder="How it works..." />
                                 </div>
 
-                                <ArrayInput label="AI Models" values={aiModels} setter={setAiModels} placeholder="e.g. GPT-4" />
-                                <ArrayInput label="Integrations" values={integrations} setter={setIntegrations} placeholder="e.g. Slack" />
+                                <ArrayInput label="AI Models" values={aiModels} setter={setAiModels} placeholder="e.g. ChatGPT, Gemini" />
 
 
                             </>
@@ -446,10 +445,10 @@ export default function ProjectForm({ initialData, isEditing = false }: ProjectF
                     </div>
 
                     <div className="bg-zinc-900/30 border border-white/5 rounded-3xl p-8 space-y-6">
-                        {category !== 'visual-storytelling' && category !== 'digital-development' && category !== 'ai-automation' && category !== 'digital-marketing' && (
+                        {category !== 'visual-storytelling' && category !== 'ai-automation' && category !== 'digital-marketing' && (
                             <>
-                                <h2 className="text-xl font-bold text-white mb-4">Common Tags</h2>
-                                <ArrayInput label="Technologies" values={technologies} setter={setTechnologies} placeholder="e.g. React" />
+                                <h2 className="text-xl font-bold text-white mb-4">Tech Stack</h2>
+                                <ArrayInput label="Technologies" values={technologies} setter={setTechnologies} placeholder="e.g. React, Next.js, Node.js" />
                             </>
                         )}
 

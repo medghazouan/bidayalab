@@ -3,12 +3,18 @@ import mongoose, { Schema, Document, Model } from "mongoose";
 export interface ISettings extends Document {
     linkedinUrl: string;
     instagramUrl: string;
+    email: string;
+    phone: string;
+    whatsapp: string;
 }
 
 const SettingsSchema = new Schema<ISettings>(
     {
         linkedinUrl: { type: String, default: "" },
         instagramUrl: { type: String, default: "" },
+        email: { type: String, default: "" },
+        phone: { type: String, default: "" },
+        whatsapp: { type: String, default: "" },
     },
     { timestamps: true }
 );

@@ -1,43 +1,13 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Mail, Phone, Send, Loader2, CheckCircle2, AlertCircle, Sparkles, User, MessageSquare, Smartphone } from 'lucide-react';
+import { Mail, Phone, Send, Loader2, CheckCircle2, AlertCircle, Sparkles, User, MessageSquare, Smartphone, ArrowRight } from 'lucide-react';
 import { FaWhatsapp } from 'react-icons/fa';
 import Link from 'next/link';
+import { getSettings } from '@/app/actions/settings';
 
-const contactInfo = [
-  {
-    icon: Mail,
-    title: 'Email',
-    info: 'bidayalab1@gmail.com',
-    link: 'mailto:bidayalab1@gmail.com',
-    gradient: 'from-blue-500/20 via-blue-500/10 to-transparent',
-    borderColor: 'border-blue-500/30',
-    iconBg: 'bg-blue-500/10',
-    iconColor: 'text-blue-400'
-  },
-  {
-    icon: Phone,
-    title: 'Phone',
-    info: '0751388901',
-    link: 'tel:0751388901',
-    gradient: 'from-green-500/20 via-green-500/10 to-transparent',
-    borderColor: 'border-green-500/30',
-    iconBg: 'bg-green-500/10',
-    iconColor: 'text-green-400'
-  },
-  {
-    icon: FaWhatsapp,
-    title: 'WhatsApp',
-    info: '0751388901',
-    link: 'https://wa.me/0751388901',
-    gradient: 'from-green-500/20 via-green-500/10 to-transparent',
-    borderColor: 'border-green-500/30',
-    iconBg: 'bg-green-500/10',
-    iconColor: 'text-green-400'
-  }
-];
+
 
 export default function ContactSection() {
   const [formData, setFormData] = useState({
@@ -49,6 +19,59 @@ export default function ContactSection() {
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [errorMessage, setErrorMessage] = useState('');
   const [focusedField, setFocusedField] = useState<string | null>(null);
+
+  const [contactSettings, setContactSettings] = useState({
+    email: "bidayalab1@gmail.com",
+    phone: "+212 751 388 901",
+    whatsapp: "+212 751 388 901"
+  });
+
+  useEffect(() => {
+    const fetchSettings = async () => {
+      const data = await getSettings();
+      if (data) {
+        setContactSettings({
+          email: data.email || "bidayalab1@gmail.com",
+          phone: data.phone || "+212 751 388 901",
+          whatsapp: data.whatsapp || "+212 751 388 901"
+        });
+      }
+    };
+    fetchSettings();
+  }, []);
+
+  const contactInfo = [
+    {
+      icon: Mail,
+      title: 'Email',
+      info: contactSettings.email,
+      link: `mailto:${contactSettings.email}`,
+      gradient: 'from-blue-500/20 via-blue-500/10 to-transparent',
+      borderColor: 'border-blue-500/30',
+      iconBg: 'bg-blue-500/10',
+      iconColor: 'text-blue-400'
+    },
+    {
+      icon: Phone,
+      title: 'Phone',
+      info: contactSettings.phone,
+      link: `tel:${contactSettings.phone.replace(/\s+/g, '')}`,
+      gradient: 'from-green-500/20 via-green-500/10 to-transparent',
+      borderColor: 'border-green-500/30',
+      iconBg: 'bg-green-500/10',
+      iconColor: 'text-green-400'
+    },
+    {
+      icon: FaWhatsapp,
+      title: 'WhatsApp',
+      info: contactSettings.whatsapp,
+      link: `https://wa.me/${contactSettings.whatsapp.replace(/[^0-9]/g, '')}`,
+      gradient: 'from-green-500/20 via-green-500/10 to-transparent',
+      borderColor: 'border-green-500/30',
+      iconBg: 'bg-green-500/10',
+      iconColor: 'text-green-400'
+    }
+  ];
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -185,7 +208,7 @@ export default function ContactSection() {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, ease: "easeOut" }}
-              className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 lg:px-12 py-6 sm:py-8 md:py-12 text-center"
+              className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 lg:px-12 py-6 sm:py-8 md:py-12 text-center mb-8"
             >
               <motion.div
                 initial={{ opacity: 0, scale: 0.9 }}
@@ -203,7 +226,7 @@ export default function ContactSection() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.3 }}
-                className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black text-white mb-6 sm:mb-8 tracking-tight leading-none"
+                className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black text-white mb-8 tracking-tight leading-none"
               >
                 Let&apos;s Build
                 <br />
@@ -212,225 +235,157 @@ export default function ContactSection() {
                 </span>
               </motion.h1>
 
-              <motion.p
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.4 }}
-                className="text-base sm:text-lg md:text-xl lg:text-2xl text-gray-400 max-w-4xl mx-auto leading-relaxed font-light mb-10 sm:mb-16 md:mb-20"
-              >
-                Have a project in mind? Drop me a message and let&apos;s create something amazing together.
-                I typically respond within 24 hours.
-              </motion.p>
+
             </motion.div>
 
-            {/* Contact Content Grid */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-10 md:gap-12 items-start">
-              {/* Left: Contact Info Cards */}
+            {/* Contact Content Grid (Creative Bento) */}
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 max-w-7xl mx-auto">
+
+              {/* Left Column: Info Tiles */}
               <motion.div
-                initial={{ opacity: 0, x: -50 }}
+                initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.6, delay: 0.5 }}
-                className="space-y-6"
+                transition={{ duration: 0.6, delay: 0.4 }}
+                className="lg:col-span-5 flex flex-col gap-6 h-full"
               >
-                {contactInfo.map((item, index) => {
-                  const Icon = item.icon;
-                  return (
-                    <motion.div
-                      key={index}
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.5, delay: 0.6 + index * 0.1 }}
-                      whileHover={{ scale: 1.02, y: -5 }}
-                      className="group relative"
-                    >
-                      <div className={`absolute inset-0 bg-gradient-to-r ${item.gradient} rounded-3xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity`} />
+                {/* Trust Signal Box */}
+                <div className="flex-1 p-8 rounded-[2rem] bg-zinc-900/50 border border-white/10 backdrop-blur-sm relative overflow-hidden group flex flex-col justify-center">
+                  <div className="absolute inset-0 bg-gradient-to-br from-[#beff01]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                  <div className="relative z-10">
+                    <div className="w-12 h-12 rounded-xl bg-[#beff01]/10 flex items-center justify-center text-[#beff01] mb-6 border border-[#beff01]/20">
+                      <Sparkles className="w-6 h-6" />
+                    </div>
+                    <h3 className="text-2xl font-black text-white mb-3">Quick Response</h3>
+                    <p className="text-zinc-400 leading-relaxed font-medium">
+                      I personally review every message. You can expect a response within <span className="text-white font-bold">24 hours</span>, usually much sooner.
+                    </p>
+                  </div>
+                </div>
+
+                {/* Contact Methods Grid */}
+                <div className="grid grid-cols-2 gap-4">
+                  {contactInfo.map((item, index) => {
+                    const Icon = item.icon;
+                    // Email takes full width (col-span-2), others take 1
+                    const isEmail = item.title === 'Email';
+                    return (
                       <a
+                        key={index}
                         href={item.link}
                         target={item.title === 'WhatsApp' ? '_blank' : undefined}
                         rel={item.title === 'WhatsApp' ? 'noopener noreferrer' : undefined}
-                        className={`relative flex items-start gap-4 sm:gap-5 p-5 sm:p-6 md:p-8 rounded-2xl sm:rounded-3xl border ${item.borderColor} bg-zinc-900/50 backdrop-blur-sm hover:border-opacity-100 transition-all duration-300`}
+                        className={`${isEmail ? 'col-span-2' : 'col-span-1'} group relative p-6 rounded-[2rem] bg-zinc-900/50 border border-white/10 hover:border-[#beff01]/50 hover:bg-[#beff01] transition-all duration-300 flex flex-col justify-between overflow-hidden min-h-[160px]`}
                       >
-                        <div className={`w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-xl sm:rounded-2xl ${item.iconBg} flex items-center justify-center flex-shrink-0 border ${item.borderColor} group-hover:scale-110 transition-transform`}>
-                          {item.title === 'WhatsApp' ? (
-                            <Icon className={`w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 ${item.iconColor}`} />
-                          ) : (
-                            <Icon className={`w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 ${item.iconColor}`} strokeWidth={2.5} />
-                          )}
+                        <div className="relative z-10 flex justify-between items-start mb-4">
+                          <div className={`p-3 rounded-full bg-white/5 text-zinc-400 group-hover:bg-black/10 group-hover:text-black transition-colors`}>
+                            <Icon size={24} />
+                          </div>
+                          <ArrowRight className="w-5 h-5 text-zinc-600 group-hover:text-black -rotate-45 group-hover:rotate-0 transition-all duration-300" />
                         </div>
-                        <div className="flex-1">
-                          <h3 className="text-sm font-bold uppercase tracking-wider text-gray-500 mb-2">
-                            {item.title}
-                          </h3>
-                          <p className={`text-lg sm:text-xl font-black text-white group-hover:${item.iconColor} transition-colors`}>
+
+                        <div className="relative z-10">
+                          <h4 className="text-xs font-bold uppercase tracking-widest text-zinc-500 group-hover:text-black/60 mb-1">{item.title}</h4>
+                          <p className={`font-bold text-white group-hover:text-black truncate ${isEmail ? 'text-xl' : 'text-lg'}`}>
                             {item.info}
                           </p>
                         </div>
                       </a>
-                    </motion.div>
-                  );
-                })}
-
-                {/* Info Box */}
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 0.8 }}
-                  className="p-5 sm:p-6 md:p-8 rounded-2xl sm:rounded-3xl bg-gradient-to-br from-[#beff01]/10 to-transparent border border-[#beff01]/20 backdrop-blur-sm"
-                >
-                  <h3 className="text-xl font-black text-white mb-3">Quick Response Guaranteed</h3>
-                  <p className="text-gray-400 leading-relaxed">
-                    I personally read and respond to every message. Expect to hear back within 24 hours,
-                    often much sooner!
-                  </p>
-                </motion.div>
+                    );
+                  })}
+                </div>
               </motion.div>
 
-              {/* Right: Modern Contact Form */}
+              {/* Right Column: The Form */}
               <motion.div
                 id="contact-form"
-                initial={{ opacity: 0, x: 50 }}
+                initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.6, delay: 0.6 }}
-                className="relative group"
+                className="lg:col-span-7"
               >
-                {/* Decorative Form Background */}
-                <div className="absolute inset-0 bg-gradient-to-br from-[#beff01]/5 via-purple-500/5 to-blue-500/5 rounded-[2.5rem] blur-3xl opacity-50 group-hover:opacity-100 transition-opacity duration-700" />
-
-                <div className="relative bg-zinc-900/80 backdrop-blur-xl border border-white/10 rounded-[2.5rem] p-6 sm:p-8 md:p-10 shadow-2xl">
-                  <div className="mb-8">
-                    <h3 className="text-2xl font-bold text-white mb-2">Send a Message</h3>
-                    <p className="text-zinc-400 text-sm">Fill out the form below and I&apos;ll get back to you shortly.</p>
+                <div className="h-full rounded-[2.5rem] bg-zinc-900/30 border border-white/10 p-6 md:p-10 backdrop-blur-md relative overflow-hidden">
+                  {/* Header */}
+                  <div className="mb-8 border-b border-white/5 pb-8">
+                    <h3 className="text-3xl font-black text-white mb-2">Send a Message</h3>
+                    <p className="text-zinc-400">Let's discuss how we can help your business grow.</p>
                   </div>
 
                   <form onSubmit={handleSubmit} className="space-y-6">
-                    {/* Name Input */}
-                    <div className="space-y-2">
-                      <div className={`relative group transition-all duration-300 ${focusedField === 'name' ? 'scale-[1.02]' : ''}`}>
-                        <div className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-500 group-focus-within:text-[#beff01] transition-colors">
-                          <User className="w-5 h-5" />
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      {/* Name */}
+                      <div className="group space-y-2">
+                        <label htmlFor="name" className="text-xs font-bold uppercase tracking-widest text-zinc-500 ml-4 group-focus-within:text-[#beff01] transition-colors">Name</label>
+                        <div className="relative">
+                          <User className="absolute left-6 top-1/2 -translate-y-1/2 w-5 h-5 text-zinc-600 group-focus-within:text-[#beff01] transition-colors" />
+                          <input type="text" id="name" name="name" value={formData.name} onChange={handleChange} required disabled={status === 'loading'}
+                            className="w-full pl-14 pr-6 py-4 bg-black/20 border border-white/10 rounded-2xl text-white focus:outline-none focus:border-[#beff01] focus:bg-black/40 transition-all placeholder-zinc-700 font-medium"
+                            placeholder="John Doe"
+                          />
                         </div>
-                        <input
-                          type="text"
-                          id="name"
-                          name="name"
-                          value={formData.name}
-                          onChange={handleChange}
-                          onFocus={() => setFocusedField('name')}
-                          onBlur={() => setFocusedField(null)}
-                          required
-                          disabled={status === 'loading'}
-                          className="w-full pl-12 pr-6 py-4 bg-black/40 border border-white/10 rounded-2xl text-white placeholder-zinc-600 focus:outline-none focus:border-[#beff01]/50 focus:bg-black/60 focus:ring-1 focus:ring-[#beff01]/20 transition-all duration-300"
-                          placeholder="Your Name"
-                        />
+                      </div>
+
+                      {/* Email */}
+                      <div className="group space-y-2">
+                        <label htmlFor="email" className="text-xs font-bold uppercase tracking-widest text-zinc-500 ml-4 group-focus-within:text-[#beff01] transition-colors">Email</label>
+                        <div className="relative">
+                          <Mail className="absolute left-6 top-1/2 -translate-y-1/2 w-5 h-5 text-zinc-600 group-focus-within:text-[#beff01] transition-colors" />
+                          <input type="email" id="email" name="email" value={formData.email} onChange={handleChange} required disabled={status === 'loading'}
+                            className="w-full pl-14 pr-6 py-4 bg-black/20 border border-white/10 rounded-2xl text-white focus:outline-none focus:border-[#beff01] focus:bg-black/40 transition-all placeholder-zinc-700 font-medium"
+                            placeholder="john@company.com"
+                          />
+                        </div>
                       </div>
                     </div>
 
-                    {/* Email Input */}
-                    <div className="space-y-2">
-                      <div className={`relative group transition-all duration-300 ${focusedField === 'email' ? 'scale-[1.02]' : ''}`}>
-                        <div className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-500 group-focus-within:text-[#beff01] transition-colors">
-                          <Mail className="w-5 h-5" />
-                        </div>
-                        <input
-                          type="email"
-                          id="email"
-                          name="email"
-                          value={formData.email}
-                          onChange={handleChange}
-                          onFocus={() => setFocusedField('email')}
-                          onBlur={() => setFocusedField(null)}
-                          required
-                          disabled={status === 'loading'}
-                          className="w-full pl-12 pr-6 py-4 bg-black/40 border border-white/10 rounded-2xl text-white placeholder-zinc-600 focus:outline-none focus:border-[#beff01]/50 focus:bg-black/60 focus:ring-1 focus:ring-[#beff01]/20 transition-all duration-300"
-                          placeholder="email@example.com"
-                        />
-                      </div>
-                    </div>
-
-                    {/* Phone Input */}
-                    <div className="space-y-2">
-                      <div className={`relative group transition-all duration-300 ${focusedField === 'phone' ? 'scale-[1.02]' : ''}`}>
-                        <div className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-500 group-focus-within:text-[#beff01] transition-colors">
-                          <Smartphone className="w-5 h-5" />
-                        </div>
-                        <input
-                          type="tel"
-                          id="phone"
-                          name="phone"
-                          value={formData.phone}
-                          onChange={handleChange}
-                          onFocus={() => setFocusedField('phone')}
-                          onBlur={() => setFocusedField(null)}
-                          disabled={status === 'loading'}
-                          className="w-full pl-12 pr-6 py-4 bg-black/40 border border-white/10 rounded-2xl text-white placeholder-zinc-600 focus:outline-none focus:border-[#beff01]/50 focus:bg-black/60 focus:ring-1 focus:ring-[#beff01]/20 transition-all duration-300"
+                    {/* Phone */}
+                    <div className="group space-y-2">
+                      <label htmlFor="phone" className="text-xs font-bold uppercase tracking-widest text-zinc-500 ml-4 group-focus-within:text-[#beff01] transition-colors">Phone</label>
+                      <div className="relative">
+                        <Smartphone className="absolute left-6 top-1/2 -translate-y-1/2 w-5 h-5 text-zinc-600 group-focus-within:text-[#beff01] transition-colors" />
+                        <input type="tel" id="phone" name="phone" value={formData.phone} onChange={handleChange} disabled={status === 'loading'}
+                          className="w-full pl-14 pr-6 py-4 bg-black/20 border border-white/10 rounded-2xl text-white focus:outline-none focus:border-[#beff01] focus:bg-black/40 transition-all placeholder-zinc-700 font-medium"
                           placeholder="+1 (555) 000-0000"
                         />
                       </div>
                     </div>
 
-                    {/* Message Textarea */}
-                    <div className="space-y-2">
-                      <div className={`relative group transition-all duration-300 ${focusedField === 'message' ? 'scale-[1.02]' : ''}`}>
-                        <div className="absolute left-4 top-6 text-zinc-500 group-focus-within:text-[#beff01] transition-colors">
-                          <MessageSquare className="w-5 h-5" />
-                        </div>
-                        <textarea
-                          id="message"
-                          name="message"
-                          value={formData.message}
-                          onChange={handleChange}
-                          onFocus={() => setFocusedField('message')}
-                          onBlur={() => setFocusedField(null)}
-                          required
-                          disabled={status === 'loading'}
-                          rows={5}
-                          className="w-full pl-12 pr-6 py-4 bg-black/40 border border-white/10 rounded-2xl text-white placeholder-zinc-600 focus:outline-none focus:border-[#beff01]/50 focus:bg-black/60 focus:ring-1 focus:ring-[#beff01]/20 transition-all duration-300 resize-none"
-                          placeholder="Tell me about your project..."
+                    {/* Message */}
+                    <div className="group space-y-2">
+                      <label htmlFor="message" className="text-xs font-bold uppercase tracking-widest text-zinc-500 ml-4 group-focus-within:text-[#beff01] transition-colors">Message</label>
+                      <div className="relative">
+                        <MessageSquare className="absolute left-6 top-6 w-5 h-5 text-zinc-600 group-focus-within:text-[#beff01] transition-colors" />
+                        <textarea id="message" name="message" value={formData.message} onChange={handleChange} required disabled={status === 'loading'} rows={5}
+                          className="w-full pl-14 pr-6 py-5 bg-black/20 border border-white/10 rounded-2xl text-white focus:outline-none focus:border-[#beff01] focus:bg-black/40 transition-all placeholder-zinc-700 font-medium resize-none leading-relaxed"
+                          placeholder="Tell us about your project goals..."
                         />
                       </div>
                     </div>
 
                     {/* Error Message */}
                     {status === 'error' && (
-                      <motion.div
-                        initial={{ opacity: 0, y: -10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        className="p-4 rounded-xl border border-red-500/30 bg-red-500/10 flex items-start gap-3"
-                      >
+                      <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="p-4 rounded-xl border border-red-500/30 bg-red-500/10 flex items-start gap-3">
                         <AlertCircle className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
-                        <p className="text-red-400 text-sm">
-                          {errorMessage || 'Something went wrong. Please try again.'}
-                        </p>
+                        <p className="text-red-400 text-sm">{errorMessage || 'Something went wrong. Please try again.'}</p>
                       </motion.div>
                     )}
 
                     {/* Submit Button */}
-                    <motion.button
-                      type="submit"
-                      disabled={status === 'loading'}
-                      whileHover={{ scale: status === 'loading' ? 1 : 1.02 }}
-                      whileTap={{ scale: status === 'loading' ? 1 : 0.98 }}
-                      className="relative w-full py-5 bg-[#beff01] hover:bg-[#a8e600] text-black font-black text-lg rounded-2xl transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3 shadow-[0_0_20px_rgba(190,255,1,0.2)] hover:shadow-[0_0_30px_rgba(190,255,1,0.4)] overflow-hidden group"
+                    <button type="submit" disabled={status === 'loading'}
+                      className="w-full py-5 bg-[#beff01] text-black font-black text-lg uppercase tracking-widest rounded-2xl hover:bg-[#a8e600] active:scale-[0.98] transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3 relative overflow-hidden group shadow-lg shadow-[#beff01]/10"
                     >
-                      <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
-
                       {status === 'loading' ? (
                         <>
-                          <Loader2 className="w-6 h-6 animate-spin relative z-10" />
-                          <span className="relative z-10">Sending...</span>
+                          <Loader2 className="w-6 h-6 animate-spin" />
+                          <span>Sending...</span>
                         </>
                       ) : (
                         <>
-                          <Send className="w-5 h-5 relative z-10 group-hover:translate-x-1 transition-transform" />
                           <span className="relative z-10">Send Message</span>
+                          <Send className="w-5 h-5 relative z-10 group-hover:translate-x-1 transition-transform" />
+                          <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
                         </>
                       )}
-                    </motion.button>
-
-                    {/* Privacy Note */}
-                    <p className="text-xs text-center text-zinc-500">
-                      Your information is secure and will never be shared.
-                    </p>
+                    </button>
                   </form>
                 </div>
               </motion.div>

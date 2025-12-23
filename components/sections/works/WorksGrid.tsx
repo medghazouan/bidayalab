@@ -50,7 +50,7 @@ export default function WorksGrid() {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
-          className="max-w-7xl mx-auto px-6 md:px-8 lg:px-12 py-8 md:py-12 text-center"
+          className="max-w-7xl mx-auto px-6 md:px-8 lg:px-12 py-8 md:py-12 text-center mb-8"
         >
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
@@ -68,24 +68,15 @@ export default function WorksGrid() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.3 }}
-            className="text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-black text-white mb-8 tracking-tight leading-none"
+            className="font-black text-white mb-2 tracking-tight leading-none flex flex-col items-center"
           >
-            Projects That
-            <br />
-            <span className="bg-gradient-to-r from-[#beff01] via-[#d4ff4d] to-[#beff01] bg-clip-text text-transparent bg-[length:200%_auto] animate-gradient">
-              Speak For Themselves
+            <span className="text-6xl md:text-7xl lg:text-8xl xl:text-9xl whitespace-nowrap block">Our Latest</span>
+            <span className="bg-gradient-to-r from-[#beff01] via-[#d4ff4d] to-[#beff01] bg-clip-text text-transparent bg-[length:200%_auto] animate-gradient text-[9vw] sm:text-[8vw] md:text-6xl lg:text-8xl xl:text-9xl leading-[0.8] whitespace-nowrap block mt-2">
+              Digital Case Studies
             </span>
           </motion.h1>
 
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-            className="text-xl md:text-2xl text-gray-400 max-w-4xl mx-auto leading-relaxed font-light mb-20"
-          >
-            Real projects, real results. From stunning websites to marketing campaigns
-            that convert—here&apos;s what I&apos;ve built for businesses like yours.
-          </motion.p>
+
         </motion.div>
 
         {/* Loading State */}

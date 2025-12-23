@@ -12,7 +12,13 @@ export default function SettingsPage() {
     const [loading, setLoading] = useState(true);
 
     // General Settings State
-    const [settings, setSettings] = useState({ linkedinUrl: "", instagramUrl: "" });
+    const [settings, setSettings] = useState({
+        linkedinUrl: "",
+        instagramUrl: "",
+        email: "",
+        phone: "",
+        whatsapp: ""
+    });
     const [savingSettings, setSavingSettings] = useState(false);
     const [settingsMessage, setSettingsMessage] = useState("");
 
@@ -32,7 +38,10 @@ export default function SettingsPage() {
             if (data) {
                 setSettings({
                     linkedinUrl: data.linkedinUrl || "",
-                    instagramUrl: data.instagramUrl || ""
+                    instagramUrl: data.instagramUrl || "",
+                    email: data.email || "",
+                    phone: data.phone || "",
+                    whatsapp: data.whatsapp || ""
                 });
             }
             setLoading(false);
@@ -162,6 +171,43 @@ export default function SettingsPage() {
                                 className="w-full bg-black/50 border border-white/10 rounded-xl p-4 text-white focus:border-[#beff01] focus:outline-none transition-colors"
                                 placeholder="https://instagram.com/..."
                             />
+                        </div>
+
+                        <div className="h-px bg-white/5 my-6" /> {/* Divider */}
+                        <h3 className="text-md font-bold text-white mb-4">Contact Information</h3>
+
+                        <div className="space-y-2">
+                            <label className="text-xs font-bold uppercase text-zinc-500 tracking-wider">Public Email</label>
+                            <input
+                                type="email"
+                                value={settings.email}
+                                onChange={(e) => setSettings({ ...settings, email: e.target.value })}
+                                className="w-full bg-black/50 border border-white/10 rounded-xl p-4 text-white focus:border-[#beff01] focus:outline-none transition-colors"
+                                placeholder="contact@bidayalab.com"
+                            />
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div className="space-y-2">
+                                <label className="text-xs font-bold uppercase text-zinc-500 tracking-wider">Phone Number</label>
+                                <input
+                                    type="text"
+                                    value={settings.phone}
+                                    onChange={(e) => setSettings({ ...settings, phone: e.target.value })}
+                                    className="w-full bg-black/50 border border-white/10 rounded-xl p-4 text-white focus:border-[#beff01] focus:outline-none transition-colors"
+                                    placeholder="+1 (555) 000-0000"
+                                />
+                            </div>
+                            <div className="space-y-2">
+                                <label className="text-xs font-bold uppercase text-zinc-500 tracking-wider">WhatsApp Number</label>
+                                <input
+                                    type="text"
+                                    value={settings.whatsapp}
+                                    onChange={(e) => setSettings({ ...settings, whatsapp: e.target.value })}
+                                    className="w-full bg-black/50 border border-white/10 rounded-xl p-4 text-white focus:border-[#beff01] focus:outline-none transition-colors"
+                                    placeholder="+1 (555) 000-0000"
+                                />
+                            </div>
                         </div>
                     </div>
 

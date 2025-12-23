@@ -1,185 +1,55 @@
 'use client';
 
-
-import { ArrowRight, Zap, TrendingUp, Trophy } from 'lucide-react';
-import { motion } from 'framer-motion';
+import Link from "next/link";
+import { ArrowUpRight } from "lucide-react";
 
 export default function CallToAction() {
-  const scrollToContact = () => {
-    const contactSection = document.getElementById('contact-section');
-    if (contactSection) {
-      const offset = 100;
-      const elementPosition = contactSection.getBoundingClientRect().top;
-      const offsetPosition = elementPosition + window.pageYOffset - offset;
-
-      window.scrollTo({
-        top: offsetPosition,
-        behavior: 'smooth'
-      });
-    }
-  };
-
   return (
-    <section className="relative py-16 md:py-24 lg:py-32 overflow-hidden">
-      {/* Divider Above Section */}
-      <div className="max-w-7xl mx-auto px-6 md:px-8 lg:px-12 pb-16">
-        <div className="relative">
-          <div className="h-px bg-gradient-to-r from-transparent via-zinc-800 to-transparent" />
-          <motion.div
-            animate={{ x: ['-100%', '100%'] }}
-            transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
-            className="absolute top-0 left-0 h-px w-1/3 bg-gradient-to-r from-transparent via-[#beff01]/50 to-transparent"
-          />
-        </div>
-      </div>
+    <section className="py-24 md:py-32 bg-[#beff01] text-black relative overflow-hidden">
+      <div className="relative z-10 w-full max-w-[90rem] mx-auto px-4 md:px-8">
 
-      <div className="relative max-w-7xl mx-auto px-6 md:px-8 lg:px-12">
-        {/* Section Header - Original Typography */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
-          className="text-center mb-20"
-        >
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#beff01]/10 border border-[#beff01]/30 backdrop-blur-sm mb-8 group hover:bg-[#beff01]/20 transition-all"
-          >
-            <div className="w-2 h-2 rounded-full bg-[#beff01] animate-pulse" />
-            <span className="text-[#beff01] text-sm font-bold uppercase tracking-wider">
-              The Choice Is Yours
-            </span>
-          </motion.div>
+        {/* Creative Grid Layout */}
+        <div className="border-t-2 border-black">
 
-          <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.3 }}
-            className="text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-black text-white mb-8 tracking-tight leading-none"
-          >
-            Let&apos;s Talk
-            <br />
-            <span className="bg-gradient-to-r from-[#beff01] via-[#d4ff4d] to-[#beff01] bg-clip-text text-transparent bg-[length:200%_auto] animate-gradient">
-              About Your Revenue
-            </span>
-          </motion.h2>
-
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-            className="text-xl md:text-2xl text-gray-400 max-w-4xl mx-auto leading-relaxed font-light mb-16"
-          >
-            You can keep guessing, or we can build a roadmap together.
-            <br />
-            <span className="text-white font-bold">30 minutes. No sales pitch. Just a strategy session to see if we&apos;re a fit.</span>
-          </motion.p>
-
-          {/* Interactive Question Cards - Simple & Creative */}
-          <div className="grid md:grid-cols-3 gap-6 max-w-6xl mx-auto mb-16">
-            {[
-              {
-                icon: Zap,
-                question: "Tired of generic solutions?",
-                answer: "We build custom, not cookie-cutter",
-                accentColor: "from-[#beff01] to-[#d4ff4d]"
-              },
-              {
-                icon: TrendingUp,
-                question: "Want results, not promises?",
-                answer: "We track everything, prove everything",
-                accentColor: "from-green-400 to-[#beff01]"
-              },
-              {
-                icon: Trophy,
-                question: "Ready to outgrow competitors?",
-                answer: "We help you dominate, not compete",
-                accentColor: "from-[#d4ff4d] to-green-500"
-              }
-            ].map((card, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.6 + index * 0.15 }}
-                whileHover={{ y: -8, scale: 1.02 }}
-                className="group relative"
-              >
-                {/* Simple Card */}
-                <div className="relative bg-zinc-900/50 border-2 border-zinc-800 hover:border-[#beff01]/50 rounded-2xl p-6 h-full backdrop-blur-sm transition-all duration-300">
-                  {/* Accent Strip */}
-                  <div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${card.accentColor} rounded-t-2xl`} />
-
-                  {/* Simple Icon */}
-                  <div className="mb-4 inline-flex items-center justify-center w-12 h-12 rounded-xl bg-[#beff01]/10 group-hover:bg-[#beff01]/20 transition-colors">
-                    <card.icon className="w-6 h-6 text-[#beff01]" />
-                  </div>
-
-                  {/* Question */}
-                  <h3 className="text-lg font-black text-white mb-2 leading-tight">
-                    {card.question}
-                  </h3>
-
-                  {/* Answer - Always Visible */}
-                  <p className="text-gray-400 text-sm leading-relaxed">
-                    {card.answer}
-                  </p>
-                </div>
-              </motion.div>
-            ))}
+          {/* Top Row: Main Headline */}
+          <div className="border-b-2 border-black py-12 md:py-20 lg:py-24 px-4 md:px-0">
+            <h2 className="font-black tracking-tighter leading-[0.85] text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl max-w-7xl">
+              Ready to stop guessing <br className="hidden md:block" />
+              and start dominating?
+            </h2>
           </div>
 
-          {/* Simple CTA Button */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.9 }}
-            className="flex justify-center"
-          >
-            <motion.button
-              onClick={scrollToContact}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="group relative overflow-hidden bg-[#beff01] hover:bg-[#d4ff4d] text-black font-black text-2xl px-12 py-6 rounded-full transition-all duration-300 shadow-lg shadow-[#beff01]/20 hover:shadow-2xl hover:shadow-[#beff01]/40"
-            >
-              <span className="relative z-10 flex items-center gap-3">
-                Book Your Strategy Call
-                <ArrowRight className="w-6 h-6 group-hover:translate-x-2 transition-transform" />
-              </span>
-            </motion.button>
-          </motion.div>
+          {/* Bottom Row: Split Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 border-b-2 border-black">
 
-          {/* Bottom Note */}
-          <motion.p
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 1.6 }}
-            className="text-sm text-gray-500 mt-8 max-w-2xl mx-auto"
-          >
-            <span className="font-bold text-white">No sales pitch.</span> Just you, me, and a whiteboard figuring out how to get you where you want to be. If we click, awesome. If not, I&apos;ll point you to someone who&apos;s a better fit.
-          </motion.p>
-        </motion.div>
+            {/* Left Col: Secondary Headline */}
+            <div className="border-b-2 md:border-b-0 md:border-r-2 border-black py-12 md:py-20 px-4 md:px-12 flex items-center">
+              <p className="font-black tracking-tighter leading-[0.9] text-3xl sm:text-4xl md:text-5xl lg:text-6xl max-w-xl">
+                Let&apos;s build your <br />
+                unfair advantage.
+              </p>
+            </div>
+
+            {/* Right Col: CTA Area */}
+            <div className="py-12 md:py-20 px-4 md:px-12 flex flex-col justify-center items-start md:items-end">
+              <div className="flex flex-col gap-6">
+                <Link href="/contact" className="group relative inline-flex items-center justify-between gap-6 px-8 py-6 bg-black text-[#beff01] hover:text-white transition-colors overflow-hidden rounded-full md:rounded-none md:rounded-tl-3xl md:rounded-br-3xl w-full md:w-auto min-w-[300px]">
+                  <span className="text-xl md:text-2xl font-bold uppercase tracking-widest relative z-10">Start the Conversation</span>
+                  <ArrowUpRight className="w-8 h-8 relative z-10 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+
+                  {/* Hover Effect */}
+                  <div className="absolute inset-0 bg-zinc-900 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
+                </Link>
+                <span className="text-xs font-mono uppercase tracking-widest opacity-60 text-left md:text-right w-full block">
+                  Available for new projects
+                </span>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
       </div>
-
-      <style jsx>{`
-        @keyframes gradient {
-          0%, 100% { background-position: 0% 50%; }
-          50% { background-position: 100% 50%; }
-        }
-        
-        .animate-gradient {
-          animation: gradient 3s ease infinite;
-        }
-      `}</style>
     </section>
   );
 }

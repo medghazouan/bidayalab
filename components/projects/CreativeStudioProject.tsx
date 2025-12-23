@@ -1,13 +1,23 @@
 "use client";
 
-import { motion, useScroll, useTransform, useSpring } from "framer-motion";
+import { useRef, useState, useEffect } from "react";
+import { createPortal } from "react-dom";
+import { motion, useScroll, useTransform, useSpring, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowLeft, ArrowUpRight, MoveRight } from "lucide-react";
+import { ArrowLeft, ArrowUpRight, MoveRight, X, Maximize2 } from "lucide-react";
+import { SiAdobeillustrator, SiAdobephotoshop, SiFigma, SiAdobeaftereffects, SiAdobepremierepro, SiAdobeindesign, SiBlender, SiCinema4D, SiDavinciresolve, SiAdobelightroom } from "react-icons/si";
+import { FaPalette, FaBolt, FaPenNib } from "react-icons/fa";
 import { IProject } from "@/models/Project";
-import { useRef } from "react";
 
 export default function CreativeStudioProject({ project }: { project: IProject }) {
+    const [selectedImage, setSelectedImage] = useState<string | null>(null);
+    const [mounted, setMounted] = useState(false);
+
+    useEffect(() => {
+        setMounted(true);
+    }, []);
+
     const containerRef = useRef(null);
     const { scrollYProgress } = useScroll({
         target: containerRef,
@@ -26,18 +36,21 @@ export default function CreativeStudioProject({ project }: { project: IProject }
     };
 
     const getTechIcon = (tech: string) => {
+        // ... existing tech icon logic ...
         const lower = tech.toLowerCase();
-        if (lower.includes('illustrator')) return '✒️';
-        if (lower.includes('photoshop')) return '📷';
-        if (lower.includes('figma')) return '🎨';
-        if (lower.includes('after effects')) return '🎬';
-        if (lower.includes('premiere')) return '🎞️';
-        if (lower.includes('procreate')) return '✏️';
-        if (lower.includes('indesign')) return '📰';
-        if (lower.includes('blender') || lower.includes('3d') || lower.includes('cinema')) return '🧊';
-        if (lower.includes('davinci')) return '🌈';
-        if (lower.includes('lightroom')) return '🌅';
-        return '⚡';
+        if (lower.includes('illustrator')) return <SiAdobeillustrator />;
+        if (lower.includes('photoshop')) return <SiAdobephotoshop />;
+        if (lower.includes('figma')) return <SiFigma />;
+        if (lower.includes('after effects')) return <SiAdobeaftereffects />;
+        if (lower.includes('premiere')) return <SiAdobepremierepro />;
+        if (lower.includes('procreate')) return <FaPenNib />;
+        if (lower.includes('indesign')) return <SiAdobeindesign />;
+        if (lower.includes('blender')) return <SiBlender />;
+        if (lower.includes('cinema')) return <SiCinema4D />;
+        if (lower.includes('3d')) return <SiBlender />; // Default 3D to blender if not specified
+        if (lower.includes('davinci')) return <SiDavinciresolve />;
+        if (lower.includes('lightroom')) return <SiAdobelightroom />;
+        return <FaBolt />;
     };
 
     // Staggered columns for masonry
@@ -49,12 +62,15 @@ export default function CreativeStudioProject({ project }: { project: IProject }
         <div ref={containerRef} className="min-h-screen bg-[#050505] text-white selection:bg-[#beff01] selection:text-black font-sans overflow-x-hidden">
 
             {/* Navigation - Minimalist */}
-            <div className="absolute top-0 left-0 right-0 z-40 w-full max-w-7xl mx-auto px-6 md:px-8 lg:px-12 py-8 flex justify-between items-center mix-blend-difference pointer-events-none mt-24">
-                <Link href="/works" className="pointer-events-auto group flex items-center gap-3 text-xs md:text-sm font-bold uppercase tracking-widest hover:text-[#beff01] transition-colors">
-                    <ArrowLeft size={18} className="group-hover:-translate-x-1 transition-transform" />
-                    <span className="hidden md:block">Back</span>
+            {/* Navigation - Standardized */}
+            <div className="absolute top-0 left-0 right-0 z-50 w-full max-w-7xl mx-auto px-6 md:px-8 lg:px-12 py-8 flex justify-between items-center mt-24 pointer-events-none">
+                <Link href="/works" className="pointer-events-auto group flex items-center gap-3 text-sm font-medium text-zinc-400 hover:text-white transition-colors">
+                    <div className="p-2 rounded-full bg-white/5 border border-white/10 group-hover:bg-white/10 transition-colors">
+                        <ArrowLeft size={16} className="group-hover:-translate-x-0.5 transition-transform" />
+                    </div>
+                    <span>Back to Works</span>
                 </Link>
-                <div className="text-xs md:text-sm font-bold uppercase tracking-widest text-[#beff01]">
+                <div className="hidden md:block px-4 py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-md text-xs font-medium text-[#beff01] uppercase tracking-wider">
                     Creative Studio
                 </div>
             </div>
@@ -63,21 +79,22 @@ export default function CreativeStudioProject({ project }: { project: IProject }
             <section className="relative min-h-screen flex flex-col justify-center items-center pt-32 pb-20 overflow-hidden">
                 <motion.div
                     style={{ scale: heroScale, opacity: heroOpacity }}
-                    className="absolute inset-0 z-0"
+                    className="absolute inset-0 z-0 cursor-zoom-in"
+                    onClick={() => project.image && setSelectedImage(getAssetUrl(project.image))}
                 >
                     <Image
                         src={getAssetUrl(project.image)}
                         alt={project.title}
                         fill
-                        className="object-cover opacity-50 grayscale hover:grayscale-0 transition-all duration-[2s]"
+                        className="object-cover opacity-60 hover:opacity-100 transition-all duration-[2s]"
                         priority
                     />
-                    <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/20 to-[#050505]" />
+                    <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/20 to-[#050505] pointer-events-none" />
                 </motion.div>
 
-                <div className="relative z-10 w-full max-w-7xl px-6 md:px-8 lg:px-12 mx-auto">
+                <div className="relative z-10 w-full max-w-7xl px-6 md:px-8 lg:px-12 mx-auto pointer-events-none">
                     <motion.div style={{ y: textY }} className="flex flex-col items-center text-center">
-                        <div className="mb-8 px-6 py-2 border border-white/10 rounded-full bg-black/20 backdrop-blur-sm text-sm font-bold uppercase tracking-widest text-zinc-400">
+                        <div className="mb-8 px-6 py-2 border border-white/10 rounded-full bg-black/20 backdrop-blur-sm text-sm font-bold uppercase tracking-widest text-zinc-400 pointer-events-auto">
                             Case Study: {project.title}
                         </div>
 
@@ -85,11 +102,12 @@ export default function CreativeStudioProject({ project }: { project: IProject }
                             initial={{ y: 50, opacity: 0 }}
                             animate={{ y: 0, opacity: 1 }}
                             transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
-                            className="text-5xl md:text-7xl lg:text-9xl font-black uppercase tracking-tighter mix-blend-overlay mb-8"
+                            className="text-5xl md:text-7xl lg:text-9xl font-black uppercase tracking-tighter mix-blend-overlay mb-8 break-words"
                         >
                             Design So Good, They Can&apos;t Ignore You.
                         </motion.h1>
 
+                        {/* ... (Copy text and metadata - existing code) ... */}
                         <p className="text-xl md:text-2xl text-zinc-300 max-w-3xl mb-12 font-light leading-relaxed">
                             In a crowded market, blending in is a death sentence. We craft visual identities that demand attention and build instant trust.
                         </p>
@@ -98,8 +116,9 @@ export default function CreativeStudioProject({ project }: { project: IProject }
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.3, duration: 0.8 }}
-                            className="flex flex-wrap justify-center gap-8 md:gap-16 text-xs md:text-sm font-bold uppercase tracking-widest bg-black/20 backdrop-blur-sm px-8 py-4 rounded-full border border-white/10"
+                            className="flex flex-wrap justify-center gap-8 md:gap-16 text-xs md:text-sm font-bold uppercase tracking-widest bg-black/20 backdrop-blur-sm px-8 py-4 rounded-full border border-white/10 pointer-events-auto"
                         >
+                            {/* ... (Metadata content - existing code) ... */}
                             <div className="flex flex-col items-center gap-1">
                                 <span className="text-zinc-500 text-[10px]">Client</span>
                                 <span>{project.client}</span>
@@ -139,7 +158,7 @@ export default function CreativeStudioProject({ project }: { project: IProject }
             {/* Content - Vertical Stack Layout */}
             <section className="relative z-10 bg-[#050505] pt-20 pb-20">
                 <div className="w-full max-w-7xl mx-auto px-6 md:px-8 lg:px-12 space-y-32">
-
+                    {/* ... (Description, Strategy, Deliverables, Technologies - existing code) ... */}
                     {/* Description */}
                     <div>
                         <h2 className="text-5xl md:text-7xl lg:text-8xl leading-none font-black uppercase tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-white to-zinc-800 mb-12">
@@ -190,23 +209,25 @@ export default function CreativeStudioProject({ project }: { project: IProject }
                             <h2 className="text-5xl md:text-7xl lg:text-8xl leading-none font-black uppercase tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-white to-zinc-800 mb-12">
                                 Technologies
                             </h2>
-                            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
+                            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                                 {project.technologies.map((item, i) => (
-                                    <div key={i} className="group relative p-[1px] rounded-2xl overflow-hidden transition-all duration-300 hover:scale-105">
-                                        <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                                        <div className="absolute inset-0 bg-[#beff01]/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                                        <div className="relative h-full bg-black/40 backdrop-blur-md border border-white/10 rounded-2xl p-6 flex flex-col items-center justify-center gap-4 group-hover:border-[#beff01]/50 transition-colors duration-300">
-                                            <span className="text-4xl filter drop-shadow-lg scale-100 group-hover:scale-110 transition-transform duration-300">{getTechIcon(item)}</span>
-                                            <span className="text-xs font-bold uppercase tracking-widest text-zinc-400 group-hover:text-white transition-colors text-center">
+                                    <div key={i} className="group relative aspect-square bg-zinc-900/50 border border-white/5 rounded-3xl overflow-hidden transition-all duration-500 hover:bg-[#beff01] hover:scale-[1.02]">
+                                        <div className="absolute inset-0 flex flex-col items-center justify-center gap-6 p-6">
+                                            <div className="text-5xl text-zinc-500 group-hover:text-black transition-colors duration-500 scale-100 group-hover:scale-110 transform">
+                                                {getTechIcon(item)}
+                                            </div>
+                                            <span className="text-xs font-black uppercase tracking-widest text-zinc-500 group-hover:text-black transition-colors duration-500 text-center">
                                                 {item}
                                             </span>
                                         </div>
+                                        {/* Creative Abstract Decoration */}
+                                        <div className="absolute -bottom-8 -right-8 w-24 h-24 bg-white/5 rounded-full blur-2xl group-hover:bg-black/5 transition-colors duration-500" />
+                                        <ArrowUpRight className="absolute top-6 right-6 text-black opacity-0 -translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500" size={20} />
                                     </div>
                                 ))}
                             </div>
                         </div>
                     )}
-
                 </div>
             </section>
 
@@ -232,7 +253,8 @@ export default function CreativeStudioProject({ project }: { project: IProject }
                                     whileInView={{ opacity: 1, y: 0 }}
                                     viewport={{ once: true, margin: "-10%" }}
                                     transition={{ duration: 0.8 }}
-                                    className="relative group"
+                                    className="relative group cursor-zoom-in"
+                                    onClick={() => setSelectedImage(img)}
                                 >
                                     <div className="overflow-hidden">
                                         <Image
@@ -245,7 +267,7 @@ export default function CreativeStudioProject({ project }: { project: IProject }
                                     </div>
                                     <div className="mt-4 flex justify-between items-center opacity-0 group-hover:opacity-100 transition-opacity duration-500">
                                         <span className="text-xs font-mono text-[#beff01]">FIG. {String(i * 2 + 1).padStart(2, '0')}</span>
-                                        <ArrowUpRight size={14} className="text-[#beff01]" />
+                                        <Maximize2 size={14} className="text-[#beff01]" />
                                     </div>
                                 </motion.div>
                             ))}
@@ -258,7 +280,8 @@ export default function CreativeStudioProject({ project }: { project: IProject }
                                     whileInView={{ opacity: 1, y: 0 }}
                                     viewport={{ once: true, margin: "-10%" }}
                                     transition={{ duration: 0.8 }}
-                                    className="relative group"
+                                    className="relative group cursor-zoom-in"
+                                    onClick={() => setSelectedImage(img)}
                                 >
                                     <div className="overflow-hidden">
                                         <Image
@@ -266,12 +289,12 @@ export default function CreativeStudioProject({ project }: { project: IProject }
                                             alt={`Gallery ${i}`}
                                             width={1000}
                                             height={1200}
-                                            className="w-full h-auto object-cover grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-105"
+                                            className="w-full h-auto object-cover transition-all duration-700 group-hover:scale-105"
                                         />
                                     </div>
                                     <div className="mt-4 flex justify-between items-center opacity-0 group-hover:opacity-100 transition-opacity duration-500">
                                         <span className="text-xs font-mono text-[#beff01]">FIG. {String(i * 2 + 2).padStart(2, '0')}</span>
-                                        <ArrowUpRight size={14} className="text-[#beff01]" />
+                                        <Maximize2 size={14} className="text-[#beff01]" />
                                     </div>
                                 </motion.div>
                             ))}
@@ -279,6 +302,49 @@ export default function CreativeStudioProject({ project }: { project: IProject }
                     </div>
                 </div>
             </section>
+
+            {/* Lightbox - Portaled to Body */}
+            <AnimatePresence>
+                {selectedImage && mounted && createPortal(
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.2 }}
+                        onClick={() => setSelectedImage(null)}
+                        className="fixed inset-0 z-[99999] bg-black/95 backdrop-blur-xl flex items-center justify-center p-4 md:p-8 cursor-zoom-out"
+                    >
+                        <div className="absolute top-8 right-8 z-[100000]">
+                            <button
+                                onClick={() => setSelectedImage(null)}
+                                className="p-2 text-white/50 hover:text-[#beff01] transition-colors"
+                            >
+                                <X size={32} />
+                            </button>
+                        </div>
+
+                        <motion.div
+                            initial={{ scale: 0.95, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            exit={{ scale: 0.95, opacity: 0 }}
+                            transition={{ duration: 0.2 }}
+                            onClick={(e) => e.stopPropagation()}
+                            className="relative max-w-7xl w-full max-h-[90vh] flex items-center justify-center p-2"
+                        >
+                            <div className="relative w-full h-[85vh] rounded-xl overflow-hidden shadow-2xl border border-white/10 bg-black">
+                                <Image
+                                    src={selectedImage}
+                                    alt="Gallery Preview"
+                                    fill
+                                    priority
+                                    className="object-contain"
+                                />
+                            </div>
+                        </motion.div>
+                    </motion.div>,
+                    document.body
+                )}
+            </AnimatePresence>
 
             {/* Footer - Minimalist CTA */}
             <section className="py-40 bg-[#beff01] text-black text-center relative overflow-hidden">

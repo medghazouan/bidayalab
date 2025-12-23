@@ -29,7 +29,7 @@ export default function LoginPage() {
                 setError("Invalid credentials. Please try again.");
                 setLoading(false);
             } else {
-                router.push("/studio-admin");
+                router.push("/dashboard");
                 router.refresh();
             }
         } catch (err) {
