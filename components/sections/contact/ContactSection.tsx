@@ -14,7 +14,8 @@ export default function ContactSection() {
     name: '',
     email: '',
     phone: '',
-    message: ''
+    message: '',
+    website_url: '' // Honeypot field
   });
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [errorMessage, setErrorMessage] = useState('');
@@ -107,7 +108,7 @@ export default function ContactSection() {
   };
 
   const resetForm = () => {
-    setFormData({ name: '', email: '', phone: '', message: '' });
+    setFormData({ name: '', email: '', phone: '', message: '', website_url: '' });
     setStatus('idle');
     setErrorMessage('');
   };
@@ -368,6 +369,9 @@ export default function ContactSection() {
                         <p className="text-red-400 text-sm">{errorMessage || 'Something went wrong. Please try again.'}</p>
                       </motion.div>
                     )}
+
+                    {/* Honeypot Field - Hidden */}
+                    <input type="text" name="website_url" value={(formData as any).website_url} onChange={handleChange} className="hidden" tabIndex={-1} autoComplete="off" />
 
                     {/* Submit Button */}
                     <button type="submit" disabled={status === 'loading'}

@@ -50,10 +50,12 @@ export default function Hero() {
           1. AMBIENCE 
           (Removed noise overlay/solid bg. Kept subtle glows for depth/blending) 
       */}
+            {/* 
+          1. AMBIENCE REMOVED
+          Transparent background to show global app background 
+      */}
             <div className="absolute inset-0 pointer-events-none">
-                {/* Glows - adjusted opacity for blending */}
-                <div className="absolute top-[-20%] right-[-10%] w-[800px] h-[800px] bg-[#beff01]/5 rounded-full blur-[140px] animate-pulse-slow mix-blend-screen" />
-                <div className="absolute bottom-[-10%] left-[-10%] w-[600px] h-[600px] bg-blue-500/5 rounded-full blur-[120px] animate-pulse-slow delay-1000 mix-blend-screen" />
+                 {/* No background elements */}
             </div>
 
             <div className="relative z-10 w-full max-w-7xl mx-auto px-4 md:px-8 lg:px-12">
@@ -92,35 +94,47 @@ export default function Hero() {
              WHO WE ARE - "Ultra Creative" Fusion Grid
              Using a sophisticated layout merging typography styles
           */}
+                    {/* 
+            WHO WE ARE - "Glassmorphic Statement"
+            Clean, modern, and unified typography.
+         */}
                     <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.6, delay: 0.4 }}
-                        className="w-full mb-16 relative group"
+                        initial={{ opacity: 0, y: 30 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.8 }}
+                        className="w-full mb-10 md:mb-16 relative max-w-5xl mx-auto px-4"
                     >
-                        {/* Subtle animated background gradient */}
-                        <div className="absolute -inset-1 rounded-[2.5rem] bg-gradient-to-r from-[#beff01]/10 via-blue-500/10 to-[#beff01]/10 blur-xl opacity-20 group-hover:opacity-40 transition duration-1000"></div>
+                        {/* The Glass Card */}
+                        <div className="relative rounded-[2rem] border border-white/10 bg-gradient-to-b from-white/5 to-transparent backdrop-blur-xl p-8 md:p-14 overflow-hidden">
 
-                        <div className="relative p-8 md:p-12 rounded-[2.5rem] border border-white/10 bg-black/20 backdrop-blur-md overflow-hidden hover:bg-black/30 transition-colors duration-500">
+                            {/* Inner Glow Effect */}
+                            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-1/2 h-1 bg-gradient-to-r from-transparent via-[#beff01]/50 to-transparent blur-sm" />
+                            <div className="absolute -top-[200px] left-1/2 -translate-x-1/2 w-[400px] h-[400px] bg-[#beff01]/5 blur-[80px] rounded-full pointer-events-none" />
 
-                            <div className="flex flex-col gap-6 text-center">
-                                {/* Label */}
-                                <div className="flex justify-center">
-                                    <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-[10px] uppercase tracking-[0.2em] text-[#beff01]">
-                                        <span className="w-1 h-1 rounded-full bg-[#beff01]" />
-                                        We Are Bidayalab
+                            <div className="relative z-10 flex flex-col items-center text-center">
+
+                                {/* Tag */}
+                                <div className="mb-6">
+                                    <span className="text-[#beff01] font-mono text-xs uppercase tracking-[0.3em] font-medium opacity-80">
+                                        // We Are Bidayalab
                                     </span>
                                 </div>
 
-                                {/* Headline */}
-                                <h2 className="text-2xl md:text-4xl leading-snug font-light text-white">
-                                    We engineer the intersection of <br className="hidden md:block" />
-                                    <span className="font-serif italic text-white/80">human creativity</span> <span className="text-zinc-600 px-1 font-thin">&</span> <span className="font-mono text-[#beff01] font-normal">artificial intelligence</span>
+                                {/* Headline - Unified & Powerful */}
+                                <h2 className="text-3xl md:text-5xl lg:text-6xl font-bold text-white leading-tight mb-8 tracking-tight">
+                                    Engineering the intersection of<br />
+                                    <span className="text-transparent bg-clip-text bg-gradient-to-b from-white to-white/70">Human Creativity</span>
+                                    <span className="mx-2 text-[#beff01]">&</span>
+                                    <span className="text-transparent bg-clip-text bg-gradient-to-b from-white to-white/70">Artificial Intelligence</span>
                                 </h2>
 
-                                {/* Paragraph */}
-                                <p className="text-zinc-400 text-sm md:text-lg max-w-2xl mx-auto leading-relaxed">
-                                    Building digital ecosystems that scale revenue, automate drudgery, and define the future of your industry.
+                                {/* Divider */}
+                                <div className="w-12 h-[1px] bg-white/20 mb-8" />
+
+                                {/* Description */}
+                                <p className="text-zinc-400 text-base md:text-xl font-light leading-relaxed max-w-3xl">
+                                    Building digital ecosystems that <span className="text-zinc-100 font-medium">scale revenue</span>, <span className="text-zinc-100 font-medium">automate drudgery</span>, and <span className="text-zinc-100 font-medium">define the future</span> of your industry.
                                 </p>
                             </div>
                         </div>
@@ -152,11 +166,13 @@ export default function Hero() {
                         initial={{ opacity: 0 }}
                         whileInView={{ opacity: 1 }}
                         viewport={{ once: true }}
-                        className="flex items-center gap-6 mb-16 px-4 justify-center opacity-60"
+                        className="flex items-center gap-6 mb-16 px-4 justify-center"
                     >
-                        <div className="h-px bg-gradient-to-r from-transparent via-white/20 to-transparent w-32" />
-                        <span className="text-[#beff01] font-mono text-xs uppercase tracking-[0.4em] text-center shadow-[0_0_20px_rgba(190,255,1,0.3)]">Our Capabilities</span>
-                        <div className="h-px bg-gradient-to-r from-transparent via-white/20 to-transparent w-32" />
+                        <div className="h-px bg-gradient-to-r from-transparent via-[#beff01]/30 to-transparent w-full max-w-[200px]" />
+                        <span className="text-zinc-500 font-mono text-xs uppercase tracking-[0.4em] text-center">
+                            <span className="text-[#beff01]">///</span> Our Capabilities
+                        </span>
+                        <div className="h-px bg-gradient-to-r from-transparent via-[#beff01]/30 to-transparent w-full max-w-[200px]" />
                     </motion.div>
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
@@ -240,7 +256,7 @@ function SpotlightCard({ children, delay = 0 }: { children: React.ReactNode, del
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay }}
-            className="group relative border border-white/10 bg-white/[0.02] rounded-[2.5rem] overflow-hidden backdrop-blur-md hover:bg-white/[0.04] transition-colors"
+            className="group relative border border-[#beff01]/20 bg-[#beff01]/10 rounded-[2.5rem] overflow-hidden backdrop-blur-sm hover:bg-[#beff01]/20 transition-colors"
             onMouseMove={handleMouseMove}
         >
             <motion.div

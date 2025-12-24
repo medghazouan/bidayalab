@@ -5,6 +5,7 @@ import bcrypt from "bcryptjs"
 import { connectToDatabase } from "@/lib/mongoose"
 import Admin from "@/models/Admin"
 import { rateLimit } from "@/lib/rate-limit"
+import { headers } from "next/headers"
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
     providers: [
@@ -22,8 +23,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
                     const { email, password } = parsedCredentials.data
 
                     // Rate Limiting (Brute Force Protection)
-                    // In-memory rate limiting to prevent spamming attempts on an account
-                    if (!rateLimit({ ip: email, limit: 5, windowMs: 60 * 1000 })) {
+                    // IP-based limiting to prevent brute force attacks
+                    const headersList = await headers();
+                    const ip = headersList.get("x-forwarded-for") ?? "127.0.0.1"
+                    if (!rateLimit({ ip, limit: 5, windowMs: 60 * 1000 })) {
                         throw new Error("Too many login attempts. Please try again later.");
                     }
 

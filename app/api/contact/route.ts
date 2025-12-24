@@ -1,11 +1,30 @@
-// app/api/contact/route.ts - OPTIMIZED VERSION
+// app/api/contact/route.ts - SECURED VERSION
 import { NextResponse } from 'next/server';
 import { getDatabase } from '@/lib/mongodb';
 import { sendEmailAsync } from '@/lib/email-service';
+import { headers } from 'next/headers';
+import { rateLimit } from '@/lib/rate-limit';
 
 export async function POST(request: Request) {
   try {
-    const { name, email, phone, message } = await request.json();
+    const { name, email, phone, message, website_url } = await request.json();
+
+    // 1. HONEYPOT CHECK (Anti-Spam)
+    if (website_url) {
+      // If the hidden field is filled, it's a bot.
+      // Return success to trick the bot, but do nothing.
+      return NextResponse.json({ success: true, message: 'Message sent' });
+    }
+
+    // 2. RATE LIMITING (Brute Force Protection)
+    const headersList = await headers();
+    const ip = headersList.get('x-forwarded-for') ?? '127.0.0.1';
+    if (!rateLimit({ ip, limit: 3, windowMs: 60 * 1000 })) { // 3 requests per minute per IP
+      return NextResponse.json(
+        { success: false, error: 'Too many requests. Please try again later.' },
+        { status: 429 }
+      );
+    }
 
     // Validation
     if (!name || !email || !phone) {
@@ -150,7 +169,7 @@ export async function POST(request: Request) {
 
       sendEmailAsync({
         from: `"${name}" <${emailUser}>`,
-        to: 'medelkechchad@gmail.com',
+        to: 'support@bidayalab.com',
         subject: `🔥 New Contact from ${name}`,
         html: emailHTML,
       });

@@ -1,13 +1,31 @@
-// app/api/orders/route.ts - OPTIMIZED VERSION
+// app/api/orders/route.ts - SECURED VERSION
 import { NextResponse } from 'next/server';
 import { getDatabase } from '@/lib/mongodb';
 import { sendEmailAsync } from '@/lib/email-service';
+import { headers } from 'next/headers';
+import { rateLimit } from '@/lib/rate-limit';
 
 export async function POST(request: Request) {
   try {
     // Parse request body
     const body = await request.json();
-    const { name, email, phone, message, plan, planId, price, currency } = body;
+    const { name, email, phone, message, plan, planId, price, currency, website_url } = body;
+
+    // 1. HONEYPOT CHECK (Anti-Spam)
+    if (website_url) {
+      // Silent failure for bots
+      return NextResponse.json({ success: true, message: 'Order created' });
+    }
+
+    // 2. RATE LIMITING
+    const headersList = await headers();
+    const ip = headersList.get('x-forwarded-for') ?? '127.0.0.1';
+    if (!rateLimit({ ip, limit: 2, windowMs: 60 * 60 * 1000 })) { // 2 orders per hour per IP (stricter)
+      return NextResponse.json(
+        { success: false, error: 'Too many order attempts. Please contact support.' },
+        { status: 429 }
+      );
+    }
 
     // Validation
     if (!name || !email || !phone || !plan) {
@@ -211,7 +229,7 @@ export async function POST(request: Request) {
 
       sendEmailAsync({
         from: `"${name}" <${emailUser}>`,
-        to: 'medelkechchad@gmail.com',
+        to: 'support@bidayalab.com',
         subject: `🔥 New Order: ${plan} - ${orderNumber}`,
         html: emailHTML,
       });

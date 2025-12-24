@@ -16,7 +16,8 @@ export default function OrderModal({ isOpen, onClose, plan }: OrderModalProps) {
     name: '',
     email: '',
     phone: '',
-    message: ''
+    message: '',
+    website_url: '' // Honeypot field
   });
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState<'idle' | 'success' | 'error'>('idle');
@@ -25,7 +26,7 @@ export default function OrderModal({ isOpen, onClose, plan }: OrderModalProps) {
   useEffect(() => {
     if (!isOpen) {
       setTimeout(() => {
-        setFormData({ name: '', email: '', phone: '', message: '' });
+        setFormData({ name: '', email: '', phone: '', message: '', website_url: '' });
         setStatus('idle');
         setErrorMessage('');
       }, 300);
@@ -36,17 +37,17 @@ export default function OrderModal({ isOpen, onClose, plan }: OrderModalProps) {
   useEffect(() => {
     const navbar = document.querySelector('nav');
     const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
-    
+
     if (isOpen) {
       // Hide navbar
       if (navbar) {
         (navbar as HTMLElement).style.display = 'none';
       }
-      
+
       // Lock body scroll and compensate for scrollbar width
       document.body.style.overflow = 'hidden';
       document.body.style.paddingRight = `${scrollbarWidth}px`;
-      
+
       // Also lock html element scroll
       document.documentElement.style.overflow = 'hidden';
     } else {
@@ -54,13 +55,13 @@ export default function OrderModal({ isOpen, onClose, plan }: OrderModalProps) {
       if (navbar) {
         (navbar as HTMLElement).style.display = '';
       }
-      
+
       // Restore body scroll
       document.body.style.overflow = '';
       document.body.style.paddingRight = '';
       document.documentElement.style.overflow = '';
     }
-    
+
     return () => {
       // Cleanup
       if (navbar) {
@@ -132,10 +133,10 @@ export default function OrderModal({ isOpen, onClose, plan }: OrderModalProps) {
           />
 
           {/* Modal Container - Scrollable */}
-          <div 
+          <div
             className="fixed inset-0 z-[100001] overflow-y-auto"
-            style={{ 
-              margin: 0, 
+            style={{
+              margin: 0,
               padding: 0,
               scrollbarWidth: 'thin',
               scrollbarColor: '#beff01 #18181b'
@@ -163,7 +164,7 @@ export default function OrderModal({ isOpen, onClose, plan }: OrderModalProps) {
                 background: #a8e600;
               }
             `}</style>
-            
+
             <div className="min-h-full flex items-center justify-center p-4 py-20">
               <motion.div
                 initial={{ opacity: 0, scale: 0.9, y: 50 }}
@@ -174,7 +175,7 @@ export default function OrderModal({ isOpen, onClose, plan }: OrderModalProps) {
               >
                 {/* Animated Border Glow */}
                 <div className="absolute inset-0 rounded-3xl bg-gradient-to-r from-[#beff01]/20 via-transparent to-[#beff01]/20 opacity-50 blur-xl" />
-                
+
                 {/* Close Button - Always Visible */}
                 <button
                   onClick={onClose}
@@ -207,11 +208,11 @@ export default function OrderModal({ isOpen, onClose, plan }: OrderModalProps) {
                         Order Received!
                       </h3>
                       <p className="text-2xl text-gray-300 mb-4">
-                        Thanks, <span className="text-[#beff01] font-bold">{formData.name}</span>! 
+                        Thanks, <span className="text-[#beff01] font-bold">{formData.name}</span>!
                       </p>
                       <p className="text-gray-400 max-w-2xl mx-auto leading-relaxed text-lg mb-10">
-                        I&apos;ve received your order for the <strong className="text-white">{plan.name}</strong> plan. 
-                        I&apos;ll reach out to you at <strong className="text-[#beff01]">{formData.email}</strong> within 24 hours 
+                        I&apos;ve received your order for the <strong className="text-white">{plan.name}</strong> plan.
+                        I&apos;ll reach out to you at <strong className="text-[#beff01]">{formData.email}</strong> within 24 hours
                         to get everything set up.
                       </p>
 
@@ -376,7 +377,7 @@ export default function OrderModal({ isOpen, onClose, plan }: OrderModalProps) {
                       >
                         <h3 className="text-3xl font-black text-white mb-3 tracking-tight">Let&apos;s Get Started</h3>
                         <p className="text-gray-400 mb-8">Fill in your details and I&apos;ll be in touch shortly</p>
-                        
+
                         <form onSubmit={handleSubmit} className="space-y-6">
                           {/* Name Input */}
                           <motion.div
@@ -477,6 +478,9 @@ export default function OrderModal({ isOpen, onClose, plan }: OrderModalProps) {
                             </motion.div>
                           )}
 
+                          {/* Honeypot Field - Hidden */}
+                          <input type="text" name="website_url" value={(formData as any).website_url} onChange={handleChange} className="hidden" tabIndex={-1} autoComplete="off" />
+
                           {/* Submit Button */}
                           <motion.button
                             type="submit"
@@ -511,7 +515,7 @@ export default function OrderModal({ isOpen, onClose, plan }: OrderModalProps) {
                             transition={{ delay: 0.8 }}
                             className="text-xs text-center text-gray-500 leading-relaxed"
                           >
-                            By submitting this form, you agree that I&apos;ll contact you about this order. 
+                            By submitting this form, you agree that I&apos;ll contact you about this order.
                             Your information is secure and will never be shared.
                           </motion.p>
                         </form>
