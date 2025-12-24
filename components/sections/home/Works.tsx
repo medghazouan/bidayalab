@@ -75,8 +75,8 @@ export default function Works() {
             transition={{ duration: 0.6, delay: 0.3 }}
             className="font-black text-white mb-2 tracking-tight leading-none flex flex-col items-center"
           >
-            <span className="text-6xl md:text-7xl lg:text-8xl xl:text-9xl whitespace-nowrap block">Our Latest</span>
-            <span className="bg-gradient-to-r from-[#beff01] via-[#d4ff4d] to-[#beff01] bg-clip-text text-transparent bg-[length:200%_auto] animate-gradient text-[9vw] sm:text-[8vw] md:text-6xl lg:text-8xl xl:text-9xl leading-[0.8] whitespace-nowrap block mt-2">
+            <span className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl whitespace-nowrap block">Our Latest</span>
+            <span className="bg-gradient-to-r from-[#beff01] via-[#d4ff4d] to-[#beff01] bg-clip-text text-transparent bg-[length:200%_auto] animate-gradient text-5xl sm:text-6xl md:text-7xl lg:text-8xl leading-[0.9] whitespace-nowrap block mt-2 pb-2">
               Digital Case Studies
             </span>
           </motion.h2>
