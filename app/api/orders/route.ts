@@ -1,32 +1,16 @@
-// app/api/orders/route.ts
-
+// app/api/orders/route.ts - OPTIMIZED VERSION
 import { NextResponse } from 'next/server';
-import nodemailer from 'nodemailer';
-import clientPromise from '@/lib/mongodb';
+import { getDatabase } from '@/lib/mongodb';
+import { sendEmailAsync } from '@/lib/email-service';
 
 export async function POST(request: Request) {
-  console.log('✅ Order API route hit');
-  
   try {
     // Parse request body
     const body = await request.json();
-    console.log('📦 Request received for plan:', body.plan);
-    
-    const { 
-      name, 
-      email, 
-      phone, 
-      message,
-      plan,
-      planId,
-      price,
-      currency 
-    } = body;
+    const { name, email, phone, message, plan, planId, price, currency } = body;
 
-    // ✅ VALIDATION
+    // Validation
     if (!name || !email || !phone || !plan) {
-      console.error('❌ Validation failed');
-      
       return NextResponse.json(
         { 
           success: false, 
@@ -36,14 +20,11 @@ export async function POST(request: Request) {
       );
     }
 
-    // ✅ Generate order number
+    // Generate order number
     const orderNumber = `ORD-${Date.now()}-${Math.random().toString(36).substr(2, 9).toUpperCase()}`;
 
-    // ✅ SAVE TO MONGODB
-    console.log('💾 Saving to database...');
-    const client = await clientPromise;
-    const db = client.db('meddigital');
-    
+    // Save to MongoDB
+    const db = await getDatabase();
     const newOrder = {
       orderNumber,
       name,
@@ -55,178 +36,97 @@ export async function POST(request: Request) {
       price: price || null,
       currency: currency || 'MAD',
       status: 'pending',
-      createdAt: new Date()
+      createdAt: new Date(),
     };
 
     const result = await db.collection('orders').insertOne(newOrder);
-    console.log('✅ Order saved! ID:', result.insertedId);
 
-    // ✅ SEND EMAIL ASYNC (non-blocking) - DON'T AWAIT
+    // Send email asynchronously (non-blocking)
     const emailUser = process.env.EMAIL_USER;
-    const emailPass = process.env.EMAIL_PASS;
-
-    // Send email in background without blocking the response
-    if (emailUser && emailPass) {
-      // Don't await - send in background
-      (async () => {
-        try {
-          console.log('📧 Creating email transporter...');
-          
-          // Create transporter with explicit configuration
-          const transporter = nodemailer.createTransport({
-            host: 'smtp.gmail.com',
-            port: 587,
-            secure: false, // Use TLS
-            auth: {
-              user: emailUser,
-              pass: emailPass,
-            },
-            tls: {
-              rejectUnauthorized: false // For development
-            }
-          });
-
-          // Removed synchronous verification - not needed and adds latency
-          console.log('✅ Transporter created successfully!');
-
+    if (emailUser) {
       const emailHTML = `
-      <!DOCTYPE html>
-      <html>
-      <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      </head>
-      <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
-        <div style="background: linear-gradient(135deg, #beff01 0%, #9ed600 100%); padding: 30px; text-align: center; border-radius: 10px 10px 0 0;">
-          <h1 style="color: #000; margin: 0; font-size: 28px;">🎉 NEW ORDER RECEIVED!</h1>
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+          <h2 style="color: #333;">New Order Received</h2>
+          <p><strong>Order Number:</strong> ${orderNumber}</p>
+          <p><strong>Received:</strong> ${new Date().toLocaleString('en-US', { 
+            timeZone: 'Africa/Casablanca',
+            year: 'numeric', 
+            month: 'long', 
+            day: 'numeric',
+            hour: '2-digit', 
+            minute: '2-digit'
+          })}</p>
+          
+          <table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
+            <tr style="background: #f5f5f5;">
+              <td style="padding: 10px; border: 1px solid #ddd;"><strong>Customer</strong></td>
+              <td style="padding: 10px; border: 1px solid #ddd;">${name}</td>
+            </tr>
+            <tr>
+              <td style="padding: 10px; border: 1px solid #ddd;"><strong>Email</strong></td>
+              <td style="padding: 10px; border: 1px solid #ddd;">${email}</td>
+            </tr>
+            <tr style="background: #f5f5f5;">
+              <td style="padding: 10px; border: 1px solid #ddd;"><strong>Phone</strong></td>
+              <td style="padding: 10px; border: 1px solid #ddd;">${phone}</td>
+            </tr>
+            <tr>
+              <td style="padding: 10px; border: 1px solid #ddd;"><strong>Plan</strong></td>
+              <td style="padding: 10px; border: 1px solid #ddd;">${plan}</td>
+            </tr>
+            <tr style="background: #f5f5f5;">
+              <td style="padding: 10px; border: 1px solid #ddd;"><strong>Price</strong></td>
+              <td style="padding: 10px; border: 1px solid #ddd;">${price} ${currency}</td>
+            </tr>
+            <tr>
+              <td style="padding: 10px; border: 1px solid #ddd;"><strong>Status</strong></td>
+              <td style="padding: 10px; border: 1px solid #ddd;"><span style="background: #ffc107; color: #000; padding: 3px 8px; border-radius: 3px;">PENDING</span></td>
+            </tr>
+          </table>
+          
+          ${message ? `<div style="margin: 20px 0; padding: 15px; background: #f9f9f9; border-left: 4px solid #2196F3;">
+            <p style="margin: 0;"><strong>Message:</strong></p>
+            <p style="margin: 10px 0 0 0;">${message}</p>
+          </div>` : ''}
+          
+          <hr style="margin: 30px 0; border: none; border-top: 1px solid #ddd;">
+          <p style="color: #666; font-size: 14px;">
+            <strong>MED ELKECHCHAD - Order Management System</strong><br>
+            Reply directly to customer: <a href="mailto:${email}">${email}</a>
+          </p>
         </div>
-        
-        <div style="background: #f9f9f9; padding: 30px; border: 2px solid #e0e0e0; border-top: none; border-radius: 0 0 10px 10px;">
-          <div style="background: #fff; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
-            <h2 style="color: #beff01; margin-top: 0;">Order #${orderNumber}</h2>
-            <p style="font-size: 14px; color: #666;">Received: ${new Date().toLocaleString('en-US', { 
-              timeZone: 'Africa/Casablanca',
-              year: 'numeric',
-              month: 'long',
-              day: 'numeric',
-              hour: '2-digit',
-              minute: '2-digit'
-            })}</p>
-          </div>
-
-          <div style="background: #fff; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
-            <h3 style="color: #333; margin-top: 0; border-bottom: 2px solid #beff01; padding-bottom: 10px;">📦 Order Details</h3>
-            <table style="width: 100%; border-collapse: collapse;">
-              <tr>
-                <td style="padding: 10px 0; font-weight: bold; color: #000;">Plan:</td>
-                <td style="padding: 10px 0; color: #666;">${plan}</td>
-              </tr>
-              ${price ? `
-              <tr>
-                <td style="padding: 10px 0; font-weight: bold; color: #000;">Price:</td>
-                <td style="padding: 10px 0; color: #666;">${price} ${currency}</td>
-              </tr>
-              ` : ''}
-              <tr>
-                <td style="padding: 10px 0; font-weight: bold; color: #000;">Status:</td>
-                <td style="padding: 10px 0;"><span style="background: #ff6b35; color: white; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: bold;">PENDING</span></td>
-              </tr>
-            </table>
-          </div>
-
-          <div style="background: #fff; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
-            <h3 style="color: #333; margin-top: 0; border-bottom: 2px solid #beff01; padding-bottom: 10px;">👤 Customer Information</h3>
-            <table style="width: 100%; border-collapse: collapse;">
-              <tr>
-                <td style="padding: 10px 0; font-weight: bold; color: #000;">Name:</td>
-                <td style="padding: 10px 0; color: #666;">${name}</td>
-              </tr>
-              <tr>
-                <td style="padding: 10px 0; font-weight: bold; color: #000;">Email:</td>
-                <td style="padding: 10px 0; color: #666;"><a href="mailto:${email}" style="color: #beff01; text-decoration: none;">${email}</a></td>
-              </tr>
-              <tr>
-                <td style="padding: 10px 0; font-weight: bold; color: #000;">Phone:</td>
-                <td style="padding: 10px 0; color: #666;"><a href="tel:${phone}" style="color: #beff01; text-decoration: none;">${phone}</a></td>
-              </tr>
-            </table>
-          </div>
-
-          ${message ? `
-          <div style="background: #fff; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
-            <h3 style="color: #333; margin-top: 0; border-bottom: 2px solid #beff01; padding-bottom: 10px;">💬 Project Details</h3>
-            <p style="color: #666; line-height: 1.6;">${message}</p>
-          </div>
-          ` : ''}
-
-          <div style="text-align: center; padding-top: 20px; border-top: 2px solid #e0e0e0;">
-            <p style="color: #999; font-size: 12px; margin: 0;">MED ELKECHCHAD - Order Management System</p>
-            <p style="color: #999; font-size: 12px; margin: 5px 0 0 0;">Reply directly to customer: <a href="mailto:${email}" style="color: #beff01;">${email}</a></p>
-          </div>
-        </div>
-      </body>
-      </html>
       `;
 
-      console.log('📤 Sending email to:', emailUser);
-      
-      const mailOptions = {
-        from: `"MEO Digital Orders" <${emailUser}>`,
-        to: emailUser,
-        replyTo: email,
-        subject: `🔥 NEW ORDER #${orderNumber} - ${plan} Plan`,
+      sendEmailAsync({
+        from: `"${name}" <${emailUser}>`,
+        to: 'medelkechchad@gmail.com',
+        subject: `🔥 New Order: ${plan} - ${orderNumber}`,
         html: emailHTML,
-        text: `
-NEW ORDER RECEIVED!
-
-Order Number: ${orderNumber}
-Plan: ${plan}
-${price ? `Price: ${price} ${currency}` : ''}
-
-Customer Information:
-Name: ${name}
-Email: ${email}
-Phone: ${phone}
-
-${message ? `Project Details:\n${message}` : ''}
-
-Reply to customer: ${email}
-        `
-      };
-
-          const info = await transporter.sendMail(mailOptions);
-          
-          console.log('✅ EMAIL SENT SUCCESSFULLY!');
-          console.log('📧 Message ID:', info.messageId);
-          console.log('📬 Response:', info.response);
-
-        } catch (emailError: any) {
-          console.error('❌ EMAIL ERROR (non-blocking):', emailError);
-          console.error('Error Code:', emailError.code);
-          console.error('Error Message:', emailError.message);
-          // Email failure doesn't affect the response
-        }
-      })();
+      });
     }
 
-    // ✅ SUCCESS RESPONSE - Return immediately without waiting for email
+    // Return success immediately (don't wait for email)
     return NextResponse.json(
-      { 
-        success: true, 
+      {
+        success: true,
         orderNumber,
-        message: 'Order received successfully! I will contact you within 24 hours.' 
+        orderId: result.insertedId.toString(),
+        message: 'Order created successfully',
       },
-      { status: 200 }
-    );
-
-  } catch (error: any) {
-    console.error('❌ Order API Error:', error);
-    console.error('Error stack:', error.stack);
-    
-    return NextResponse.json(
       { 
-        success: false, 
-        error: error.message || 'Failed to process order' 
+        status: 201,
+        headers: {
+          'Cache-Control': 'no-store', // Orders should never be cached
+        }
+      }
+    );
+  } catch (error) {
+    console.error('❌ Error creating order:', error);
+    return NextResponse.json(
+      {
+        success: false,
+        error: 'Failed to create order',
+        message: error instanceof Error ? error.message : 'Unknown error',
       },
       { status: 500 }
     );

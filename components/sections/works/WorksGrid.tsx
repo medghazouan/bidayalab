@@ -5,7 +5,7 @@ import { motion, AnimatePresence, useMotionValue, useSpring, useTransform } from
 import { useQuery } from '@tanstack/react-query';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Briefcase, Code, TrendingUp, Palette, Loader2 } from 'lucide-react';
+import { Code2, Workflow, Palette, Briefcase, Loader2 } from 'lucide-react';
 
 interface Project {
   _id: string;
@@ -26,18 +26,20 @@ interface Project {
 
 const categories = [
   { slug: 'all', label: 'All Projects', icon: Briefcase },
-  { slug: 'web-dev', label: 'Web Development', icon: Code },
-  { slug: 'paid-ads', label: 'Paid Ads', icon: TrendingUp },
-  { slug: 'social-media', label: 'Social Media', icon: Palette },
+  { slug: 'digital-solutions', label: 'Digital Solutions', icon: Code2 },
+  { slug: 'smart-automation', label: 'Smart Automation', icon: Workflow },
+  { slug: 'creative-branding', label: 'Creative Branding', icon: Palette },
 ];
 
 // Throttle utility for mouse move handlers
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function throttleMouseMove<T extends (...args: any[]) => void>(
   func: T,
   limit: number
 ): (...args: Parameters<T>) => void {
   let lastCall = 0;
   let rafId: number | null = null;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   return function (this: any, ...args: Parameters<T>) {
     const now = Date.now();
     if (now - lastCall >= limit) {
@@ -97,7 +99,7 @@ export default function WorksGrid() {
           >
             <div className="w-2 h-2 rounded-full bg-[#beff01] animate-pulse" />
             <span className="text-[#beff01] text-sm font-bold uppercase tracking-wider">
-              My Portfolio
+              Our works
             </span>
           </motion.div>
 
@@ -121,7 +123,7 @@ export default function WorksGrid() {
             className="text-xl md:text-2xl text-gray-400 max-w-4xl mx-auto leading-relaxed font-light mb-20"
           >
             Real projects, real results. From stunning websites to marketing campaigns
-            that convert—here's what I've built for businesses like yours.
+            that convert—here&apos;s what I&apos;ve built for businesses like yours.
           </motion.p>
         </motion.div>
 
@@ -289,13 +291,13 @@ function ProjectCard({ project, index }: ProjectCardProps) {
   }, [x, y]);
 
   const getCategoryDisplay = (category: string) => {
-    const categoryMap: Record<string, string> = {
-      'web-dev': 'Web Development',
-      'paid-ads': 'Paid Ads',
-      'social-media': 'Social Media',
-    };
-    return categoryMap[category] || category;
+  const categoryMap: Record<string, string> = {
+    'digital-solutions': 'Digital Solutions',
+    'smart-automation': 'Smart Automation',
+    'creative-branding': 'Creative Branding',
   };
+  return categoryMap[category] || category;
+};
 
   return (
     <Link href={`/works/${project.slug}`}>
@@ -303,7 +305,6 @@ function ProjectCard({ project, index }: ProjectCardProps) {
         initial={{ opacity: 0, y: 50 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-50px" }}
-        style={{ willChange: 'transform, opacity' }}
         transition={{ 
           duration: 0.6, 
           delay: index * 0.1,
@@ -317,6 +318,7 @@ function ProjectCard({ project, index }: ProjectCardProps) {
           rotateX,
           rotateY,
           transformStyle: 'preserve-3d',
+          willChange: 'transform, opacity',
         }}
         className="group relative aspect-[4/3] overflow-hidden rounded-3xl bg-zinc-900/50 border border-zinc-800/50 cursor-pointer hover:border-[#beff01]/50 transition-all duration-300"
       >

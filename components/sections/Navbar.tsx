@@ -11,19 +11,21 @@ import { Menu, X } from "lucide-react";
 
 const navLinks = [
   { name: "HOME", href: "/home" },
-  { name: "ABOUT", href: "/about" },
+  
   { name: "SERVICES", href: "/services" },
   { name: "WORKS", href: "/works" },
   { name: "CONTACT", href: "/contact" },
 ];
 
 // Optimized throttle utility function - uses requestAnimationFrame for smooth updates
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function throttle<T extends (...args: any[]) => void>(
   func: T,
   limit: number
 ): (...args: Parameters<T>) => void {
   let lastCall = 0;
   let rafId: number | null = null;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   return function (this: any, ...args: Parameters<T>) {
     const now = Date.now();
     if (now - lastCall >= limit) {
@@ -145,10 +147,10 @@ export default function Navbar() {
           {/* Logo */}
           <Link href="/home" className="relative z-50" prefetch={true}>
             <Image
-              src="/assets/icons/MEDDIGITAL.svg"
+              src="/assets/icons/newlogo.png"
               alt="Med Digital"
-              width={50}
-              height={50}
+              width={150}
+              height={150}
               priority
               className={`transition-all duration-300 ${
                 animateLogo ? 'scale-110 rotate-12' : 'scale-100'
@@ -188,7 +190,7 @@ export default function Navbar() {
             prefetch={true}
             className="hidden md:block bg-[#beff01] hover:bg-[#a8e600] text-black px-8 py-3 rounded-full font-bold transition-all duration-300 hover:scale-105"
           >
-            LET'S TALK
+            LET&apos;S TALK
           </Link>
 
           {/* Mobile Menu Button */}
@@ -256,7 +258,7 @@ export default function Navbar() {
                 onClick={() => setMobileMenuOpen(false)}
                 className="block text-center bg-[#beff01] hover:bg-[#a8e600] text-black px-12 py-4 rounded-full font-bold text-lg transition-all duration-300 hover:scale-105 uppercase"
               >
-                LET'S TALK
+                LET&apos;S TALK
               </Link>
 
               {/* Decorative Element */}

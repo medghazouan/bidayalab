@@ -97,7 +97,7 @@ export default function Testimonials() {
             What Clients
             <br />
             <span className="bg-gradient-to-r from-[#beff01] via-[#d4ff4d] to-[#beff01] bg-clip-text text-transparent bg-[length:200%_auto] animate-gradient">
-              Say About Me
+              Say About Us
             </span>
           </motion.h1>
 
@@ -108,7 +108,7 @@ export default function Testimonials() {
             transition={{ duration: 0.6, delay: 0.4 }}
             className="text-xl md:text-2xl text-gray-400 max-w-4xl mx-auto leading-relaxed font-light mb-20"
           >
-            Don't just take my word for it. Here's what people I've worked with have to say.
+            Don&apos;t just take my word for it. Here&apos;s what people I&apos;ve worked with have to say.
           </motion.p>
         </motion.div>
 
@@ -171,7 +171,7 @@ export default function Testimonials() {
                     transition={{ delay: 0.2 }}
                     className="text-2xl md:text-3xl text-gray-200 leading-relaxed mb-10 font-light"
                   >
-                    "{currentTestimonial.content}"
+                    &quot;{currentTestimonial.content}&quot;
                   </motion.p>
 
                   {/* Author */}

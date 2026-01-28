@@ -6,7 +6,7 @@ const services = [
   {
     icon: Code,
     title: "Web Development",
-    description: "I build websites that actually work for you—not against you. Fast, modern, and designed to turn visitors into customers. No bloated code, no confusing interfaces. Just clean, professional websites that get the job done.",
+    description: "We build websites that actually work for you—not against you. Fast, modern, and designed to turn visitors into customers. No bloated code, no confusing interfaces. Just clean, professional websites that get the job done.",
     features: [
       "Lightning-fast loading times",
       "Mobile-first responsive design",
@@ -22,7 +22,7 @@ const services = [
   {
     icon: TrendingUp,
     title: "Digital Marketing",
-    description: "Marketing that drives real results. I don't just spend your budget—I invest it smartly to bring you paying customers. Facebook Ads, Google Ads, or organic growth—whatever works best for your business.",
+    description: "Marketing that drives real results. We don&apos;t just spend your budget—we invest it smartly to bring you paying customers. Facebook Ads, Google Ads, or organic growth—whatever works best for your business.",
     features: [
       "Targeted campaigns that convert",
       "Real-time performance tracking",
@@ -38,7 +38,7 @@ const services = [
   {
     icon: Palette,
     title: "Brand Design",
-    description: "Your brand is more than just a logo—it's how people remember you. I create visual identities that make you stand out and build trust. From logos to complete brand kits, everything you need to look professional.",
+    description: "Your brand is more than just a logo—it&apos;s how people remember you. We create visual identities that make you stand out and build trust. From logos to complete brand kits, everything you need to look professional.",
     features: [
       "Custom logo that represents you",
       "Complete brand identity package",
@@ -54,7 +54,7 @@ const services = [
   {
     icon: Search,
     title: "SEO Optimization",
-    description: "Get found on Google when people search for what you offer. I optimize your website so you rank higher, get more traffic, and turn that traffic into customers. No shady tricks—just proven strategies that work.",
+    description: "Get found on Google when people search for what you offer. We optimize your website so you rank higher, get more traffic, and turn that traffic into customers. No shady tricks—just proven strategies that work.",
     features: [
       "Keyword research & strategy",
       "On-page optimization",
@@ -70,7 +70,7 @@ const services = [
   {
     icon: Megaphone,
     title: "Social Media Management",
-    description: "Stay active online without the stress. I handle your social media so you don't have to—creating posts, engaging with followers, and growing your audience while you focus on running your business.",
+    description: "Stay active online without the stress. We handle your social media so you don&apos;t have to—creating posts, engaging with followers, and growing your audience while you focus on running your business.",
     features: [
       "Content creation & scheduling",
       "Consistent posting strategy",
@@ -86,7 +86,7 @@ const services = [
   {
     icon: ShoppingCart,
     title: "E-Commerce Solutions",
-    description: "Want to sell online? I build online stores that make buying easy for your customers and managing easy for you. From product pages to checkout, everything optimized to maximize your sales.",
+    description: "Want to sell online? We build online stores that make buying easy for your customers and managing easy for you. From product pages to checkout, everything optimized to maximize your sales.",
     features: [
       "Complete store setup",
       "Secure payment processing",
@@ -128,7 +128,7 @@ export default function ServicesList() {
           >
             <div className="w-2 h-2 rounded-full bg-[#beff01] animate-pulse" />
             <span className="text-[#beff01] text-sm font-bold uppercase tracking-wider">
-              What I Offer
+              What We Offer
             </span>
           </motion.div>
 
@@ -151,7 +151,7 @@ export default function ServicesList() {
             transition={{ duration: 0.6, delay: 0.4 }}
             className="text-xl md:text-2xl text-gray-400 max-w-4xl mx-auto leading-relaxed font-light"
           >
-            From stunning websites to powerful marketing campaigns—I help businesses like yours 
+            From stunning websites to powerful marketing campaigns—We help businesses like yours 
             stand out online and attract more customers.
           </motion.p>
 

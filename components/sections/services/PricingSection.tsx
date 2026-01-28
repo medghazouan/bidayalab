@@ -3,16 +3,42 @@ import { Check, Zap, Crown, Shield, Rocket, ArrowRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useQuery } from '@tanstack/react-query';
 
-export default function PricingSection({ onOpenOrderModal }) {
-  const [hoveredPlan, setHoveredPlan] = useState(null);
+export interface PricingPlan {
+  _id: string;
+  id?: string;
+  name: string;
+  tagline?: string;
+  price?: number;
+  currency?: string;
+  period: string;
+  description: string;
+  features: string[];
+  popular?: boolean;
+  isCustom?: boolean;
+}
+
+interface PricingResponse {
+  success: boolean;
+  plans: PricingPlan[];
+}
+
+interface PricingSectionProps {
+  onOpenOrderModal: (plan: PricingPlan) => void;
+}
+
+export default function PricingSection({ onOpenOrderModal }: PricingSectionProps) {
+  const [hoveredPlan, setHoveredPlan] = useState<string | null>(null);
 
   // Use React Query for better caching and request deduplication
-  const { data, isLoading } = useQuery<any[]>({
+  const { data, isLoading, error } = useQuery<PricingResponse | PricingPlan[]>({
     queryKey: ['pricing-plans'],
     queryFn: async () => {
       const response = await fetch('/api/pricing');
       if (!response.ok) throw new Error('Failed to fetch');
-      return response.json();
+      const result = await response.json();
+      console.log('API Response:', result); // Debug log
+      console.log('API Response Type:', typeof result, Array.isArray(result)); // Debug log
+      return result;
     },
     staleTime: 5 * 60 * 1000, // 5 minutes
     gcTime: 30 * 60 * 1000, // 30 minutes cache
@@ -22,19 +48,51 @@ export default function PricingSection({ onOpenOrderModal }) {
 
   // Memoize sorted plans to avoid re-sorting on every render
   const plans = useMemo(() => {
-    if (!data) return [];
+    if (!data) {
+      console.log('No data received'); // Debug log
+      return [];
+    }
+
+    // Handle different response formats
+    let plansArray: PricingPlan[] = [];
+    
+    // Check if data is an array (direct plans array)
+    if (Array.isArray(data)) {
+      console.log('Data is array, length:', data.length); // Debug log
+      plansArray = data;
+    } 
+    // Check if data has a plans property
+    else if (data && typeof data === 'object' && 'plans' in data) {
+      console.log('Data has plans property, length:', data.plans?.length); // Debug log
+      plansArray = data.plans || [];
+    }
+    // Check if data has a data property (nested structure)
+    else if (data && typeof data === 'object' && 'data' in data) {
+      console.log('Data has data property'); // Debug log
+      const nestedData = (data as Record<string, unknown>).data;
+      if (Array.isArray(nestedData)) {
+        plansArray = nestedData;
+      } else if (nestedData && typeof nestedData === 'object' && 'plans' in nestedData) {
+        plansArray = (nestedData as { plans: PricingPlan[] }).plans || [];
+      }
+    }
+
+    console.log('Final plans array:', plansArray); // Debug log
+
+    if (!plansArray || plansArray.length === 0) {
+      return [];
+    }
+
     // Sort plans: Starter first (left), Growth middle (center), Custom last (right)
     const desktopOrder: Record<string, number> = { 'Starter': 0, 'Growth': 1, 'Custom': 2 };
-    return [...data].sort((a, b) => {
+    return [...plansArray].sort((a, b) => {
       const orderA = desktopOrder[a.name] ?? 999;
       const orderB = desktopOrder[b.name] ?? 999;
       return orderA - orderB;
     });
   }, [data]);
 
-  const loading = isLoading;
-
-  const getPlanIcon = (name) => {
+  const getPlanIcon = (name: string) => {
     switch(name.toLowerCase()) {
       case 'starter': return <Rocket className="w-6 h-6" />;
       case 'growth': return <Crown className="w-6 h-6" />;
@@ -43,17 +101,42 @@ export default function PricingSection({ onOpenOrderModal }) {
     }
   };
 
-  const handleOrderClick = (plan) => {
+  const handleOrderClick = (plan: PricingPlan) => {
     if (onOpenOrderModal) {
       onOpenOrderModal(plan);
     }
   };
 
-  if (loading) {
+  // Show error state
+  if (error) {
+    return (
+      <section className="min-h-screen py-32 px-6 md:px-8 lg:px-12">
+        <div className="max-w-7xl mx-auto text-center">
+          <p className="text-red-500 text-xl">Error loading pricing plans. Please try again later.</p>
+          <p className="text-gray-400 mt-2">{error instanceof Error ? error.message : 'Unknown error'}</p>
+        </div>
+      </section>
+    );
+  }
+
+  // Show loading state
+  if (isLoading) {
     return (
       <section className="min-h-screen py-32 px-6 md:px-8 lg:px-12">
         <div className="max-w-7xl mx-auto text-center">
           <div className="inline-block animate-spin rounded-full h-16 w-16 border-4 border-[#beff01] border-t-transparent"></div>
+          <p className="text-gray-400 mt-4">Loading pricing plans...</p>
+        </div>
+      </section>
+    );
+  }
+
+  // Show empty state
+  if (!plans || plans.length === 0) {
+    return (
+      <section className="min-h-screen py-32 px-6 md:px-8 lg:px-12">
+        <div className="max-w-7xl mx-auto text-center">
+          <p className="text-gray-400 text-xl">No pricing plans available at the moment.</p>
         </div>
       </section>
     );
@@ -179,9 +262,11 @@ export default function PricingSection({ onOpenOrderModal }) {
                     </h3>
 
                     {/* Tagline */}
-                    <p className="text-gray-400 text-sm font-medium mb-6">
-                      {plan.tagline}
-                    </p>
+                    {plan.tagline && (
+                      <p className="text-gray-400 text-sm font-medium mb-6">
+                        {plan.tagline}
+                      </p>
+                    )}
 
                     {/* Price */}
                     <div className="mb-8 pb-8 border-b border-zinc-800">
@@ -194,7 +279,7 @@ export default function PricingSection({ onOpenOrderModal }) {
                             `}>
                               {plan.price.toLocaleString()}
                             </span>
-                            <span className="text-2xl text-gray-400 font-bold">{plan.currency}</span>
+                            <span className="text-2xl text-gray-400 font-bold">{plan.currency || 'USD'}</span>
                           </div>
                           <p className="text-sm text-gray-500 font-medium">
                             {plan.period === 'one-time' ? 'One-time investment' : plan.period}
@@ -202,7 +287,7 @@ export default function PricingSection({ onOpenOrderModal }) {
                         </>
                       ) : (
                         <div className="py-4">
-                          <span className="text-4xl font-black text-white">Let's Talk</span>
+                          <span className="text-4xl font-black text-white">Let&apos;s Talk</span>
                           <p className="text-sm text-gray-500 mt-2 font-medium">Custom pricing for your needs</p>
                         </div>
                       )}

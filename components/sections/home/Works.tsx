@@ -16,12 +16,14 @@ interface Project {
 }
 
 // Throttle utility for mouse move handlers
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function throttleMouseMove<T extends (...args: any[]) => void>(
   func: T,
   limit: number
 ): (...args: Parameters<T>) => void {
   let lastCall = 0;
   let rafId: number | null = null;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   return function (this: any, ...args: Parameters<T>) {
     const now = Date.now();
     if (now - lastCall >= limit) {
@@ -196,7 +198,7 @@ export default function Works() {
   const loading = isLoading;
 
   return (
-    <section id="works-section" className="relative py-20 md:py-32 overflow-hidden">
+    <section id="works-section" className="relative pt-18 md:pt-32 pb-12 md:pb-16 overflow-hidden">
       {/* Divider Above Section */}
       <div className="max-w-7xl mx-auto px-6 md:px-8 lg:px-12 pb-16">
         <div className="relative">
@@ -238,7 +240,7 @@ export default function Works() {
             transition={{ duration: 0.6, delay: 0.3 }}
             className="text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-black text-white mb-8 tracking-tight leading-none"
           >
-            See What I've
+            See What I&apos;ve
             <br />
             <span className="bg-gradient-to-r from-[#beff01] via-[#d4ff4d] to-[#beff01] bg-clip-text text-transparent bg-[length:200%_auto] animate-gradient">
               Built For Others
@@ -252,10 +254,10 @@ export default function Works() {
             transition={{ duration: 0.6, delay: 0.4 }}
             className="text-xl md:text-2xl text-gray-400 max-w-4xl mx-auto leading-relaxed font-light mb-16"
           >
-            These aren't just pretty websites or random ads. Each project here helped a real business 
-            <span className="text-white font-semibold"> attract more customers</span>, 
-            <span className="text-[#beff01] font-semibold"> increase sales</span>, and 
-            <span className="text-white font-semibold"> grow faster</span>. 
+            These aren&apos;t just pretty websites or random ads. Each project here helped a real business 
+             attract more customers, 
+             increase sales, and 
+            grow faster. 
             Yours could be next.
           </motion.p>
         </motion.div>
@@ -276,15 +278,15 @@ export default function Works() {
               Currently Cooking Up Some Amazing Projects
             </h3>
             <p className="text-gray-400 text-lg mb-8 max-w-2xl mx-auto">
-              I'm working on some exciting new work right now. But here's the thing—
+              I&apos;m working on some exciting new work right now. But here&apos;s the thing—
               <span className="text-white font-semibold"> your project could be the next showcase piece</span>. 
-              Let's make something incredible together.
+              Let&apos;s make something incredible together.
             </p>
             <Link
               href="/contact"
               className="inline-flex items-center gap-3 bg-[#beff01] text-black font-bold px-10 py-5 rounded-full hover:bg-[#a8e600] transition-all shadow-xl shadow-[#beff01]/30"
             >
-              <span>Let's Create Your Success Story</span>
+              <span>Let&apos;s Create Your Success Story</span>
               <ArrowRight className="w-5 h-5" />
             </Link>
           </motion.div>
@@ -292,7 +294,7 @@ export default function Works() {
           <>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
               {projects.map((project, index) => (
-                <ProjectCard key={project.id} project={project} index={index} />
+                 <ProjectCard key={`${project.id}-${index}`} project={project} index={index} />
               ))}
             </div>
 

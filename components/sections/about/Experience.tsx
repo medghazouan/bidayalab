@@ -82,7 +82,7 @@ export default function Experience() {
             transition={{ duration: 0.6, delay: 0.4 }}
             className="text-xl md:text-2xl text-gray-400 max-w-4xl mx-auto leading-relaxed font-light mb-20"
           >
-            Here's a quick rundown of my journey so far. Each role taught me something valuable 
+            Here&apos;s a quick rundown of my journey so far. Each role taught me something valuable 
             that I use every day to help my clients succeed.
           </motion.p>
         </motion.div>

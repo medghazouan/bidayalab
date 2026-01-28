@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { ArrowRight, Sparkles, Rocket, Zap, Monitor, TrendingUp, Palette, CheckCircle2 } from 'lucide-react';
+import { ArrowRight,  Monitor, TrendingUp, Palette } from 'lucide-react';
 
 export default function Hero() {
   const scrollToWorks = () => {
@@ -13,7 +13,7 @@ export default function Hero() {
   };
 
   return (
-    <section className="relative py-20 md:py-32 overflow-hidden">
+    <section className="relative pt-20 md:pt-32 pb-6 md:pb-16 overflow-hidden">
       <div className="relative max-w-7xl mx-auto px-6 md:px-8 lg:px-12">
         {/* Section Header - Same as Services */}
         <motion.div
@@ -30,7 +30,7 @@ export default function Hero() {
           >
             <div className="w-2 h-2 rounded-full bg-[#beff01] animate-pulse" />
             <span className="text-[#beff01] text-sm font-bold uppercase tracking-wider">
-              Welcome to Your Growth Partner
+            YOUR DIGITAL GROWTH PARTNER IN MOROCCO
             </span>
           </motion.div>
 
@@ -53,54 +53,13 @@ export default function Hero() {
             transition={{ duration: 0.6, delay: 0.4 }}
             className="text-xl md:text-2xl text-gray-400 max-w-4xl mx-auto leading-relaxed font-light mb-12"
           >
-            I'm <span className="text-white font-semibold">Med Elkechchad</span>, and I help ambitious business owners like you turn their online presence into a 
-            <span className="text-[#beff01] font-semibold"> powerful growth engine</span>. 
+            We&apos;re Bidayalab , and we help ambitious business owners like you turn their online presence into a 
+             powerful growth engine.
             No fluff, no empty promises—just real results that move your business forward.
           </motion.p>
 
-          {/* What Makes Me Different - Psychological Trust Builders */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.5 }}
-            className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-12 max-w-5xl mx-auto"
-          >
-            {[
-              { 
-                icon: CheckCircle2, 
-                title: "Results First", 
-                desc: "Every line of code, every campaign—built to convert visitors into paying customers",
-              },
-              { 
-                icon: Sparkles, 
-                title: "No BS Approach", 
-                desc: "I speak human, not tech jargon. You'll always know exactly what's happening",
-              },
-              { 
-                icon: Rocket, 
-                title: "Your Success Partner", 
-                desc: "I don't just deliver and disappear. Your growth is my mission",
-              },
-            ].map((item, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4, delay: 0.6 + index * 0.1 }}
-                whileHover={{ scale: 1.03, y: -5 }}
-                className="relative bg-zinc-900/50 backdrop-blur-sm border border-zinc-800/50 rounded-2xl p-6 transition-all duration-300 hover:border-[#beff01]/50 hover:shadow-xl hover:shadow-[#beff01]/10 group"
-              >
-                <div className="absolute inset-0 bg-gradient-to-br from-[#beff01]/5 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity" />
-                <div className="relative z-10">
-                  <div className="w-12 h-12 rounded-xl bg-[#beff01]/10 border border-[#beff01]/30 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                    <item.icon className="w-6 h-6 text-[#beff01]" />
-                  </div>
-                  <h3 className="text-lg font-bold text-white mb-2">{item.title}</h3>
-                  <p className="text-gray-400 text-sm leading-relaxed">{item.desc}</p>
-                </div>
-              </motion.div>
-            ))}
-          </motion.div>
+          
+          
 
           {/* What I Actually Do - Service Cards */}
           <motion.div
@@ -109,7 +68,7 @@ export default function Hero() {
             transition={{ duration: 0.6, delay: 0.8 }}
             className="mb-12"
           >
-            <p className="text-gray-400 mb-6 text-sm uppercase tracking-wider font-bold">What I Can Do For You</p>
+            <p className="text-gray-400 mb-6 text-sm uppercase tracking-wider font-bold">What We Can Do For You</p>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {[
                 { 
@@ -174,17 +133,17 @@ export default function Hero() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 1.2 }}
-            className="flex flex-col sm:flex-row gap-4 justify-center"
+            className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center"
           >
             {/* Primary CTA */}
             <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.98 }}>
               <Link
                 href="/services#pricing-section"
-                className="group relative inline-flex items-center justify-center gap-3 bg-[#beff01] text-black font-black text-lg px-12 py-6 rounded-full hover:bg-[#a8e600] transition-all overflow-hidden shadow-2xl shadow-[#beff01]/30"
+                className="group relative inline-flex items-center justify-center gap-2 sm:gap-3 bg-[#beff01] text-black font-black text-base sm:text-lg px-6 sm:px-12 py-4 sm:py-6 rounded-full hover:bg-[#a8e600] transition-all overflow-hidden shadow-2xl shadow-[#beff01]/30"
               >
-                <Rocket className="w-6 h-6 relative z-10" />
-                <span className="relative z-10">Let's Talk Pricing</span>
-                <ArrowRight className="w-6 h-6 relative z-10 group-hover:translate-x-1 transition-transform" />
+                
+                <span className="relative z-10">Let&apos;s Talk Pricing</span>
+                <ArrowRight className="w-5 h-5 sm:w-6 sm:h-6 relative z-10 group-hover:translate-x-1 transition-transform" />
                 <motion.div 
                   className="absolute inset-0 bg-gradient-to-r from-[#d4ff4d] to-[#beff01]"
                   initial={{ x: '-100%' }}
@@ -198,11 +157,10 @@ export default function Hero() {
             <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.98 }}>
               <button
                 onClick={scrollToWorks}
-                className="group inline-flex items-center justify-center gap-3 bg-transparent border-2 border-[#beff01] text-[#beff01] font-black text-lg px-12 py-6 rounded-full hover:bg-[#beff01]/10 transition-all backdrop-blur-xl shadow-lg shadow-[#beff01]/10 hover:shadow-[#beff01]/20"
+                className="group inline-flex items-center justify-center gap-2 sm:gap-3 bg-transparent border-2 border-[#beff01] text-[#beff01] font-black text-base sm:text-lg px-6 sm:px-12 py-4 sm:py-6 rounded-full hover:bg-[#beff01]/10 transition-all backdrop-blur-xl shadow-lg shadow-[#beff01]/10 hover:shadow-[#beff01]/20"
               >
-                <Zap className="w-6 h-6" />
                 <span>See Real Results</span>
-                <ArrowRight className="w-6 h-6 group-hover:translate-x-1 transition-transform" />
+                <ArrowRight className="w-5 h-5 sm:w-6 sm:h-6 group-hover:translate-x-1 transition-transform" />
               </button>
             </motion.div>
           </motion.div>
@@ -224,11 +182,11 @@ export default function Hero() {
                 ))}
               </div>
               <span className="text-gray-300">
-                <span className="text-[#beff01] font-bold">20+ businesses</span> already growing with me
+                <span className="text-[#beff01] font-bold">20+ businesses</span> already growing with us
               </span>
             </div>
             <div className="flex items-center gap-2 text-gray-400">
-              <Sparkles className="w-4 h-4 text-[#beff01]" />
+              
               <span>Based in Marrakech, serving clients worldwide</span>
             </div>
           </motion.div>

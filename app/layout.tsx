@@ -4,7 +4,7 @@ import { Inter } from 'next/font/google';
 import './globals.css';
 import { Providers } from './providers';
 import dynamic from 'next/dynamic';
-
+import ChatbotWidget from "@/components/ChatbotWidget";
 // Dynamically import components to reduce initial bundle size
 const Navbar = dynamic(() => import('@/components/sections/Navbar'), {
   ssr: true,
@@ -23,8 +23,13 @@ const inter = Inter({
 });
 
 export const metadata = {
-  title: 'MEDDIGITAL - Web Development & Digital Marketing',
+  title: 'BIDAYA - Web Development & Digital Marketing',
   description: 'Professional web development and digital marketing services',
+  icons: {
+    icon: '/assets/icons/logo.svg',
+    shortcut: '/assets/icons/logo.svg',
+    apple: '/assets/icons/logo.svg',
+  },
 };
 
 export default function RootLayout({
@@ -44,6 +49,7 @@ export default function RootLayout({
         <Providers>
           <Navbar />
           {children}
+          <ChatbotWidget />
           <Footer />
         </Providers>
       </body>

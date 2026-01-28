@@ -85,7 +85,7 @@ export default function Education() {
             transition={{ duration: 0.6, delay: 0.4 }}
             className="text-xl md:text-2xl text-gray-400 max-w-4xl mx-auto leading-relaxed font-light mb-20"
           >
-            I'm a big believer in continuous learning. Here's where I got my formal education—
+            I&apos;m a big believer in continuous learning. Here&apos;s where I got my formal education—
             and where I keep learning every single day.
           </motion.p>
         </motion.div>

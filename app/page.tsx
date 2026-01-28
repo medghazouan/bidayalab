@@ -1,7 +1,7 @@
 // app/page.tsx
 'use client';
 
-import { motion } from 'framer-motion';
+//import { motion } from 'framer-motion';
 import dynamic from 'next/dynamic';
 import Hero from "@/components/sections/home/Hero";
 
@@ -9,6 +9,10 @@ import Hero from "@/components/sections/home/Hero";
 const Works = dynamic(() => import('@/components/sections/home/Works'), {
   loading: () => <div className="h-[500px]" />, // Simple placeholder
 });
+const Blogs = dynamic(() => import('@/components/sections/home/Blogs'), {
+  loading: () => <div className="h-[300px]" />, // Simple placeholder
+});
+
 const CallToAction = dynamic(() => import('@/components/sections/home/CallToAction'), {
   loading: () => <div className="h-[300px]" />, // Simple placeholder
 });
@@ -51,9 +55,10 @@ export default function HomePage() {
       </div>
 
       {/* Main Content */}
-      <main className="relative z-10 pt-24">
+      <main className="relative z-10 pt-18">
         <Hero />
         <Works />
+        <Blogs />
         <CallToAction />
       </main>
 

@@ -1,7 +1,7 @@
 // app/works/page.tsx
 'use client';
 
-import { motion } from 'framer-motion';
+//import { motion } from 'framer-motion';
 import WorksGrid from '@/components/sections/works/WorksGrid';
 
 export default function WorksPage() {
