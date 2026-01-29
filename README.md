@@ -1,6 +1,6 @@
-# Med Digital Portfolio
+# BidayaLab agency website
 
-A professional agency and portfolio website built with **Next.js 14 (App Router)**, **TypeScript**, and **Tailwind CSS**. This project features a modern, responsive design, dynamic content management via MongoDB, and AI-powered capabilities using LangChain and Upstash Vector.
+A professional agency website built with **Next.js 14 (App Router)**, **TypeScript**, and **Tailwind CSS**. This project features a modern, responsive design, dynamic content management via MongoDB, and AI-powered capabilities using LangChain and Upstash Vector.
 
 ## 🚀 Features
 
