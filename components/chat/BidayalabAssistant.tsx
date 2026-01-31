@@ -273,6 +273,7 @@ export default function BidayalabAssistant() {
             {/* TOGGLE BUTTON */}
             {!isWelcomeOpen && (
                 <motion.button
+                    id="bidayalab-assistant-widget"
                     onClick={() => setIsOpen(!isOpen)}
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}

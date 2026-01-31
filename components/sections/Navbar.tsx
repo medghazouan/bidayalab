@@ -1,246 +1,218 @@
-// components/sections/Navbar.tsx
-
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import Image from "next/image";
-import { motion } from "framer-motion";
-import { X } from "lucide-react";
+import { usePathname } from "next/navigation";
+import { motion, AnimatePresence } from "framer-motion";
+import { Instagram, Linkedin, Twitter, ArrowUpRight, AlignRight } from "lucide-react";
+import { getSettings } from "@/app/actions/settings";
 
 const navLinks = [
-  { name: "HOME", href: "/home" },
-  { name: "SERVICES & PRICING", href: "/services" },
-  { name: "PROJECTS", href: "/works" },
-  { name: "CONTACT", href: "/contact" },
+  { name: "Home", href: "/home" },
+  { name: "Projects", href: "/works" },
+  { name: "Blogs", href: "/blog" },
+  { name: "Contact", href: "/contact" },
 ];
 
-// Optimized throttle utility function - uses requestAnimationFrame for smooth updates
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function throttle<T extends (...args: any[]) => void>(
-  func: T,
-  limit: number
-): (...args: Parameters<T>) => void {
-  let lastCall = 0;
-  let rafId: number | null = null;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  return function (this: any, ...args: Parameters<T>) {
-    const now = Date.now();
-    if (now - lastCall >= limit) {
-      lastCall = now;
-      func.apply(this, args);
-    } else {
-      // Use requestAnimationFrame for smooth throttled updates
-      if (rafId !== null) cancelAnimationFrame(rafId);
-      rafId = requestAnimationFrame(() => {
-        lastCall = Date.now();
-        func.apply(this, args);
-      });
-    }
-  };
-}
-
 export default function Navbar() {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
-  const lastScrollYRef = useRef(0);
+  const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
+  const [settings, setSettings] = useState<any>({
+    linkedinUrl: "",
+    instagramUrl: "",
+    email: "",
+    phone: "",
+    whatsapp: ""
+  });
 
   useEffect(() => {
-    const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-      const lastScrollY = lastScrollYRef.current;
-      const isScrollingDown = currentScrollY > lastScrollY;
-      // const isScrollingUp = currentScrollY < lastScrollY; // Unused now if logic removed
-
-      // Update ref immediately for next comparison
-      lastScrollYRef.current = currentScrollY;
-
-      // Only update state when threshold crossed (avoids unnecessary re-renders)
-      if (isScrollingDown && currentScrollY > 100) {
-        setScrolled(true);
-      } else if (currentScrollY < 50) {
-        setScrolled(false);
+    const fetchSettings = async () => {
+      try {
+        const data = await getSettings();
+        if (data) {
+          setSettings(data);
+        }
+      } catch (error) {
+        console.error("Failed to fetch settings:", error);
       }
     };
+    fetchSettings();
+  }, []);
 
-    // Throttle scroll handler to run max once per 16ms (~60fps)
-    const throttledHandleScroll = throttle(handleScroll, 16);
-
-    window.addEventListener("scroll", throttledHandleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", throttledHandleScroll);
-  }, []); // Empty dependencies - using refs to avoid re-registration
-
-  // Lock body scroll when mobile menu is open - optimized to avoid layout thrashing
   useEffect(() => {
-    if (mobileMenuOpen) {
-      // Batch DOM reads and writes
-      const scrollY = window.scrollY;
-      // Use requestAnimationFrame to batch style updates
-      requestAnimationFrame(() => {
-        document.body.style.setProperty('position', 'fixed', 'important');
-        document.body.style.setProperty('top', `-${scrollY}px`, 'important');
-        document.body.style.setProperty('width', '100%', 'important');
-      });
+    const chatbot = document.getElementById('bidayalab-assistant-widget');
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+      if (chatbot) chatbot.style.display = 'none';
+      document.body.classList.add('menu-open');
     } else {
-      // Batch DOM reads
-      const scrollY = document.body.style.top;
-      const scrollYValue = scrollY ? parseInt(scrollY || '0', 10) * -1 : 0;
-
-      requestAnimationFrame(() => {
-        document.body.style.removeProperty('position');
-        document.body.style.removeProperty('top');
-        document.body.style.removeProperty('width');
-        if (scrollYValue !== 0) {
-          window.scrollTo(0, scrollYValue);
-        }
-      });
+      document.body.style.overflow = "unset";
+      if (chatbot) chatbot.style.display = 'block';
+      document.body.classList.remove('menu-open');
     }
-
     return () => {
-      // Cleanup on unmount
-      requestAnimationFrame(() => {
-        document.body.style.removeProperty('position');
-        document.body.style.removeProperty('top');
-        document.body.style.removeProperty('width');
-      });
-    };
-  }, [mobileMenuOpen]);
+      document.body.style.overflow = "unset";
+      if (chatbot) chatbot.style.display = 'block';
+      document.body.classList.remove('menu-open');
+    }
+  }, [isOpen]);
+
+  const toggleMenu = () => setIsOpen(!isOpen);
+
+  // Social Media Configuration mapping
+  const socialConfig = [
+    { key: 'linkedinUrl', label: 'LinkedIn' },
+    { key: 'instagramUrl', label: 'Instagram' },
+    { key: 'twitterUrl', label: 'Twitter' },
+  ];
+
+  const menuVariants = {
+    initial: { opacity: 0 },
+    animate: { opacity: 1, transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] } },
+    exit: { opacity: 0, transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] } },
+  };
+
+  const containerVariants = {
+    initial: { opacity: 0 },
+    animate: { opacity: 1, transition: { staggerChildren: 0.1, delayChildren: 0.2 } },
+    exit: { opacity: 0 }
+  };
+
+  const itemVariants = {
+    initial: { y: 20, opacity: 0 },
+    animate: { y: 0, opacity: 1, transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] } },
+    exit: { y: 20, opacity: 0 }
+  };
 
   return (
-    <motion.nav
-      initial={{ y: -100 }}
-      animate={{ y: 0 }}
-      transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-      className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${scrolled ? 'bg-black/95 shadow-xl' : 'bg-transparent'
-        }`}
-      style={{
-        // Use CSS will-change for better performance
-        willChange: scrolled ? 'background-color' : 'auto',
-      }}
-    >
-      <div className="max-w-7xl mx-auto px-6 md:px-8 lg:px-12">
-        <div className="flex items-center justify-between h-24">
-          {/* Logo */}
-          <Link href="/home" className="relative z-50" prefetch={true}>
+    <>
+      <style jsx global>{`
+        body.menu-open #bidayalab-assistant-widget {
+            display: none !important;
+        }
+      `}</style>
+
+      {/* MINIMAL HEADER - Scrolls with page */}
+      <header className="relative top-0 left-0 right-0 z-[60] px-4 md:px-8 py-2 md:py-4 pointer-events-none">
+        <div className="flex items-center justify-between max-w-[1920px] mx-auto">
+          <Link href="/home" className="pointer-events-auto relative z-[70]">
             <Image
               src="/assets/icons/newlogo.png"
-              alt="Med Digital"
-              width={150}
-              height={150}
+              alt="Bidayalab"
+              width={180}
+              height={60}
               priority
-              className="scale-100"
+              className="h-14 md:h-20 w-auto transition-transform duration-300 hover:scale-105"
             />
           </Link>
 
-          {/* Desktop Navigation - CENTERED */}
-          <div className="hidden md:flex items-center gap-8">
-            {navLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                prefetch={true}
-                className={`text-sm font-bold tracking-wider transition-colors ${pathname === link.href
-                  ? "text-[#beff01]"
-                  : "text-white hover:text-[#beff01]"
-                  }`}
-              >
-                {link.name}
-              </Link>
-            ))}
-          </div>
-
-          {/* CTA Button */}
-          <Link
-            href="/contact"
-            prefetch={true}
-            className="hidden md:block bg-[#beff01] hover:bg-[#a8e600] text-black px-8 py-3 rounded-full font-bold transition-all duration-300 hover:scale-105"
-          >
-            LET&apos;S TALK
-          </Link>
-
-          {/* Mobile Menu Button */}
-          <button
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="md:hidden text-white p-2 hover:text-[#beff01] transition-colors z-10 group"
-            aria-label="Toggle menu"
-          >
-            {mobileMenuOpen ? (
-              <X size={28} />
+          <button onClick={toggleMenu} className="pointer-events-auto relative z-[70] group flex items-center justify-center">
+            {isOpen ? (
+              <span className="text-white font-medium text-lg uppercase tracking-wider hover:text-zinc-300 transition-colors border-b border-white pb-0.5">
+                CLOSE
+              </span>
             ) : (
-              <div className="w-8 h-8 flex flex-col justify-center gap-1.5 items-end">
-                <span className="w-8 h-0.5 bg-white group-hover:bg-[#beff01] transition-all duration-300"></span>
-                <span className="w-6 h-0.5 bg-white group-hover:bg-[#beff01] transition-all duration-300 group-hover:w-8"></span>
-                <span className="w-4 h-0.5 bg-white group-hover:bg-[#beff01] transition-all duration-300 group-hover:w-8"></span>
+              <div className="w-14 h-14 rounded-full bg-black/20 backdrop-blur-sm flex justify-center items-center group-hover:bg-white group-hover:text-black transition-all duration-300 hover:scale-110">
+                <AlignRight size={32} strokeWidth={1.5} />
               </div>
             )}
           </button>
         </div>
-      </div>
+      </header>
 
-      {/* Mobile Menu */}
-      {mobileMenuOpen && (
-        <>
-          {/* Backdrop - Removed expensive backdrop-blur */}
+      {/* FULL SCREEN MENU OVERLAY */}
+      <AnimatePresence>
+        {isOpen && (
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/95 z-40"
-            onClick={() => setMobileMenuOpen(false)}
-          />
-
-          {/* Menu Panel */}
-          <motion.div
-            initial={{ x: '100%' }}
-            animate={{ x: 0 }}
-            exit={{ x: '100%' }}
-            transition={{ type: 'spring', damping: 30, stiffness: 300 }}
-            className="fixed right-0 top-0 h-full w-full max-w-sm bg-zinc-900 shadow-2xl z-50 overflow-y-auto"
+            variants={menuVariants}
+            initial="initial"
+            animate="animate"
+            exit="exit"
+            className="fixed inset-0 bg-black z-[50] w-full h-[100dvh] flex flex-col pt-32 pb-8 px-4 md:px-8 overflow-hidden"
           >
-            {/* Close Button */}
-            <button
-              onClick={() => setMobileMenuOpen(false)}
-              className="absolute top-8 right-8 text-white hover:text-[#beff01] transition-colors p-2"
-              aria-label="Close menu"
+            <motion.div
+              variants={containerVariants}
+              initial="initial"
+              animate="animate"
+              exit="exit"
+              className="flex-1 flex flex-col md:flex-row w-full h-full max-w-[1920px] mx-auto relative"
             >
-              <X size={32} />
-            </button>
+              {/* LEFT COLUMN: LINKS + SOCIALS */}
+              <div className="flex-1 flex flex-col justify-between h-full pb-4">
 
-            {/* Menu Content */}
-            <div className="flex flex-col items-center justify-center min-h-full px-8 py-24 space-y-8">
-              {navLinks.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  prefetch={true}
-                  onClick={() => setMobileMenuOpen(false)}
-                  className={`block text-center text-3xl font-bold uppercase transition-colors ${pathname === link.href
-                    ? "text-[#beff01]"
-                    : "text-white hover:text-[#beff01]"
-                    }`}
-                >
-                  {link.name}
-                </Link>
-              ))}
+                {/* NAV LINKS CONTAINER */}
+                <div className="flex flex-col items-start gap-4 md:gap-2 mt-4 md:mt-8">
+                  {navLinks.map((link, index) => (
+                    <div key={index} className="overflow-visible relative group">
+                      <motion.div variants={itemVariants}>
+                        <Link
+                          href={link.href}
+                          onClick={toggleMenu}
+                          className={`text-[13vw] md:text-[7vw] leading-[0.85] font-normal tracking-tight hover:text-[#beff01] transition-colors duration-300 block ${pathname === link.href ? 'text-[#beff01]' : 'text-zinc-200'}`}
+                          style={{ fontFamily: 'var(--font-survalia)' }}
+                        >
+                          {link.name}
+                          <span className="text-sm md:text-lg align-top ml-2 md:ml-4 opacity-50 font-mono tracking-widest text-zinc-500">
+                            /0{index + 1}
+                          </span>
+                        </Link>
+                      </motion.div>
+                    </div>
+                  ))}
+                </div>
 
-              {/* CTA Button */}
-              <Link
-                href="/contact"
-                prefetch={true}
-                onClick={() => setMobileMenuOpen(false)}
-                className="block text-center bg-[#beff01] hover:bg-[#a8e600] text-black px-12 py-4 rounded-full font-bold text-lg transition-all duration-300 hover:scale-105 uppercase"
-              >
-                LET&apos;S TALK
-              </Link>
+                {/* SOCIALS - DYNAMIC FETCH FROM DB (GENERIC ARROW STYLE) */}
+                <motion.div variants={itemVariants} className="flex gap-6 md:gap-10 pt-8 mt-auto z-20">
+                  {socialConfig.map((social) => {
+                    const url = settings[social.key];
+                    if (!url) return null;
 
-              {/* Decorative Element */}
-              <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-[#beff01] to-transparent" />
-            </div>
+                    return (
+                      <a
+                        key={social.key}
+                        href={url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-zinc-400 hover:text-white uppercase tracking-wider text-xs md:text-sm flex items-center gap-2"
+                      >
+                        {social.label}
+                        {/* Reverted to Generic Arrow Icon as requested */}
+                        <ArrowUpRight size={14} className="md:w-4 md:h-4" />
+                      </a>
+                    );
+                  })}
+                </motion.div>
+              </div>
+
+              {/* RIGHT COLUMN: DESCRIPTION + CONTACT */}
+              <div className="hidden md:flex flex-1 flex-col justify-between items-end text-right h-full pt-4">
+                <motion.div variants={itemVariants} className="max-w-md mt-6 text-right w-full ml-auto">
+                  <p className="text-2xl md:text-3xl font-light text-zinc-300 leading-tight">
+                    {/* Updated Text: Removed 'Moroccan' */}
+                    Turning businesses into digital powerhouses through AI automation and world-class platforms.
+                  </p>
+                </motion.div>
+
+                <motion.div variants={itemVariants} className="text-right pb-4">
+                  <p className="text-zinc-500 text-sm mb-2 uppercase tracking-widest">Get in touch</p>
+                  <div className="flex flex-col items-end gap-1">
+                    <a href={`mailto:${settings.email}`} className="text-white text-2xl md:text-4xl hover:text-[#beff01] transition-colors font-light block">
+                      {settings.email}
+                    </a>
+                    {settings.phone && (
+                      /* Matched Phone Size to Email Size */
+                      <a href={`tel:${settings.phone}`} className="text-zinc-400 text-2xl md:text-4xl hover:text-white transition-colors font-light block">
+                        {settings.phone}
+                      </a>
+                    )}
+                  </div>
+                </motion.div>
+              </div>
+            </motion.div>
           </motion.div>
-        </>
-      )}
-    </motion.nav>
+        )}
+      </AnimatePresence>
+    </>
   );
 }

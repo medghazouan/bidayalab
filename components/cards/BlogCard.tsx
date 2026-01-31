@@ -18,14 +18,12 @@ interface Blog {
 }
 
 // Throttle utility for mouse move handlers
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function throttleMouseMove<T extends (...args: any[]) => void>(
     func: T,
     limit: number
 ): (...args: Parameters<T>) => void {
     let lastCall = 0;
     let rafId: number | null = null;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return function (this: any, ...args: Parameters<T>) {
         const now = Date.now();
         if (now - lastCall >= limit) {
@@ -41,7 +39,7 @@ function throttleMouseMove<T extends (...args: any[]) => void>(
     };
 }
 
-export default function BlogCard({ blog, index }: { blog: Blog; index: number }) {
+export default function BlogCard({ blog, index, className = "", formatDate }: { blog: Blog; index: number; className?: string; formatDate?: (dateString: string) => string }) {
     const [isHovered, setIsHovered] = useState(false);
     const x = useMotionValue(0);
     const y = useMotionValue(0);
@@ -88,7 +86,7 @@ export default function BlogCard({ blog, index }: { blog: Blog; index: number })
         rectRef.current = null;
     }, [x, y]);
 
-    const formatDate = (dateString: string) => {
+    const defaultFormatDate = (dateString: string) => {
         const date = new Date(dateString);
         return date.toLocaleDateString('en-US', {
             year: 'numeric',
@@ -97,8 +95,10 @@ export default function BlogCard({ blog, index }: { blog: Blog; index: number })
         });
     };
 
+    const displayDate = formatDate ? formatDate(blog.publicationDate) : defaultFormatDate(blog.publicationDate);
+
     return (
-        <Link href={`/blogs/${blog.slug}`}>
+        <Link href={`/blogs/${blog.slug}`} className={`block h-full ${className}`}>
             <motion.div
                 initial={{ opacity: 0, y: 50 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -117,7 +117,7 @@ export default function BlogCard({ blog, index }: { blog: Blog; index: number })
                     rotateY,
                     transformStyle: 'preserve-3d',
                 }}
-                className="group relative overflow-hidden rounded-3xl bg-zinc-900/50 backdrop-blur-xl border border-zinc-800/50 cursor-pointer hover:border-[#beff01]/50 transition-all duration-300"
+                className="group w-full h-full relative overflow-hidden rounded-3xl bg-zinc-900/50 backdrop-blur-xl border border-zinc-800/50 cursor-pointer hover:border-[#beff01]/50 transition-all duration-300 flex flex-col"
             >
                 {/* Glow Effect */}
                 {isHovered && (
@@ -128,9 +128,9 @@ export default function BlogCard({ blog, index }: { blog: Blog; index: number })
                     />
                 )}
 
-                {/* Blog Image */}
+                {/* Blog Image - Flexible aspect ratio based on parent/flex */}
                 <motion.div
-                    className="relative aspect-video overflow-hidden"
+                    className="relative w-full flex-grow min-h-[280px] overflow-hidden"
                     animate={{
                         scale: isHovered ? 1.05 : 1,
                     }}
@@ -160,14 +160,14 @@ export default function BlogCard({ blog, index }: { blog: Blog; index: number })
                     </motion.div>
                 </motion.div>
 
-                {/* Blog Title & Date - Below Image */}
-                <div className="p-6">
+                {/* Blog Title & Date - Fixed height content area */}
+                <div className="p-6 relative z-10 bg-zinc-900/40">
                     <h3 className="text-xl font-black text-white mb-3 group-hover:text-[#beff01] transition-colors duration-300 tracking-tight line-clamp-2">
                         {blog.title}
                     </h3>
                     <div className="flex items-center gap-2 text-gray-400 text-sm">
                         <Calendar className="w-4 h-4" />
-                        <span>{formatDate(blog.publicationDate)}</span>
+                        <span>{displayDate}</span>
                     </div>
                 </div>
             </motion.div>

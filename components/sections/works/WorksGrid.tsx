@@ -44,40 +44,44 @@ export default function WorksGrid() {
 
   return (
     <section className="relative py-12 px-4 md:px-8 lg:px-16 overflow-hidden">
-      <div className="relative max-w-7xl mx-auto px-6 md:px-8 lg:px-12">
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
-          className="max-w-7xl mx-auto px-6 md:px-8 lg:px-12 py-8 md:py-12 text-center mb-8"
-        >
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#beff01]/10 border border-[#beff01]/30 backdrop-blur-sm mb-8 group hover:bg-[#beff01]/20 transition-all"
-          >
-            <div className="w-2 h-2 rounded-full bg-[#beff01] animate-pulse" />
-            <span className="text-[#beff01] text-sm font-bold uppercase tracking-wider">
-              Our works
-            </span>
-          </motion.div>
+      <div className="relative max-w-[1400px] mx-auto px-4 md:px-8">
+        {/* Creative Section Header - Max Right Alignment */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-end mb-16">
+          <div className="lg:col-span-7">
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-white/10 bg-white/5 text-zinc-400 text-xs font-mono uppercase tracking-widest mb-6"
+            >
+              <div className="w-1.5 h-1.5 rounded-full bg-[#beff01]" />
+              Our Portfolio
+            </motion.div>
 
-          <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.3 }}
-            className="font-black text-white mb-2 tracking-tight leading-none flex flex-col items-center"
-          >
-            <span className="text-6xl md:text-7xl lg:text-8xl xl:text-9xl whitespace-nowrap block">Our Latest</span>
-            <span className="bg-gradient-to-r from-[#beff01] via-[#d4ff4d] to-[#beff01] bg-clip-text text-transparent bg-[length:200%_auto] animate-gradient text-[9vw] sm:text-[8vw] md:text-6xl lg:text-8xl xl:text-9xl leading-[0.8] whitespace-nowrap block mt-2">
-              Digital Case Studies
-            </span>
-          </motion.h1>
+            <motion.h1
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8 }}
+              className="text-6xl md:text-8xl lg:text-9xl font-black text-white leading-[0.85] tracking-tight"
+            >
+              LATEST<br />
+              <span className="text-[#beff01]">PROJECTS</span>
+            </motion.h1>
+          </div>
 
-
-        </motion.div>
+          <div className="lg:col-span-5 lg:col-start-8 lg:text-right lg:pb-4">
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.2 }}
+              className="text-xl text-zinc-400 leading-relaxed ml-auto"
+            >
+              Explore our collection of award-winning digital experiences. Each project is a testament to our obsession with <span className="text-white font-medium">quality and performance</span>.
+            </motion.p>
+          </div>
+        </div>
 
         {/* Loading State */}
         {loading && (

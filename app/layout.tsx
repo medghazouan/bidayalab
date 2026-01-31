@@ -4,25 +4,70 @@ import { Providers } from './providers';
 import BidayalabAssistant from '@/components/chat/BidayalabAssistant';
 import GlobalSchema from '@/components/seo/GlobalSchema';
 
+import localFont from 'next/font/local';
+
 // Optimized font loading with display swap to prevent render blocking
 const inter = Inter({
   subsets: ['latin'],
-  display: 'swap', // Use fallback font until custom font loads
-  preload: true, // Preload font for better performance
-  variable: '--font-inter', // CSS variable for styling
+  display: 'swap',
+  variable: '--font-inter',
+});
+
+// Real Melon Pop Font (Local)
+const melon = localFont({
+  src: './fonts/MelonPop.otf',
+  variable: '--font-melon',
+  display: 'swap',
+});
+
+// nNiely Font (Local)
+const nNiely = localFont({
+  src: './fonts/nNiely.ttf',
+  variable: '--font-nniely',
+  display: 'swap',
+});
+
+// Survalia Font (Local) - Primary font for big titles
+const survalia = localFont({
+  src: './fonts/Survalia.ttf',
+  variable: '--font-survalia',
+  display: 'swap',
+});
+
+// Louis George Cafe Font (Local) - Secondary font for body/descriptions
+const louis = localFont({
+  src: [
+    {
+      path: './fonts/Louis George Cafe Light.ttf',
+      weight: '300',
+      style: 'normal',
+    },
+    {
+      path: './fonts/Louis George Cafe.ttf',
+      weight: '400',
+      style: 'normal',
+    },
+    {
+      path: './fonts/Louis George Cafe Bold.ttf',
+      weight: '700',
+      style: 'normal',
+    },
+  ],
+  variable: '--font-louis',
+  display: 'swap',
 });
 
 export const metadata = {
-  title: 'BIDAYA | Turn Your Online Presence Into Profit',
-  description: "Don't just build a website. Build a revenue engine. Bidayalab combines world-class development, design, and AI to scale your business.",
+  title: 'AI Automation & Web Development Agency Morocco | BidayaLab',
+  description: "Transform your Moroccan SME with AI automation, custom web development & premium content. Stop losing clients to digital competitors. Marrakech-based agency.",
   icons: {
     icon: '/assets/icons/logo.svg',
     shortcut: '/assets/icons/logo.svg',
     apple: '/assets/icons/logo.svg',
   },
   openGraph: {
-    title: 'BIDAYA | Turn Your Online Presence Into Profit',
-    description: "Don't just build a website. Build a revenue engine. Bidayalab combines world-class development, design, and AI to scale your business.",
+    title: 'AI Automation & Web Development Agency Morocco | BidayaLab',
+    description: "Transform your Moroccan SME with AI automation, custom web development & premium content. Stop losing clients to digital competitors. Marrakech-based agency.",
     url: 'https://bidayalab.com',
     siteName: 'Bidayalab',
     locale: 'en_US',
@@ -43,12 +88,14 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
       </head>
-      <body className={inter.className} suppressHydrationWarning>
+      <body className={`${inter.className} ${melon.variable} ${nNiely.variable} ${survalia.variable} ${louis.variable}`} suppressHydrationWarning>
         <Providers>
           <GlobalSchema />
           {children}
           <BidayalabAssistant />
         </Providers>
+        {/* Noise texture overlay for creative film grain effect */}
+        <div className="noise-overlay" />
       </body>
     </html>
   );

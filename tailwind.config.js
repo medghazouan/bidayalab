@@ -61,6 +61,11 @@ module.exports = {
           dark: '#8bc900',
         },
       },
+      fontFamily: {
+        melon: ['var(--font-melon)', 'sans-serif'],
+        survalia: ['var(--font-survalia)', 'sans-serif'],
+        louis: ['var(--font-louis)', 'sans-serif'],
+      },
       keyframes: {
         'gradient-mesh': {
           '0%, 100%': { backgroundPosition: '0% 0%, 100% 100%, 50% 50%' },
@@ -78,12 +83,19 @@ module.exports = {
           '0%': { transform: 'translateY(-100vh)' },
           '100%': { transform: 'translateY(200vh)' },
         },
+        'wave-wipe': {
+          '0%': { strokeDashoffset: '2400' },
+          '50%': { strokeDashoffset: '0' },
+          '100%': { strokeDashoffset: '-2400' },
+        },
       },
       animation: {
         'gradient-mesh': 'gradient-mesh 20s ease-in-out infinite',
         'orb-1': 'orb-1 15s ease-in-out infinite',
         'orb-2': 'orb-2 18s ease-in-out infinite 2s',
         'scan-line': 'scan-line 8s linear infinite',
+        'wave-wipe': 'wave-wipe 6s ease-in-out infinite',
+        'wave-wipe-slow': 'wave-wipe 12s ease-in-out infinite',
       },
     },
   },

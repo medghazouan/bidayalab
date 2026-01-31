@@ -19,17 +19,16 @@ interface Project {
 interface ProjectCardProps {
   project: Project;
   index: number;
+  className?: string; // Allow custom classes for creative grids
 }
 
 // Throttle utility for mouse move handlers
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function throttleMouseMove<T extends (...args: any[]) => void>(
   func: T,
   limit: number
 ): (...args: Parameters<T>) => void {
   let lastCall = 0;
   let rafId: number | null = null;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   return function (this: any, ...args: Parameters<T>) {
     const now = Date.now();
     if (now - lastCall >= limit) {
@@ -56,7 +55,7 @@ const getCategoryDisplay = (category: string) => {
   return categoryMap[category] || category;
 };
 
-export default function ProjectCard({ project, index }: ProjectCardProps) {
+export default function ProjectCard({ project, index, className = "" }: ProjectCardProps) {
   const [isHovered, setIsHovered] = useState(false);
   const x = useMotionValue(0);
   const y = useMotionValue(0);
@@ -112,7 +111,7 @@ export default function ProjectCard({ project, index }: ProjectCardProps) {
   const assetUrl = getAssetUrl(project.image);
 
   return (
-    <Link href={`/works/${project.slug}`}>
+    <Link href={`/works/${project.slug}`} className={`block h-full ${className}`}>
       <motion.div
         initial={{ opacity: 0, y: 50 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -131,7 +130,8 @@ export default function ProjectCard({ project, index }: ProjectCardProps) {
           rotateY,
           transformStyle: 'preserve-3d',
         }}
-        className="group relative aspect-[3/4] overflow-hidden rounded-3xl bg-zinc-900/50 backdrop-blur-xl border border-zinc-800/50 cursor-pointer hover:border-[#beff01]/50 transition-all duration-300"
+        // Removed fixed aspect-[3/4] here to allow control via className
+        className="group relative w-full h-full min-h-[500px] md:min-h-[400px] overflow-hidden rounded-3xl bg-zinc-900/50 backdrop-blur-xl border border-zinc-800/50 cursor-pointer hover:border-[#beff01]/50 transition-all duration-300"
       >
         {/* Glow Effect */}
         {isHovered && (
@@ -188,7 +188,7 @@ export default function ProjectCard({ project, index }: ProjectCardProps) {
           className="absolute bottom-0 left-0 right-0 p-8 z-10"
           style={{ transform: 'translateZ(20px)' }}
         >
-          <h3 className="text-3xl font-black text-white mb-2 group-hover:text-[#beff01] transition-colors duration-300 tracking-tight">
+          <h3 className="text-2xl md:text-3xl font-black text-white mb-2 group-hover:text-[#beff01] transition-colors duration-300 tracking-tight line-clamp-2">
             {project.title}
           </h3>
         </motion.div>

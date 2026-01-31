@@ -6,7 +6,7 @@ import { ArrowUpRight } from "lucide-react";
 export default function CallToAction() {
   return (
     <section className="py-24 md:py-32 bg-[#beff01] text-black relative overflow-hidden">
-      <div className="relative z-10 w-full max-w-[90rem] mx-auto px-4 md:px-8">
+      <div className="relative z-10 w-full max-w-[1400px] mx-auto px-4 md:px-8">
 
         {/* Creative Grid Layout */}
         <div className="border-t-2 border-black">

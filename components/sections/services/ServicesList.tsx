@@ -7,33 +7,6 @@ import { TbBrandGoogleAnalytics } from "react-icons/tb";
 
 const services = [
   {
-    id: "brand-identity",
-    icon: Palette,
-    secondaryIcon: Layers,
-    title: "Brand & Visual Identity",
-    seoTitle: "Creative Studio",
-    description: "We craft visual identities that tell your story. From logo design to full brand guidelines, we ensure your business looks professional and memorable across all platforms.",
-    features: [
-      "Graphic Design - Logo design, brand identity, visual branding",
-      "Print Design - Business cards, brochures, flyers, packaging",
-      "Social Media Graphics - Instagram posts, stories, promotional content",
-      "Motion Graphics - Animated videos, logo animations, explainer videos",
-      "Brand Strategy - Brand guidelines, color palettes, typography systems"
-    ],
-    techStack: [
-      { icon: SiAdobeillustrator, name: "Illustrator" },
-      { icon: SiAdobephotoshop, name: "Photoshop" },
-      { icon: SiFigma, name: "Figma" },
-      { icon: FaPenNib, name: "Procreate" }
-    ],
-    gradient: "from-purple-500/20 via-fuchsia-500/10 to-transparent",
-    glowColor: "purple-500",
-    iconBg: "bg-purple-500/10",
-    iconColor: "text-purple-400",
-    borderColor: "border-purple-500/30",
-    accentColor: "#c084fc"
-  },
-  {
     id: "digital-development",
     icon: Code,
     secondaryIcon: Globe,
@@ -62,61 +35,6 @@ const services = [
     accentColor: "#60a5fa"
   },
   {
-    id: "growth-marketing",
-    icon: Megaphone,
-    secondaryIcon: BarChart3,
-    title: "Growth & Performance Marketing",
-    seoTitle: "Digital Marketing",
-    description: "Data-driven strategies to grow your audience and convert leads. We handle everything from paid ads to organic social media growth.",
-    features: [
-      "Paid Advertising - Google Ads, Facebook/Instagram Ads, LinkedIn Ads",
-      "Social Media Management - Content planning, community management, engagement",
-      "Content Creation - Copywriting, content calendars, hashtag strategy",
-      "Analytics & Reporting - Campaign tracking, ROI analysis, performance reports",
-      "SEO Optimization - Search engine optimization, keyword research, content strategy"
-    ],
-    techStack: [
-      { icon: SiGoogleads, name: "Google Ads" },
-      { icon: SiMeta, name: "Meta Ads" },
-      { icon: TbBrandGoogleAnalytics, name: "Analytics" },
-      { icon: SiInstagram, name: "Instagram" },
-      { icon: SiTiktok, name: "TikTok" }
-    ],
-    gradient: "from-emerald-500/20 via-green-500/10 to-transparent",
-    glowColor: "emerald-500",
-    iconBg: "bg-emerald-500/10",
-    iconColor: "text-emerald-400",
-    borderColor: "border-emerald-500/30",
-    accentColor: "#34d399"
-  },
-  {
-    id: "creative-content",
-    icon: Camera,
-    secondaryIcon: Aperture,
-    title: "Cinematic Production & Photography",
-    seoTitle: "Visual Storytelling",
-    description: "Capturing moments that matter. High-quality photography and videography to showcase your products, events, and brand story.",
-    features: [
-      "Commercial Photography - Product shots, lifestyle photography, brand photography",
-      "Event Coverage - Corporate events, conferences, behind-the-scenes",
-      "Video Production - Promotional videos, testimonials, documentaries",
-      "Drone Videography - Aerial shots, real estate tours, landscape footage",
-      "Post-Production - Video editing, color grading, sound design, retouching"
-    ],
-    techStack: [
-      { icon: SiDavinciresolve, name: "DaVinci" },
-      { icon: SiAdobepremierepro, name: "Premiere" },
-      { icon: SiAdobephotoshop, name: "Lightroom" }, // Using PS icon as Lightroom sub
-      { icon: Camera, name: "Sony Alpha" }
-    ],
-    gradient: "from-orange-500/20 via-red-500/10 to-transparent",
-    glowColor: "orange-500",
-    iconBg: "bg-orange-500/10",
-    iconColor: "text-orange-400",
-    borderColor: "border-orange-500/30",
-    accentColor: "#fb923c"
-  },
-  {
     id: "ai-automation",
     icon: Bot,
     secondaryIcon: Sparkles,
@@ -142,6 +60,33 @@ const services = [
     iconColor: "text-[#beff01]",
     borderColor: "border-[#beff01]/30",
     accentColor: "#beff01"
+  },
+  {
+    id: "creative-content",
+    icon: Camera,
+    secondaryIcon: Aperture,
+    title: "Cinematic Production & Photography",
+    seoTitle: "Visual Storytelling",
+    description: "Capturing moments that matter. High-quality photography and videography to showcase your products, events, and brand story.",
+    features: [
+      "Commercial Photography - Product shots, lifestyle photography, brand photography",
+      "Event Coverage - Corporate events, conferences, behind-the-scenes",
+      "Video Production - Promotional videos, testimonials, documentaries",
+      "Drone Videography - Aerial shots, real estate tours, landscape footage",
+      "Post-Production - Video editing, color grading, sound design, retouching"
+    ],
+    techStack: [
+      { icon: SiDavinciresolve, name: "DaVinci" },
+      { icon: SiAdobepremierepro, name: "Premiere" },
+      { icon: SiAdobephotoshop, name: "Lightroom" },
+      { icon: Camera, name: "Sony Alpha" }
+    ],
+    gradient: "from-orange-500/20 via-red-500/10 to-transparent",
+    glowColor: "orange-500",
+    iconBg: "bg-orange-500/10",
+    iconColor: "text-orange-400",
+    borderColor: "border-orange-500/30",
+    accentColor: "#fb923c"
   }
 ];
 
@@ -156,48 +101,63 @@ export default function ServicesList() {
         <div className="absolute bottom-1/3 left-1/4 w-96 h-96 bg-purple-500/5 rounded-full blur-3xl"></div>
       </div>
 
-      <div className="relative max-w-7xl mx-auto">
-        {/* Header - Preserved as requested */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
-          className="max-w-7xl mx-auto px-6 md:px-8 lg:px-12 py-8 md:py-12 text-center mb-8"
-        >
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#beff01]/10 border border-[#beff01]/30 backdrop-blur-sm mb-8 group hover:bg-[#beff01]/20 transition-all"
-          >
-            <div className="w-2 h-2 rounded-full bg-[#beff01] animate-pulse" />
-            <span className="text-[#beff01] text-sm font-bold uppercase tracking-wider">
-              What We Offer
-            </span>
-          </motion.div>
+      <div className="relative max-w-[1400px] mx-auto px-4 md:px-8">
+        {/* Creative Section Header - Max Right Alignment */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-16 items-end">
+          <div className="lg:col-span-7">
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-white/10 bg-white/5 text-zinc-400 text-xs font-mono uppercase tracking-widest mb-6"
+            >
+              <div className="w-1.5 h-1.5 rounded-full bg-[#beff01]" />
+              Our Capabilities
+            </motion.div>
 
-          <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.3 }}
-            className="text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-black text-white mb-8 tracking-tight leading-none"
-          >
-            Digital Solutions
-            <br />
-            <span className="bg-gradient-to-r from-[#beff01] via-[#d4ff4d] to-[#beff01] bg-clip-text text-transparent bg-[length:200%_auto] animate-gradient">
-              Built For Growth
-            </span>
-          </motion.h1>
+            <motion.h2
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8 }}
+              className="text-6xl md:text-8xl lg:text-9xl font-black text-white leading-[0.85] tracking-tight"
+            >
+              DIGITAL<br />
+              <span className="text-[#beff01]">SOLUTIONS</span>
+            </motion.h2>
+          </div>
 
+          <div className="lg:col-span-5 lg:col-start-8 lg:text-right lg:pb-2">
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.2 }}
+              className="text-xl text-zinc-400 leading-relaxed ml-auto"
+            >
+              We build <span className="text-white font-medium">revenue-generating ecosystems</span>.
+              From high-performance code to psychology-driven design, every pixel serves a purpose.
+            </motion.p>
+          </div>
+        </div>
 
-        </motion.div>
-
-        {/* Services Grid - Redesigned */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+        {/* Services Grid - Creative Bento Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-6 lg:gap-8">
           {services.map((service, index) => {
             const IconComponent = service.icon;
             const SecondaryIcon = service.secondaryIcon;
             const isHovered = hoveredIndex === index;
+
+            // Bento Grid Logic
+            // First row: 7/5 split
+            // Second row: 5/7 split
+            // Third row: Full width or centered
+            let colSpan = "md:col-span-12 lg:col-span-4"; // Default third
+            if (index === 0) colSpan = "md:col-span-12 lg:col-span-7"; // Brand - Wide
+            if (index === 1) colSpan = "md:col-span-12 lg:col-span-5"; // Web - Narrower
+            if (index === 2) colSpan = "md:col-span-12 lg:col-span-5"; // Growth - Narrower
+            if (index === 3) colSpan = "md:col-span-12 lg:col-span-7"; // Content - Wide
+            if (index === 4) colSpan = "md:col-span-12 lg:col-span-12"; // AI - Full width statement
 
             return (
               <motion.div
@@ -210,89 +170,81 @@ export default function ServicesList() {
                 transition={{ duration: 0.5, delay: index * 0.1 }}
                 onMouseEnter={() => setHoveredIndex(index)}
                 onMouseLeave={() => setHoveredIndex(null)}
-                className="group relative h-full scroll-mt-32"
+                className={`group relative h-full scroll-mt-32 ${colSpan}`}
               >
                 {/* Card Container */}
                 <div className={`
-                  relative h-full bg-zinc-900/40 backdrop-blur-md rounded-[2rem] p-8 
+                  relative h-full bg-zinc-900/40 backdrop-blur-md rounded-[2.5rem] p-8 md:p-10
                   border border-white/5 overflow-hidden
                   transition-all duration-500 ease-out
-                  ${isHovered ? 'border-white/10 translate-y-[-8px]' : ''}
+                  ${isHovered ? 'border-white/10 translate-y-[-4px] shadow-2xl shadow-black/50' : ''}
                 `}>
 
                   {/* Hover Gradient Background */}
                   <div className={`
                     absolute inset-0 bg-gradient-to-br ${service.gradient} opacity-0 
-                    group-hover:opacity-20 transition-opacity duration-500
+                    group-hover:opacity-10 transition-opacity duration-700
                   `} />
 
+                  {/* Subtle Noise Texture */}
+                  <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
+
                   {/* Top Section: Icons & Badge */}
-                  <div className="flex justify-between items-start mb-8 relative z-10">
+                  <div className="flex justify-between items-start mb-10 relative z-10">
                     <div className={`
-                      w-14 h-14 rounded-2xl ${service.iconBg} 
+                      w-16 h-16 rounded-2xl ${service.iconBg} 
                       flex items-center justify-center
                       border ${service.borderColor}
                       shadow-[0_0_30px_-10px_rgba(0,0,0,0.5)]
                       group-hover:scale-110 transition-transform duration-500
                     `}>
-                      <IconComponent className={`w-7 h-7 ${service.iconColor}`} strokeWidth={2} />
+                      <IconComponent className={`w-8 h-8 ${service.iconColor}`} strokeWidth={1.5} />
                     </div>
 
-
+                    <div className="hidden md:flex px-3 py-1 rounded-full border border-white/5 bg-black/20 text-xs font-medium text-zinc-400">
+                      {service.seoTitle}
+                    </div>
                   </div>
 
                   {/* Content Section */}
                   <div className="relative z-10">
-                    <h3 className="text-2xl font-bold text-white mb-4 leading-tight group-hover:text-[#beff01] transition-colors duration-300">
+                    <h3 className="text-3xl md:text-4xl font-bold text-white mb-6 leading-tight group-hover:text-[#beff01] transition-colors duration-300">
                       {service.title}
                     </h3>
 
-                    <p className="text-zinc-400 text-sm leading-relaxed mb-8 line-clamp-3 group-hover:line-clamp-none transition-all duration-300">
+                    <p className="text-zinc-400 text-base md:text-lg leading-relaxed mb-10 max-w-2xl">
                       {service.description}
                     </p>
 
                     {/* Features List */}
-                    <div className="space-y-4 border-t border-white/5 pt-6">
-                      {service.features.map((feature, i) => (
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-10">
+                      {service.features.slice(0, 4).map((feature, i) => (
                         <div key={i} className="flex items-start gap-3">
-                          <div className={`mt-1.5 w-1.5 h-1.5 rounded-full bg-gradient-to-r ${service.gradient}`} />
-                          <span className="text-zinc-300 text-xs leading-relaxed">
-                            <strong className="text-white font-medium">{feature.split(' - ')[0]}</strong>
-                            <span className="text-zinc-500"> - {feature.split(' - ')[1]}</span>
+                          <div className={`mt-2 w-1.5 h-1.5 rounded-full bg-gradient-to-r ${service.gradient}`} />
+                          <span className="text-zinc-300 text-sm font-medium">
+                            {feature.split(' - ')[0]}
                           </span>
                         </div>
                       ))}
                     </div>
 
                     {/* Tech Stack - Modern Grid */}
-                    <div className="mt-8 pt-6 border-t border-white/5">
-                      <div className="text-[10px] font-bold uppercase tracking-widest text-zinc-600 mb-4 flex items-center gap-2">
-                        <div className={`w-1 h-1 rounded-full ${service.iconBg} ${service.iconColor}`} />
+                    <div className="pt-6 border-t border-white/5 flex flex-wrap gap-2 items-center">
+                      <span className="text-xs font-bold uppercase tracking-widest text-[#beff01]/70 mr-2">
                         Powered By
-                      </div>
-                      <div className="flex flex-wrap gap-3">
-                        {service.techStack.map((tech, i) => (
-                          <div key={i} className="group/icon relative w-10 h-10 rounded-xl bg-white/5 border border-white/5 flex items-center justify-center hover:bg-white/10 hover:border-white/20 transition-all duration-300 hover:scale-110 cursor-help">
-                            <tech.icon className={`w-5 h-5 text-zinc-500 group-hover/icon:text-white transition-colors duration-300`} />
-
-                            {/* Glow Effect */}
-                            <div className={`absolute inset-0 rounded-xl bg-gradient-to-br ${service.gradient} opacity-0 group-hover/icon:opacity-50 blur-md transition-opacity duration-300 -z-10`} />
-
-                            {/* Tooltip */}
-                            <div className="absolute -top-10 left-1/2 -translate-x-1/2 px-3 py-1.5 bg-[#0a0a0a] border border-white/10 rounded-lg text-[10px] font-bold uppercase tracking-widest text-white opacity-0 group-hover/icon:opacity-100 transition-all duration-300 transform translate-y-2 group-hover/icon:translate-y-0 whitespace-nowrap pointer-events-none z-50 shadow-xl">
-                              {tech.name}
-                              <div className="absolute bottom-[-4px] left-1/2 -translate-x-1/2 w-2 h-2 bg-[#0a0a0a] border-r border-b border-white/10 transform rotate-45" />
-                            </div>
-                          </div>
-                        ))}
-                      </div>
+                      </span>
+                      {service.techStack.map((tech, i) => (
+                        <div key={i} className="relative group/icon w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center hover:bg-white/10 transition-colors">
+                          <tech.icon className="w-4 h-4 text-zinc-400 group-hover/icon:text-white" />
+                        </div>
+                      ))}
                     </div>
                   </div>
 
                   {/* Decorative Elements */}
-                  <div className="absolute -bottom-20 -right-20 w-64 h-64 bg-gradient-to-br from-white/5 to-transparent rounded-full blur-3xl group-hover:blur-2xl transition-all duration-500" />
+                  <div className="absolute -bottom-20 -right-20 w-80 h-80 bg-gradient-to-br from-white/5 to-transparent rounded-full blur-3xl group-hover:blur-2xl transition-all duration-500 opacity-50" />
                   <SecondaryIcon className={`
-                    absolute -bottom-6 -right-6 w-32 h-32 text-white/5 
+                    absolute -bottom-10 -right-10 w-48 h-48 text-white/[0.02] 
                     transform rotate-12 group-hover:rotate-0 group-hover:scale-110 
                     transition-all duration-700 ease-out
                   `} />

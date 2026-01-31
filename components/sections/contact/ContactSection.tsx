@@ -7,8 +7,6 @@ import { FaWhatsapp } from 'react-icons/fa';
 import Link from 'next/link';
 import { getSettings } from '@/app/actions/settings';
 
-
-
 export default function ContactSection() {
   const [formData, setFormData] = useState({
     name: '',
@@ -19,7 +17,6 @@ export default function ContactSection() {
   });
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [errorMessage, setErrorMessage] = useState('');
-  const [focusedField, setFocusedField] = useState<string | null>(null);
 
   const [contactSettings, setContactSettings] = useState({
     email: "bidayalab1@gmail.com",
@@ -47,30 +44,18 @@ export default function ContactSection() {
       title: 'Email',
       info: contactSettings.email,
       link: `mailto:${contactSettings.email}`,
-      gradient: 'from-blue-500/20 via-blue-500/10 to-transparent',
-      borderColor: 'border-blue-500/30',
-      iconBg: 'bg-blue-500/10',
-      iconColor: 'text-blue-400'
     },
     {
       icon: Phone,
       title: 'Phone',
       info: contactSettings.phone,
       link: `tel:${contactSettings.phone.replace(/\s+/g, '')}`,
-      gradient: 'from-green-500/20 via-green-500/10 to-transparent',
-      borderColor: 'border-green-500/30',
-      iconBg: 'bg-green-500/10',
-      iconColor: 'text-green-400'
     },
     {
       icon: FaWhatsapp,
       title: 'WhatsApp',
       info: contactSettings.whatsapp,
       link: `https://wa.me/${contactSettings.whatsapp.replace(/[^0-9]/g, '')}`,
-      gradient: 'from-green-500/20 via-green-500/10 to-transparent',
-      borderColor: 'border-green-500/30',
-      iconBg: 'bg-green-500/10',
-      iconColor: 'text-green-400'
     }
   ];
 
@@ -114,8 +99,8 @@ export default function ContactSection() {
   };
 
   return (
-    <section className="relative pt-24 md:pt-36 lg:pt-40 pb-16 md:pb-24 px-4 md:px-8 lg:px-16 overflow-hidden">
-      <div className="relative max-w-7xl mx-auto px-6 md:px-8 lg:px-12">
+    <section className="relative pt-24 md:pt-36 lg:pt-40 pb-16 md:pb-24 overflow-hidden">
+      <div className="relative max-w-[1400px] mx-auto px-4 md:px-8">
 
         {/* Success State */}
         {status === 'success' ? (
@@ -156,42 +141,6 @@ export default function ContactSection() {
                     I&apos;ll get back to you at <strong className="text-[#beff01]">{formData.email}</strong> within 24 hours.
                   </p>
 
-                  {/* What's Next Cards */}
-                  <div className="grid md:grid-cols-3 gap-4 mb-10">
-                    <div className="p-6 rounded-2xl bg-zinc-800/50 border border-zinc-700/50 backdrop-blur-sm">
-                      <div className="w-12 h-12 mx-auto mb-4 rounded-xl bg-[#beff01]/10 flex items-center justify-center border border-[#beff01]/30">
-                        <CheckCircle2 className="w-6 h-6 text-[#beff01]" />
-                      </div>
-                      <h3 className="text-sm font-bold text-white mb-2">Quick Response</h3>
-                      <p className="text-xs text-gray-400 leading-relaxed">I&apos;ll personally review your message within 24 hours</p>
-                    </div>
-
-                    <div className="p-6 rounded-2xl bg-zinc-800/50 border border-zinc-700/50 backdrop-blur-sm">
-                      <div className="w-12 h-12 mx-auto mb-4 rounded-xl bg-[#beff01]/10 flex items-center justify-center border border-[#beff01]/30">
-                        <Mail className="w-6 h-6 text-[#beff01]" />
-                      </div>
-                      <h3 className="text-sm font-bold text-white mb-2">Direct Contact</h3>
-                      <p className="text-xs text-gray-400 leading-relaxed">
-                        You&apos;ll hear back via email or WhatsApp
-                      </p>
-                    </div>
-
-                    <div className="p-6 rounded-2xl bg-zinc-800/50 border border-zinc-700/50 backdrop-blur-sm">
-                      <div className="w-12 h-12 mx-auto mb-4 rounded-xl bg-[#beff01]/10 flex items-center justify-center border border-[#beff01]/30">
-                        <Sparkles className="w-6 h-6 text-[#beff01]" />
-                      </div>
-                      <h3 className="text-sm font-bold text-white mb-2">Let&apos;s Build</h3>
-                      <p className="text-xs text-gray-400 leading-relaxed">We&apos;ll discuss how to bring your vision to life</p>
-                    </div>
-                  </div>
-
-                  <p className="text-sm text-gray-400 mb-8">
-                    In the meantime, check out my{' '}
-                    <Link href="/works" className="text-[#beff01] font-bold hover:underline">
-                      recent projects
-                    </Link>
-                  </p>
-
                   <button
                     onClick={resetForm}
                     className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-zinc-800 hover:bg-zinc-700 text-white font-bold transition-all hover:scale-105"
@@ -204,43 +153,46 @@ export default function ContactSection() {
           </motion.div>
         ) : (
           <>
-            {/* Header - Preserved Typography */}
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, ease: "easeOut" }}
-              className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 lg:px-12 py-6 sm:py-8 md:py-12 text-center mb-8"
-            >
-              <motion.div
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.6, delay: 0.2 }}
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#beff01]/10 border border-[#beff01]/30 backdrop-blur-sm mb-8 group hover:bg-[#beff01]/20 transition-all"
-              >
-                <div className="w-2 h-2 rounded-full bg-[#beff01] animate-pulse" />
-                <span className="text-[#beff01] text-sm font-bold uppercase tracking-wider">
+            {/* Standardized Left-Aligned Header - Max Right Alignment */}
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-end mb-16">
+              <div className="lg:col-span-7">
+                <motion.div
+                  initial={{ opacity: 0, x: -20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-white/10 bg-white/5 text-zinc-400 text-xs font-mono uppercase tracking-widest mb-6"
+                >
+                  <div className="w-1.5 h-1.5 rounded-full bg-[#beff01]" />
                   Get In Touch
-                </span>
-              </motion.div>
+                </motion.div>
 
-              <motion.h1
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.3 }}
-                className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black text-white mb-8 tracking-tight leading-none"
-              >
-                Let&apos;s Build
-                <br />
-                <span className="bg-gradient-to-r from-[#beff01] via-[#d4ff4d] to-[#beff01] bg-clip-text text-transparent bg-[length:200%_auto] animate-gradient">
-                  Something Amazing
-                </span>
-              </motion.h1>
+                <motion.h1
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.8 }}
+                  className="text-5xl md:text-7xl lg:text-8xl font-black text-white leading-[0.9] tracking-tight"
+                >
+                  LET'S BUILD<br />
+                  <span className="text-[#beff01]">SOMETHING NEW</span>
+                </motion.h1>
+              </div>
 
+              <div className="lg:col-span-5 lg:col-start-8 lg:text-right lg:pb-4">
+                <motion.p
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.2 }}
+                  className="text-xl text-zinc-400 leading-relaxed ml-auto"
+                >
+                  Have a vision? We have the team to build it. Fill out the form or reach out directly to start the conversation.
+                </motion.p>
+              </div>
+            </div>
 
-            </motion.div>
-
-            {/* Contact Content Grid (Creative Bento) */}
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 max-w-7xl mx-auto">
+            {/* Contact Content Grid */}
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 overflow-visible">
 
               {/* Left Column: Info Tiles */}
               <motion.div

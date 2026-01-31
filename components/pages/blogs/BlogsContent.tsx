@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { Calendar, BookOpen, Loader2 } from 'lucide-react';
+import { Calendar, BookOpen, Loader2, ExternalLink } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useQuery } from '@tanstack/react-query';
 import Image from 'next/image';
@@ -18,7 +18,6 @@ interface Blog {
 }
 
 export default function BlogsContent() {
-
 
     const { data, isLoading, error: queryError } = useQuery({
         queryKey: ['blogs'],
@@ -48,73 +47,48 @@ export default function BlogsContent() {
     };
 
     return (
-        <div className="relative min-h-screen bg-black overflow-hidden">
-            {/* Optimized Animated Background */}
-            <div className="fixed inset-0 pointer-events-none" style={{ willChange: 'transform' }}>
-                <div
-                    className="absolute inset-0 opacity-30 animate-gradient-mesh"
-                    style={{
-                        background: 'radial-gradient(circle at 20% 50%, rgba(190, 255, 1, 0.15) 0%, transparent 50%), radial-gradient(circle at 80% 80%, rgba(59, 130, 246, 0.15) 0%, transparent 50%), radial-gradient(circle at 40% 20%, rgba(168, 85, 247, 0.15) 0%, transparent 50%)',
-                        backgroundSize: '200% 200%',
-                    }}
-                />
-
-                <div className="absolute inset-0 bg-[linear-gradient(to_right,#18181b_1px,transparent_1px),linear-gradient(to_bottom,#18181b_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_0%,#000_70%,transparent_100%)] opacity-20"></div>
-
-                <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-[#beff01]/10 rounded-full blur-2xl animate-orb-1" style={{ willChange: 'transform' }} />
-                <div className="absolute bottom-0 right-1/4 w-[600px] h-[600px] bg-blue-500/10 rounded-full blur-2xl animate-orb-2" style={{ willChange: 'transform' }} />
-
-                <div className="absolute inset-x-0 h-px bg-gradient-to-r from-transparent via-[#beff01]/30 to-transparent animate-scan-line" />
-
-                <div
-                    className="absolute inset-0 opacity-[0.015]"
-                    style={{
-                        backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
-                        backgroundRepeat: 'repeat'
-                    }}
-                />
-
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,black_100%)] opacity-40" />
-            </div>
-
+        <div className="relative min-h-screen overflow-hidden">
             {/* Main Content */}
             <main className="relative z-10 pt-24">
                 <section className="relative py-12 px-4 md:px-8 lg:px-16 overflow-hidden">
-                    <div className="relative max-w-7xl mx-auto px-6 md:px-8 lg:px-12">
-                        {/* Header */}
-                        <motion.div
-                            initial={{ opacity: 0, y: 30 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.8, ease: "easeOut" }}
-                            className="max-w-7xl mx-auto px-6 md:px-8 lg:px-12 py-8 md:py-12 text-center"
-                        >
-                            <motion.div
-                                initial={{ opacity: 0, scale: 0.9 }}
-                                animate={{ opacity: 1, scale: 1 }}
-                                transition={{ duration: 0.6, delay: 0.2 }}
-                                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#beff01]/10 border border-[#beff01]/30 backdrop-blur-sm mb-8 group hover:bg-[#beff01]/20 transition-all"
-                            >
-                                <div className="w-2 h-2 rounded-full bg-[#beff01] animate-pulse" />
-                                <span className="text-[#beff01] text-sm font-bold uppercase tracking-wider">
+                    <div className="relative max-w-[1400px] mx-auto px-4 md:px-8">
+                        {/* Creative Section Header - Max Right Alignment */}
+                        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-end mb-16">
+                            <div className="lg:col-span-7">
+                                <motion.div
+                                    initial={{ opacity: 0, x: -20 }}
+                                    whileInView={{ opacity: 1, x: 0 }}
+                                    viewport={{ once: true }}
+                                    className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-white/10 bg-white/5 text-zinc-400 text-xs font-mono uppercase tracking-widest mb-6"
+                                >
+                                    <div className="w-1.5 h-1.5 rounded-full bg-[#beff01]" />
                                     Blog & Insights
-                                </span>
-                            </motion.div>
+                                </motion.div>
 
-                            <motion.h1
-                                initial={{ opacity: 0, y: 20 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ duration: 0.6, delay: 0.3 }}
-                                className="text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-black text-white mb-8 tracking-tight leading-none"
-                            >
-                                Stories That
-                                <br />
-                                <span className="bg-gradient-to-r from-[#beff01] via-[#d4ff4d] to-[#beff01] bg-clip-text text-transparent bg-[length:200%_auto] animate-gradient">
-                                    Inspire & Educate
-                                </span>
-                            </motion.h1>
+                                <motion.h1
+                                    initial={{ opacity: 0, y: 30 }}
+                                    whileInView={{ opacity: 1, y: 0 }}
+                                    viewport={{ once: true }}
+                                    transition={{ duration: 0.8 }}
+                                    className="text-6xl md:text-8xl lg:text-9xl font-black text-white leading-[0.85] tracking-tight"
+                                >
+                                    LATEST<br />
+                                    <span className="text-[#beff01]">STORIES</span>
+                                </motion.h1>
+                            </div>
 
-
-                        </motion.div>
+                            <div className="lg:col-span-5 lg:col-start-8 lg:text-right lg:pb-4">
+                                <motion.p
+                                    initial={{ opacity: 0, y: 20 }}
+                                    whileInView={{ opacity: 1, y: 0 }}
+                                    viewport={{ once: true }}
+                                    transition={{ delay: 0.2 }}
+                                    className="text-xl text-zinc-400 leading-relaxed ml-auto"
+                                >
+                                    Read about the latest trends in AI, Design, and Development. We share what we learn, so you can grow faster.
+                                </motion.p>
+                            </div>
+                        </div>
 
                         {/* Loading State */}
                         {loading && (
@@ -182,51 +156,14 @@ export default function BlogsContent() {
             </main>
 
             <style jsx global>{`
-        @keyframes gradient {
-          0%, 100% { background-position: 0% 50%; }
-          50% { background-position: 100% 50%; }
-        }
-        
-        @keyframes gradient-mesh {
-          0%, 100% { background-position: 0% 0%, 100% 100%, 50% 50%; }
-          50% { background-position: 100% 100%, 0% 0%, 100% 0%; }
-        }
-        
-        @keyframes orb-1 {
-          0%, 100% { transform: translate(0, 0) scale(1); }
-          50% { transform: translate(30px, -40px) scale(1.2); }
-        }
-        
-        @keyframes orb-2 {
-          0%, 100% { transform: translate(0, 0) scale(1); }
-          50% { transform: translate(-30px, 40px) scale(1.3); }
-        }
-        
-        @keyframes scan-line {
-          0% { transform: translateY(-100vh); }
-          100% { transform: translateY(200vh); }
-        }
-        
-        .animate-gradient {
-          animation: gradient 3s ease infinite;
-        }
-        
-        .animate-gradient-mesh {
-          animation: gradient-mesh 20s ease-in-out infinite;
-        }
-        
-        .animate-orb-1 {
-          animation: orb-1 15s ease-in-out infinite;
-        }
-        
-        .animate-orb-2 {
-          animation: orb-2 18s ease-in-out infinite 2s;
-        }
-        
-        .animate-scan-line {
-          animation: scan-line 8s linear infinite;
-        }
-      `}</style>
+                @keyframes gradient {
+                    0%, 100% { background-position: 0% 50%; }
+                    50% { background-position: 100% 50%; }
+                }
+                .animate-gradient {
+                    animation: gradient 3s ease infinite;
+                }
+            `}</style>
         </div>
     );
 }
@@ -287,10 +224,9 @@ function BlogCard({ blog, index, formatDate }: BlogCardProps) {
                     <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-300" />
                 </motion.div>
 
-                {/* Category and Date Badges - Fixed overlapping on mobile */}
+                {/* Category Badge */}
                 <div className="absolute top-0 left-0 right-0 z-10 p-4">
                     <div className="flex flex-col sm:flex-row justify-between items-start gap-2">
-                        {/* Category Badge */}
                         <motion.div
                             initial={{ x: -20, opacity: 0 }}
                             animate={{ x: 0, opacity: 1 }}
@@ -305,9 +241,7 @@ function BlogCard({ blog, index, formatDate }: BlogCardProps) {
                 </div>
 
                 {/* Blog Title & Excerpt */}
-                <motion.div
-                    className="absolute bottom-0 left-0 right-0 p-4 sm:p-8 z-10"
-                >
+                <motion.div className="absolute bottom-0 left-0 right-0 p-4 sm:p-8 z-10">
                     <h3 className="text-xl sm:text-3xl font-black text-white mb-2 group-hover:text-[#beff01] transition-colors duration-300 tracking-tight">
                         {blog.title}
                     </h3>
@@ -316,7 +250,6 @@ function BlogCard({ blog, index, formatDate }: BlogCardProps) {
                         <Calendar className="w-4 h-4" />
                         <span>{formatDate(blog.publicationDate)}</span>
                     </div>
-
                 </motion.div>
 
                 {/* Hover Glow */}

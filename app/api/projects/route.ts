@@ -45,6 +45,58 @@ export async function GET(request: Request) {
 
     const db = await getDatabase();
 
+    // Handle diverse featured - get one project from each category
+    if (featured === 'diverse') {
+      const diverseProjects = await db
+        .collection('works')
+        .aggregate([
+          // Group by category and get one project from each
+          { $sort: { order: 1, createdAt: -1 } },
+          {
+            $group: {
+              _id: '$category',
+              project: { $first: '$$ROOT' }
+            }
+          },
+          { $replaceRoot: { newRoot: '$project' } },
+          { $limit: limit },
+          {
+            $project: {
+              title: 1,
+              slug: 1,
+              description: 1,
+              image: 1,
+              category: 1,
+              client: 1,
+              featured: 1,
+              order: 1,
+              createdAt: 1,
+            }
+          },
+        ])
+        .toArray();
+
+      return NextResponse.json({
+        success: true,
+        projects: diverseProjects.map((project: MongoProject) => ({
+          ...project,
+          _id: project._id.toString(),
+        })),
+        pagination: {
+          page: 1,
+          limit,
+          total: diverseProjects.length,
+          totalPages: 1,
+          hasNextPage: false,
+          hasPrevPage: false,
+        },
+      }, {
+        headers: {
+          'Cache-Control': 'public, s-maxage=120, stale-while-revalidate=300',
+        },
+      });
+    }
+
     // Build query object with proper typing
     const query: ProjectQuery = {};
     if (featured === 'true') {
@@ -61,6 +113,7 @@ export async function GET(request: Request) {
       description: 1,
       image: 1,
       category: 1,
+      client: 1,
       featured: 1,
       order: 1,
       createdAt: 1,
