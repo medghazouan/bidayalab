@@ -94,7 +94,7 @@ export default function Navbar() {
       `}</style>
 
       {/* MINIMAL HEADER - Scrolls with page */}
-      <header className="relative top-0 left-0 right-0 z-[60] px-4 md:px-8 py-2 md:py-4 pointer-events-none">
+      <header className="absolute top-0 left-0 right-0 z-[60] px-4 md:px-8 py-2 md:py-4 pointer-events-none transition-all duration-300">
         <div className="flex items-center justify-between max-w-[1920px] mx-auto">
           <Link href="/home" className="pointer-events-auto relative z-[70]">
             <Image
@@ -113,8 +113,8 @@ export default function Navbar() {
                 CLOSE
               </span>
             ) : (
-              <div className="w-14 h-14 rounded-full bg-black/20 backdrop-blur-sm flex justify-center items-center group-hover:bg-white group-hover:text-black transition-all duration-300 hover:scale-110">
-                <AlignRight size={32} strokeWidth={1.5} />
+              <div className="w-14 h-14 flex justify-center items-center text-[#beff01] transition-all duration-300 group-hover:bg-white/10 rounded-full">
+                <AlignRight size={32} strokeWidth={1} />
               </div>
             )}
           </button>
@@ -129,7 +129,7 @@ export default function Navbar() {
             initial="initial"
             animate="animate"
             exit="exit"
-            className="fixed inset-0 bg-black z-[50] w-full h-[100dvh] flex flex-col pt-32 pb-8 px-4 md:px-8 overflow-hidden"
+            className="fixed inset-0 bg-black/95 backdrop-blur-sm z-[50] w-full h-[100dvh] flex flex-col pt-32 pb-8 px-4 md:px-8 overflow-hidden"
           >
             <motion.div
               variants={containerVariants}
@@ -149,8 +149,8 @@ export default function Navbar() {
                         <Link
                           href={link.href}
                           onClick={toggleMenu}
-                          className={`text-[13vw] md:text-[7vw] leading-[0.85] font-normal tracking-tight hover:text-[#beff01] transition-colors duration-300 block ${pathname === link.href ? 'text-[#beff01]' : 'text-zinc-200'}`}
-                          style={{ fontFamily: 'var(--font-survalia)' }}
+                          className={`text-[13vw] md:text-[7vw] leading-[0.85] font-normal tracking-tight hover:text-[#beff01] transition-colors duration-300 block font-louis font-bold uppercase ${pathname === link.href ? 'text-[#beff01]' : 'text-zinc-200'}`}
+                          style={{}}
                         >
                           {link.name}
                           <span className="text-sm md:text-lg align-top ml-2 md:ml-4 opacity-50 font-mono tracking-widest text-zinc-500">
@@ -174,7 +174,7 @@ export default function Navbar() {
                         href={url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-zinc-400 hover:text-white uppercase tracking-wider text-xs md:text-sm flex items-center gap-2"
+                        className="text-zinc-400 hover:text-white uppercase tracking-wider text-xs md:text-sm flex items-center gap-2 font-louis font-bold"
                       >
                         {social.label}
                         {/* Reverted to Generic Arrow Icon as requested */}
@@ -188,7 +188,8 @@ export default function Navbar() {
               {/* RIGHT COLUMN: DESCRIPTION + CONTACT */}
               <div className="hidden md:flex flex-1 flex-col justify-between items-end text-right h-full pt-4">
                 <motion.div variants={itemVariants} className="max-w-md mt-6 text-right w-full ml-auto">
-                  <p className="text-2xl md:text-3xl font-light text-zinc-300 leading-tight">
+                  {/* Description in Secondary Font (Louis) */}
+                  <p className="text-2xl md:text-3xl font-light text-zinc-300 leading-tight font-louis">
                     {/* Updated Text: Removed 'Moroccan' */}
                     Turning businesses into digital powerhouses through AI automation and world-class platforms.
                   </p>
@@ -197,12 +198,12 @@ export default function Navbar() {
                 <motion.div variants={itemVariants} className="text-right pb-4">
                   <p className="text-zinc-500 text-sm mb-2 uppercase tracking-widest">Get in touch</p>
                   <div className="flex flex-col items-end gap-1">
-                    <a href={`mailto:${settings.email}`} className="text-white text-2xl md:text-4xl hover:text-[#beff01] transition-colors font-light block">
+                    <a href={`mailto:${settings.email}`} className="text-white text-2xl md:text-4xl hover:text-[#beff01] transition-colors font-louis font-bold block">
                       {settings.email}
                     </a>
                     {settings.phone && (
                       /* Matched Phone Size to Email Size */
-                      <a href={`tel:${settings.phone}`} className="text-zinc-400 text-2xl md:text-4xl hover:text-white transition-colors font-light block">
+                      <a href={`tel:${settings.phone}`} className="text-zinc-400 text-2xl md:text-4xl hover:text-white transition-colors font-louis font-bold block">
                         {settings.phone}
                       </a>
                     )}

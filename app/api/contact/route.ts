@@ -7,7 +7,7 @@ import { rateLimit } from '@/lib/rate-limit';
 
 export async function POST(request: Request) {
   try {
-    const { name, email, phone, message, website_url } = await request.json();
+    const { name, businessName, email, phone, message, services, website_url } = await request.json();
 
     // 1. HONEYPOT CHECK (Anti-Spam)
     if (website_url) {
@@ -41,9 +41,11 @@ export async function POST(request: Request) {
     const db = await getDatabase();
     const newContact = {
       name,
+      businessName: businessName || '',
       email,
       phone,
       message: message || '',
+      services: services || [],
       status: 'new' as const,
       createdAt: new Date(),
     };
@@ -53,112 +55,134 @@ export async function POST(request: Request) {
     // Send email asynchronously (non-blocking)
     const emailUser = process.env.EMAIL_USER;
     if (emailUser) {
+      // Service Labels Mapping for Email
+      const serviceLabels: Record<string, string> = {
+        'ai-automation': 'AI Automation',
+        'web-dev': 'Web Development',
+        'visual-storytelling': 'Visual Storytelling',
+      };
+
+      const readableServices = Array.isArray(services)
+        ? services.map(s => serviceLabels[s] || s)
+        : [];
+
       const emailHTML = `
         <!DOCTYPE html>
         <html lang="en">
         <head>
           <meta charset="UTF-8">
           <meta name="viewport" content="width=device-width, initial-scale=1.0">
-          <title>New Contact Message</title>
+          <title>New Project Inquiry</title>
         </head>
-        <body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 40px 20px;">
-          <table role="presentation" style="max-width: 600px; margin: 0 auto; background: #ffffff; border-radius: 20px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.3);">
-            <!-- Header -->
+        <body style="margin: 0; padding: 0; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; background-color: #000000; color: #ffffff;">
+          <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="background-color: #000000;">
             <tr>
-              <td style="background: linear-gradient(135deg, #beff01 0%, #8bc500 100%); padding: 40px 30px; text-align: center;">
-                <h1 style="margin: 0; color: #000000; font-size: 32px; font-weight: 900; letter-spacing: -1px;">
-                  💌 New Contact Message
-                </h1>
-                <p style="margin: 10px 0 0 0; color: rgba(0,0,0,0.7); font-size: 14px; font-weight: 600;">
-                  Someone wants to connect with you!
-                </p>
-              </td>
-            </tr>
-            
-            <!-- Timestamp Badge -->
-            <tr>
-              <td style="padding: 30px 30px 0 30px;">
-                <div style="display: inline-block; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: #ffffff; padding: 8px 16px; border-radius: 20px; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">
-                  📅 ${new Date().toLocaleString('en-US', {
-        timeZone: 'Africa/Casablanca',
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit'
-      })}
-                </div>
-              </td>
-            </tr>
-            
-            <!-- Contact Details -->
-            <tr>
-              <td style="padding: 30px;">
-                <!-- Name -->
-                <div style="margin-bottom: 20px; padding: 20px; background: linear-gradient(135deg, #f5f5f5 0%, #e9ecef 100%); border-radius: 12px; border-left: 4px solid #beff01;">
-                  <div style="font-size: 11px; color: #666666; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;">
-                    👤 Full Name
-                  </div>
-                  <div style="font-size: 18px; color: #1a1a1a; font-weight: 700;">
-                    ${name}
-                  </div>
-                </div>
-                
-                <!-- Email -->
-                <div style="margin-bottom: 20px; padding: 20px; background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%); border-radius: 12px; border-left: 4px solid #2196F3;">
-                  <div style="font-size: 11px; color: #1976d2; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;">
-                    📧 Email Address
-                  </div>
-                  <div style="font-size: 18px; color: #0d47a1; font-weight: 700;">
-                    <a href="mailto:${email}" style="color: #0d47a1; text-decoration: none;">
-                      ${email}
-                    </a>
-                  </div>
-                </div>
-                
-                <!-- Phone -->
-                <div style="margin-bottom: 20px; padding: 20px; background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%); border-radius: 12px; border-left: 4px solid #4caf50;">
-                  <div style="font-size: 11px; color: #388e3c; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;">
-                    📱 Phone Number
-                  </div>
-                  <div style="font-size: 18px; color: #1b5e20; font-weight: 700;">
-                    <a href="tel:${phone}" style="color: #1b5e20; text-decoration: none;">
-                      ${phone}
-                    </a>
-                  </div>
-                </div>
-                
-                ${message ? `
-                <!-- Message -->
-                <div style="margin-bottom: 20px; padding: 20px; background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%); border-radius: 12px; border-left: 4px solid #ff9800;">
-                  <div style="font-size: 11px; color: #e65100; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px;">
-                    💬 Message
-                  </div>
-                  <div style="font-size: 15px; color: #424242; line-height: 1.6; font-weight: 500;">
-                    ${message.replace(/\n/g, '<br>')}
-                  </div>
-                </div>
-                ` : ''}
-              </td>
-            </tr>
-            
-            <!-- Quick Action Button -->
-            <tr>
-              <td style="padding: 0 30px 30px 30px; text-align: center;">
-                <a href="mailto:${email}" style="display: inline-block; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: #ffffff; padding: 16px 40px; border-radius: 50px; text-decoration: none; font-weight: 700; font-size: 16px; box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4); transition: all 0.3s;">
-                  ✉️ Reply Now
-                </a>
-              </td>
-            </tr>
-            
-            <!-- Footer -->
-            <tr>
-              <td style="background: #f8f9fa; padding: 30px; text-align: center; border-top: 1px solid #e0e0e0;">
-                <p style="margin: 0 0 10px 0; color: #666666; font-size: 14px; font-weight: 600;">
-                  🚀 Bidayalab - Digital Growth Partner
-                </p>
-                <p style="margin: 0; color: #999999; font-size: 12px;">
-                  This message was sent from your website contact form
+              <td align="center" style="padding: 40px 20px;">
+                <!-- Main Container -->
+                <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="max-width: 600px; background-color: #111111; border: 1px solid #333333; border-radius: 16px; overflow: hidden;">
+                  
+                  <!-- Header -->
+                  <tr>
+                    <td style="padding: 40px 40px 20px 40px; text-align: center; border-bottom: 1px solid #222222;">
+                      <h1 style="margin: 0; font-size: 24px; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; color: #ffffff;">
+                        New <span style="color: #beff01;">Inquiry</span>
+                      </h1>
+                      <p style="margin: 10px 0 0 0; color: #888888; font-size: 14px;">
+                        Received via Bidayalab Website
+                      </p>
+                    </td>
+                  </tr>
+
+                  <!-- Content -->
+                  <tr>
+                    <td style="padding: 40px;">
+                      
+                      <!-- Intro -->
+                      <div style="margin-bottom: 30px;">
+                        <p style="margin: 0; font-size: 16px; line-height: 1.6; color: #cccccc;">
+                          You have received a new contact request. Here are the details:
+                        </p>
+                      </div>
+
+                      <!-- Client Details Section -->
+                      <div style="margin-bottom: 30px;">
+                        <h3 style="margin: 0 0 15px 0; font-size: 12px; font-weight: 700; text-transform: uppercase; color: #beff01; letter-spacing: 1px;">
+                          Client Details
+                        </h3>
+                        
+                        <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                          <tr>
+                            <td style="padding: 12px 0; border-bottom: 1px solid #222222; color: #888888; font-size: 14px; width: 120px;">Name</td>
+                            <td style="padding: 12px 0; border-bottom: 1px solid #222222; color: #ffffff; font-size: 14px; font-weight: 500;">${name}</td>
+                          </tr>
+                          ${businessName ? `
+                          <tr>
+                            <td style="padding: 12px 0; border-bottom: 1px solid #222222; color: #888888; font-size: 14px;">Business</td>
+                            <td style="padding: 12px 0; border-bottom: 1px solid #222222; color: #ffffff; font-size: 14px; font-weight: 500;">${businessName}</td>
+                          </tr>` : ''}
+                          <tr>
+                            <td style="padding: 12px 0; border-bottom: 1px solid #222222; color: #888888; font-size: 14px;">Email</td>
+                            <td style="padding: 12px 0; border-bottom: 1px solid #222222; color: #beff01; font-size: 14px; font-weight: 500;">
+                                <a href="mailto:${email}" style="color: #beff01; text-decoration: none;">${email}</a>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td style="padding: 12px 0; border-bottom: 1px solid #222222; color: #888888; font-size: 14px;">Phone</td>
+                            <td style="padding: 12px 0; border-bottom: 1px solid #222222; color: #ffffff; font-size: 14px; font-weight: 500;">
+                                <a href="tel:${phone}" style="color: #ffffff; text-decoration: none;">${phone}</a>
+                            </td>
+                          </tr>
+                        </table>
+                      </div>
+
+                      <!-- Services Section -->
+                      ${readableServices.length > 0 ? `
+                      <div style="margin-bottom: 30px;">
+                        <h3 style="margin: 0 0 15px 0; font-size: 12px; font-weight: 700; text-transform: uppercase; color: #beff01; letter-spacing: 1px;">
+                          Interested Services
+                        </h3>
+                        <div>
+                          ${readableServices.map(service => `
+                            <span style="display: inline-block; background-color: #222222; color: #ffffff; padding: 6px 12px; border-radius: 4px; font-size: 12px; font-weight: 600; margin-right: 6px; margin-bottom: 6px; border: 1px solid #333333;">
+                              ${service}
+                            </span>
+                          `).join('')}
+                        </div>
+                      </div>` : ''}
+
+                      <!-- Message Section -->
+                      <div style="margin-bottom: 30px;">
+                        <h3 style="margin: 0 0 15px 0; font-size: 12px; font-weight: 700; text-transform: uppercase; color: #beff01; letter-spacing: 1px;">
+                          Message
+                        </h3>
+                        <div style="background-color: #1a1a1a; padding: 20px; border-radius: 8px; border: 1px solid #333333; color: #cccccc; font-size: 14px; line-height: 1.6;">
+                          ${message ? message.replace(/\n/g, '<br>') : '<i style="color: #666">No message provided</i>'}
+                        </div>
+                      </div>
+
+                      <!-- Action Button -->
+                      <div style="text-align: center; margin-top: 40px;">
+                        <a href="mailto:${email}" style="display: inline-block; background-color: #beff01; color: #000000; padding: 14px 32px; border-radius: 50px; text-decoration: none; font-weight: 700; font-size: 14px; text-transform: uppercase; letter-spacing: 1px;">
+                          Reply to Client
+                        </a>
+                      </div>
+
+                    </td>
+                  </tr>
+
+                  <!-- Footer -->
+                  <tr>
+                    <td style="padding: 20px; text-align: center; background-color: #0a0a0a; border-top: 1px solid #222222;">
+                      <p style="margin: 0; color: #444444; font-size: 12px;">
+                        &copy; ${new Date().getFullYear()} Bidayalab. All rights reserved.
+                      </p>
+                    </td>
+                  </tr>
+                </table>
+
+                <!-- Timestamp -->
+                <p style="margin-top: 20px; color: #444444; font-size: 11px;">
+                  Sent: ${new Date().toLocaleString('en-US', { timeZone: 'Africa/Casablanca' })}
                 </p>
               </td>
             </tr>
@@ -170,7 +194,7 @@ export async function POST(request: Request) {
       sendEmailAsync({
         from: `"${name}" <${emailUser}>`,
         to: 'support@bidayalab.com',
-        subject: `🔥 New Contact from ${name}`,
+        subject: `🔥 New Contact: ${businessName || name}`,
         html: emailHTML,
       });
     }

@@ -10,27 +10,28 @@ const services = [
         id: 'service1',
         number: '01',
         title: 'AI Automation',
-        description: 'Streamline your operations with intelligent automation. From customer service chatbots to workflow automation, we build AI systems that work 24/7 so you can focus on growing your business.',
+        description: 'Together, we automate your workflows so you can focus on what matters—growing your business. From intelligent chatbots to seamless CRM integrations, we build AI systems that work around the clock for you.',
         categories: ['Chatbots', 'Workflow Automation', 'Lead Generation', 'Email Automation', 'CRM Integration', 'Data Processing'],
-        image: '/assets/images/services/ai-automation.png'
+        image: '/assets/images/services/ai-automation.webp'
     },
     {
         id: 'service2',
         number: '02',
         title: 'Web Development',
-        description: 'Custom websites and web applications that convert visitors into customers. Fast, responsive, and built with the latest technologies to give you a competitive edge.',
+        description: 'We craft custom digital platforms that turn your visitors into loyal customers. Fast, responsive, and built with cutting-edge technology—let\'s create something that sets you apart from the competition.',
         categories: ['Custom Websites', 'E-commerce', 'Web Apps', 'Landing Pages', 'CMS Integration', 'API Development'],
-        image: '/assets/images/services/web-development.png'
+        image: '/assets/images/services/web-development.webp'
     },
     {
         id: 'service3',
         number: '03',
         title: 'Visual Storytelling',
-        description: 'Premium video production and photography that captures your brand essence. From product shoots to brand documentaries, we create content that resonates with your audience.',
+        description: 'We bring your brand to life with premium video and photography that resonates. From product shoots to brand documentaries, let\'s tell your story in a way that captivates your audience.',
         categories: ['Video Production', 'Photography', 'Motion Graphics', 'Brand Films', 'Product Shoots', 'Social Content'],
-        image: '/assets/images/services/visual-storytelling.png'
+        image: '/assets/images/services/visual-storytelling.webp'
     }
 ];
+
 
 export default function Services() {
     const [activeServiceId, setActiveServiceId] = useState<string>(services[0].id);
@@ -112,7 +113,7 @@ export default function Services() {
     return (
         <section
             id="services-section"
-            className="relative bg-[#000000] border-t border-zinc-900"
+            className="relative bg-transparent"
             style={{ fontFamily: "'Inter Display', 'Inter', sans-serif" }}
         >
             {/* Section Header */}
@@ -138,7 +139,7 @@ export default function Services() {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.8 }}
-                    className="text-5xl md:text-7xl lg:text-8xl xl:text-9xl font-survalia text-white leading-[1.05] tracking-tight mb-4"
+                    className="text-5xl md:text-7xl lg:text-8xl xl:text-9xl font-louis font-bold text-white leading-[1.05] tracking-tight mb-4"
                 >
                     Full-Spectrum<br />
                     <span className="text-[#beff01]">Digital Capabilities.</span>

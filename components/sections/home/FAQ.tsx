@@ -45,21 +45,17 @@ function FAQItem({ faq, isOpen, onToggle }: { faq: typeof faqs[0]; isOpen: boole
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-50px" }}
-      className="border-b border-zinc-800"
+      className={`border-b border-zinc-800 transition-colors duration-500 ${isOpen ? 'bg-zinc-900/30' : 'hover:bg-zinc-900/10'}`}
     >
       <button
         onClick={onToggle}
-        className="w-full py-6 md:py-8 flex items-start justify-between gap-4 text-left group"
+        className="w-full py-6 md:py-8 pl-4 pr-4 md:pl-8 md:pr-8 flex items-start justify-between gap-4 text-left group"
       >
-        <span className="text-lg md:text-xl lg:text-2xl font-louis font-medium text-white group-hover:text-[#beff01] transition-colors duration-300">
+        <span className={`text-lg md:text-xl lg:text-2xl font-louis font-medium transition-colors duration-300 ${isOpen ? 'text-[#beff01]' : 'text-white group-hover:text-[#beff01]'}`}>
           {faq.question}
         </span>
-        <div className={`flex-shrink-0 w-10 h-10 rounded-full border border-zinc-700 flex items-center justify-center transition-all duration-300 ${isOpen ? 'bg-[#beff01] border-[#beff01]' : 'group-hover:border-[#beff01]'}`}>
-          {isOpen ? (
-            <Minus className="w-5 h-5 text-black" />
-          ) : (
-            <Plus className={`w-5 h-5 transition-colors duration-300 ${isOpen ? 'text-black' : 'text-white group-hover:text-[#beff01]'}`} />
-          )}
+        <div className={`flex-shrink-0 w-10 h-10 rounded-full border border-zinc-700 flex items-center justify-center transition-all duration-500 ${isOpen ? 'bg-[#beff01] border-[#beff01] rotate-180' : 'group-hover:border-[#beff01] rotate-0'}`}>
+          <Plus className={`w-5 h-5 transition-colors duration-300 ${isOpen ? 'text-black' : 'text-white group-hover:text-[#beff01]'}`} />
         </div>
       </button>
 
@@ -69,12 +65,20 @@ function FAQItem({ faq, isOpen, onToggle }: { faq: typeof faqs[0]; isOpen: boole
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: 'auto', opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.3, ease: [0.33, 1, 0.68, 1] }}
+            transition={{ type: "spring", duration: 0.8, bounce: 0, opacity: { duration: 0.3 } }}
             className="overflow-hidden"
           >
-            <p className="pb-6 md:pb-8 text-zinc-400 font-louis text-base md:text-lg leading-relaxed max-w-4xl">
-              {faq.answer}
-            </p>
+            <motion.div
+              initial={{ y: -20, opacity: 0, filter: 'blur(10px)' }}
+              animate={{ y: 0, opacity: 1, filter: 'blur(0px)' }}
+              exit={{ y: -20, opacity: 0, filter: 'blur(10px)' }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+              className="pl-4 pr-4 md:pl-8 md:pr-8 pb-6 md:pb-8"
+            >
+              <p className="text-zinc-400 font-louis text-base md:text-lg leading-relaxed max-w-4xl">
+                {faq.answer}
+              </p>
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
@@ -92,7 +96,7 @@ export default function FAQ() {
   return (
     <section
       id="faq-section"
-      className="relative bg-[#000000] border-t border-zinc-900"
+      className="relative bg-transparent border-t border-zinc-900"
     >
       {/* Section Header */}
       <div className="w-full px-4 md:px-8 pt-20 md:pt-32 pb-10 md:pb-16">
@@ -117,7 +121,7 @@ export default function FAQ() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
-          className="text-5xl md:text-7xl lg:text-8xl xl:text-9xl font-survalia text-white leading-[1.05] tracking-tight mb-4"
+          className="text-5xl md:text-7xl lg:text-8xl xl:text-9xl font-louis font-bold text-white leading-[1.05] tracking-tight mb-4"
         >
           Questions?<br />
           <span className="text-[#beff01]">Answers.</span>
@@ -150,22 +154,29 @@ export default function FAQ() {
             ))}
           </div>
 
-          {/* Bottom CTA */}
+          {/* Bottom CTA Row - Standardized to match Process Section */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="mt-12 md:mt-16 flex flex-col sm:flex-row items-start sm:items-center gap-4"
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="mt-6 md:mt-8 flex flex-col md:flex-row md:items-center md:justify-between gap-6 pt-4"
           >
-            <p className="text-zinc-400 font-louis">
-              Still have questions?
+            <p className="text-zinc-400 font-louis text-lg md:text-xl text-left">
+              Still have questions?{" "}
+              <span className="text-white">Let's clarify them.</span>
             </p>
             <a
               href="/contact"
-              className="inline-flex items-center gap-2 text-[#beff01] font-louis font-medium hover:underline transition-all"
+              className="w-full md:w-auto group inline-flex items-center justify-center gap-3 px-8 py-4 bg-[#beff01] text-black font-louis font-bold text-lg transition-all duration-300 hover:bg-white"
             >
-              Get in touch
-              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              Get in Touch
+              <svg
+                className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
               </svg>
             </a>

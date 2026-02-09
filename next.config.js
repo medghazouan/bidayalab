@@ -4,96 +4,91 @@
 const nextConfig = {
   reactStrictMode: true,
   eslint: {
-    // Warning: This allows production builds to successfully complete even if
-    // your project has ESLint errors.
     ignoreDuringBuilds: true,
   },
   typescript: {
-    // !! WARN !!
-    // Dangerously allow production builds to successfully complete even if
-    // your project has type errors.
-    // !! WARN !!
     ignoreBuildErrors: true,
   },
 
-
-  // ⚡ PERFORMANCE: Enable Turbopack for 10x faster compilation
-  // Use with: npm run dev --turbo
-  // Note: Turbopack is stable in Next.js 15+
+  // Transpile Spline packages for ESM compatibility
+  transpilePackages: ['@splinetool/react-spline', '@splinetool/runtime'],
 
   images: {
-    // Updated to use remotePatterns (domains is deprecated)
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'plus.unsplash.com',
-      },
-      {
-        protocol: 'https',
-        hostname: 'images.unsplash.com',
-      },
-      {
-        protocol: 'https',
-        hostname: 'res.cloudinary.com',
-      },
-      {
-        protocol: 'https',
-        hostname: 'via.placeholder.com',
+        hostname: '**', // Allow all HTTPS image sources
       },
       {
         protocol: 'http',
         hostname: 'localhost',
       },
-      {
-        protocol: 'https',
-        hostname: 'ui-avatars.com',
-      },
     ],
-    formats: ['image/avif', 'image/webp'], // Enable modern image formats
+    formats: ['image/avif', 'image/webp'],
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
-    // Add image optimization
-    minimumCacheTTL: 60 * 60 * 24 * 365, // 1 year cache
+    minimumCacheTTL: 60 * 60 * 24 * 365,
     dangerouslyAllowSVG: true,
     contentDispositionType: 'attachment',
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
+    unoptimized: false,
   },
 
-  // ⚡ CRITICAL: Tree-shaking for lucide-react and framer-motion
-  // This reduces bundle size by 60-80% for icon libraries
-  // DISABLED: modularizeImports is incompatible with Turbopack
-  // Using experimental.optimizePackageImports instead (below)
-  // modularizeImports: {
-  //   'lucide-react': {
-  //     transform: 'lucide-react/dist/esm/icons/{{kebabCase member}}',
-  //     skipDefaultConversion: true,
-  //   },
-  // },
-
-  // ⚡ PERFORMANCE: Experimental optimizations
   experimental: {
-    // Optimize package imports - reduces bundle size
     optimizePackageImports: ['lucide-react', 'framer-motion'],
-    // Enable CSS optimization
     optimizeCss: true,
-    // Optimize server components
     serverActions: {
       bodySizeLimit: '2mb',
     },
   },
 
-  // Compress responses
   compress: true,
 
-  // ⚡ PERFORMANCE: Compiler optimizations
   compiler: {
-    // Remove console logs in production
     removeConsole: process.env.NODE_ENV === 'production' ? {
       exclude: ['error', 'warn'],
     } : false,
   },
 
-  // Redirects
+  // Security Headers
+  async headers() {
+    return [
+      {
+        source: '/(.*)',
+        headers: [
+          {
+            key: 'X-DNS-Prefetch-Control',
+            value: 'on'
+          },
+          {
+            key: 'Strict-Transport-Security',
+            value: 'max-age=63072000; includeSubDomains; preload'
+          },
+          {
+            key: 'X-Content-Type-Options',
+            value: 'nosniff'
+          },
+          {
+            key: 'X-Frame-Options',
+            value: 'SAMEORIGIN'
+          },
+          {
+            key: 'X-XSS-Protection',
+            value: '1; mode=block'
+          },
+          {
+            key: 'Referrer-Policy',
+            value: 'origin-when-cross-origin'
+          },
+          {
+            key: 'Permissions-Policy',
+            value: 'camera=(), microphone=(), geolocation=()'
+          }
+        ],
+      },
+    ];
+  },
+
   async redirects() {
     return [
       {
@@ -104,8 +99,14 @@ const nextConfig = {
     ];
   },
 
-  // ⚡ PERFORMANCE: Optimized webpack configuration
   webpack: (config, { isServer, dev }) => {
+    // Fix Spline ESM imports for Next.js 15 - use absolute paths
+    const path = require('path');
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      '@splinetool/react-spline': path.resolve(__dirname, 'node_modules/@splinetool/react-spline/dist/react-spline.js'),
+    };
+
     config.resolve.fallback = {
       ...config.resolve.fallback,
       fs: false,
@@ -113,7 +114,6 @@ const nextConfig = {
       tls: false,
     };
 
-    // Optimize bundle splitting for production
     if (!isServer && !dev) {
       const existingSplitChunks = config.optimization.splitChunks || {};
       config.optimization = {
@@ -123,10 +123,8 @@ const nextConfig = {
           chunks: 'all',
           cacheGroups: {
             ...existingSplitChunks.cacheGroups,
-            // Separate vendor chunks for better caching
             default: false,
             vendors: false,
-            // Framework chunk (React, Next.js)
             framework: {
               name: 'framework',
               test: /[\\/]node_modules[\\/](react|react-dom|scheduler|next)[\\/]/,
@@ -134,28 +132,18 @@ const nextConfig = {
               enforce: true,
               reuseExistingChunk: true,
             },
-            // Framer Motion chunk
             framerMotion: {
               name: 'framer-motion',
               test: /[\\/]node_modules[\\/]framer-motion[\\/]/,
               priority: 30,
               reuseExistingChunk: true,
             },
-            // Lucide icons chunk
             lucideIcons: {
               name: 'lucide-icons',
               test: /[\\/]node_modules[\\/]lucide-react[\\/]/,
               priority: 25,
               reuseExistingChunk: true,
             },
-            // React Query chunk
-            reactQuery: {
-              name: 'react-query',
-              test: /[\\/]node_modules[\\/]@tanstack[\\/]react-query[\\/]/,
-              priority: 20,
-              reuseExistingChunk: true,
-            },
-            // Common vendor libraries
             lib: {
               name: 'lib',
               test: /[\\/]node_modules[\\/]/,
@@ -165,7 +153,6 @@ const nextConfig = {
             },
           },
         },
-        // Minimize module IDs for smaller bundle
         moduleIds: 'deterministic',
       };
     }
@@ -173,18 +160,12 @@ const nextConfig = {
     return config;
   },
 
-  // ⚡ PERFORMANCE: Production source maps (smaller and faster)
   productionBrowserSourceMaps: false,
-
-  // ⚡ PERFORMANCE: Optimize build output
   poweredByHeader: false,
   generateEtags: true,
 
-  // ⚡ PERFORMANCE: Static page generation optimization
   onDemandEntries: {
-    // Period (in ms) where the server will keep pages in the buffer
     maxInactiveAge: 60 * 1000,
-    // Number of pages that should be kept simultaneously without being disposed
     pagesBufferLength: 5,
   },
 };

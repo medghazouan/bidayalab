@@ -26,7 +26,7 @@ export async function GET(
     // Also search by slug
     query.$or.push({ slug: id });
 
-    const project = await db.collection('works').findOne(query);
+    const project = await db.collection('projects').findOne(query);
 
     if (!project) {
       return NextResponse.json(
@@ -76,7 +76,7 @@ export async function PUT(
     const body = await request.json();
     const db = await getDatabase();
 
-    const result = await db.collection('works').findOneAndUpdate(
+    const result = await db.collection('projects').findOneAndUpdate(
       { _id: new ObjectId(id) },
       {
         $set: {
@@ -140,7 +140,7 @@ export async function DELETE(
     }
 
     const db = await getDatabase();
-    const result = await db.collection('works').deleteOne({
+    const result = await db.collection('projects').deleteOne({
       _id: new ObjectId(id)
     });
 

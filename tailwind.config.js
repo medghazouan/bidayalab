@@ -63,7 +63,7 @@ module.exports = {
       },
       fontFamily: {
         melon: ['var(--font-melon)', 'sans-serif'],
-        survalia: ['var(--font-survalia)', 'sans-serif'],
+        // survalia: ['var(--font-survalia)', 'sans-serif'], // REMOVED
         louis: ['var(--font-louis)', 'sans-serif'],
       },
       keyframes: {
@@ -88,6 +88,10 @@ module.exports = {
           '50%': { strokeDashoffset: '0' },
           '100%': { strokeDashoffset: '-2400' },
         },
+        marquee: {
+          '0%': { transform: 'translateX(0%)' },
+          '100%': { transform: 'translateX(-100%)' },
+        },
       },
       animation: {
         'gradient-mesh': 'gradient-mesh 20s ease-in-out infinite',
@@ -96,6 +100,7 @@ module.exports = {
         'scan-line': 'scan-line 8s linear infinite',
         'wave-wipe': 'wave-wipe 6s ease-in-out infinite',
         'wave-wipe-slow': 'wave-wipe 12s ease-in-out infinite',
+        'marquee': 'marquee 60s linear infinite',
       },
     },
   },

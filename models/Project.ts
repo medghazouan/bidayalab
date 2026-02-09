@@ -1,177 +1,129 @@
 // models/Project.ts
-import mongoose, { Schema, Document } from 'mongoose';
+import mongoose, { Schema, Document, Model } from 'mongoose';
 
 // --- Interfaces & Types ---
 
-export type ProjectCategory =
-  | 'creative-studio'
-  | 'digital-development'
-  | 'ai-automation'
-  | 'digital-marketing'
-  | 'visual-storytelling';
+export type ProjectCategory = 'web_development' | 'ai_automation' | 'visual_storytelling';
+export type ProjectStatus = 'draft' | 'published' | 'archived';
 
-export interface IResult {
-  metric: string;
-  value: string;
-  change?: string;     // e.g. "+25%"
-  description: string; // Context for the metric
-}
-
-export interface IAdCreative {
-  type: string;     // e.g. "Video", "Carousel"
-  platform: string; // e.g. "Instagram Reels"
-  description: string;
-  image?: string;
+export interface ITestimonial {
+  quote: string;
+  author: {
+    name: string;
+    role: string;
+  };
+  isVideo?: boolean;
+  videoUrl?: string;
+  thumbnailUrl?: string;
 }
 
 export interface IProject extends Document {
-  // Universal Fields
+  // Basics
   title: string;
   slug: string;
-  description: string;
   category: ProjectCategory;
-  client: string;
-  year: string;
-  duration: string;
-  image: string;        // Main Hero Image
-  images: string[];     // Gallery
-  technologies: string[]; // General tags/tools/services
+  clientName: string;
+  isConfidential: boolean;
+  industry: string;
+
+  // Status
+  status: ProjectStatus;
   featured: boolean;
-  status: 'draft' | 'published' | 'archived';
-  order: number;
+  completedAt: Date;
 
-  // Category: Creative Studio
-  brandColors?: string[];   // Hex codes
-  brandStrategy?: string;
-  deliverables?: string[];
+  // Content
+  summary: string;       // 1-2 sentences
+  description: string;   // Full text
+  challenge: string;
+  solution: string;
+  result: string;        // Key outcome/metric line
 
-  // Category: Digital Development
+  // Media
+  thumbnail: string;     // Cover image
+  gallery: string[];     // Array of URLs
+
+  // Category-specific
+  techStack?: string[];      // Web
+  aiTools?: string[];        // AI
+  productionRole?: string;   // Visual
+
+  // Links
   liveUrl?: string;
-  githubUrl?: string;
-  features?: string[];
-  challenge?: string;
-  solution?: string;
+  caseStudyUrl?: string;
 
-  // Category: AI & Automation
-  aiModels?: string[];         // e.g., "GPT-4", "Claude"
-  automationType?: string;     // e.g., "Customer Service Bot"
-  integrations?: string[];     // e.g., "Zapier", "Salesforce"
-  workflowDescription?: string;
-  timeSaved?: string;          // e.g., "20 hours/week"
+  // Testimonial
+  testimonial?: ITestimonial;
 
-  // Category: Digital Marketing
-  platforms?: string[];        // e.g., "Google Ads", "TikTok"
-  budget?: string;
-  targetAudience?: string;
-  strategy?: string;
-  revenue?: string;            // Single revenue number
-  adCreatives?: IAdCreative[];
-
-  // Category: Visual Storytelling
-  shootingStyle?: string;     // "Cinematic", "Documentary"
-  location?: string;
-  postProduction?: string;
-  videoUrl?: string;          // YouTube/Vimeo link
-  equipment?: string[];
-  testimonial?: {
-    quote: string;
-    author: string;
-    position: string;
-  };
-
-  // Shared Results
-  results?: IResult[];
-
-  // Metadata
+  // System
   createdAt: Date;
   updatedAt: Date;
 }
 
 // --- Schemas ---
 
-const ResultSchema = new Schema({
-  metric: { type: String },
-  value: { type: String },
-  change: { type: String },
-  description: { type: String }
-}, { _id: false });
-
-const AdCreativeSchema = new Schema({
-  type: { type: String },
-  platform: { type: String },
-  description: { type: String },
-  image: { type: String }
+const TestimonialSchema = new Schema({
+  quote: { type: String, required: true },
+  author: {
+    name: { type: String, required: true },
+    role: { type: String, required: true }
+  },
+  isVideo: { type: Boolean, default: false },
+  videoUrl: { type: String },
+  thumbnailUrl: { type: String }
 }, { _id: false });
 
 const ProjectSchema = new Schema<IProject>({
-  // Core Fields
-  title: { type: String, required: true },
-  slug: { type: String, required: true, unique: true },
-  description: { type: String, required: true },
+  // Classification
   category: {
     type: String,
     required: true,
-    enum: [
-      'creative-studio',
-      'digital-development',
-      'ai-automation',
-      'digital-marketing',
-      'visual-storytelling'
-    ]
+    enum: ['web_development', 'ai_automation', 'visual_storytelling']
   },
-  client: { type: String, required: true },
-  year: { type: String, required: true },
-  duration: { type: String },
-  image: { type: String, required: true },
-  images: [{ type: String }],
-  technologies: [{ type: String }], // Can function as "Services Included" list
+
+  // Basics
+  title: { type: String, required: true },
+  slug: { type: String, required: true, unique: true },
+  clientName: { type: String, required: true },
+  isConfidential: { type: Boolean, default: false },
+  industry: { type: String },
+
+  // Status
+  status: {
+    type: String,
+    enum: ['draft', 'published', 'archived'],
+    default: 'published'
+  },
   featured: { type: Boolean, default: false },
-  status: { type: String, enum: ['draft', 'published', 'archived'], default: 'published' },
-  order: { type: Number, default: 0 },
+  completedAt: { type: Date },
 
-  // Creative Studio Specifics
-  brandColors: [{ type: String }],
-  brandStrategy: { type: String },
-  deliverables: [{ type: String }],
-
-  // Digital Dev Specifics
-  liveUrl: { type: String },
-  githubUrl: { type: String },
-  features: [{ type: String }],
+  // Content
+  summary: { type: String, required: true },
+  description: { type: String, required: true },
   challenge: { type: String },
   solution: { type: String },
+  result: { type: String },
 
-  // AI Specifics
-  aiModels: [{ type: String }],
-  automationType: { type: String },
-  integrations: [{ type: String }],
-  workflowDescription: { type: String },
-  timeSaved: { type: String },
+  // Media
+  thumbnail: { type: String, required: true },
+  gallery: [{ type: String }],
 
-  // Marketing Specifics
-  platforms: [{ type: String }],
-  budget: { type: String },
-  targetAudience: { type: String },
-  strategy: { type: String },
-  revenue: { type: String },
-  adCreatives: [AdCreativeSchema],
+  // Category Specifics
+  techStack: [{ type: String }],
+  aiTools: [{ type: String }],
+  productionRole: { type: String },
 
-  // Visual Specifics
-  shootingStyle: { type: String },
-  location: { type: String },
-  postProduction: { type: String },
-  videoUrl: { type: String },
-  equipment: [{ type: String }],
-  testimonial: {
-    quote: { type: String },
-    author: { type: String },
-    position: { type: String }
-  },
+  // Links
+  liveUrl: { type: String },
+  caseStudyUrl: { type: String },
 
-  // Universal Results
-  results: [ResultSchema],
+  // Testimonial
+  testimonial: TestimonialSchema
 
-}, { timestamps: true, collection: 'works' });
+}, {
+  timestamps: true,
+  collection: 'projects' // Strict collection mapping
+});
 
-// Model Export
-export default mongoose.models.Project || mongoose.model<IProject>('Project', ProjectSchema);
+// Prevent overwrite on hot reload
+const Project: Model<IProject> = mongoose.models.Project || mongoose.model<IProject>('Project', ProjectSchema);
+export default Project;

@@ -45,43 +45,8 @@ export default function WorksGrid() {
   return (
     <section className="relative py-12 px-4 md:px-8 lg:px-16 overflow-hidden">
       <div className="relative max-w-[1400px] mx-auto px-4 md:px-8">
-        {/* Creative Section Header - Max Right Alignment */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-end mb-16">
-          <div className="lg:col-span-7">
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-white/10 bg-white/5 text-zinc-400 text-xs font-mono uppercase tracking-widest mb-6"
-            >
-              <div className="w-1.5 h-1.5 rounded-full bg-[#beff01]" />
-              Our Portfolio
-            </motion.div>
+        {/* Creative Section Header - REMOVED (Moved to WorksContent) */}
 
-            <motion.h1
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8 }}
-              className="text-6xl md:text-8xl lg:text-9xl font-black text-white leading-[0.85] tracking-tight"
-            >
-              LATEST<br />
-              <span className="text-[#beff01]">PROJECTS</span>
-            </motion.h1>
-          </div>
-
-          <div className="lg:col-span-5 lg:col-start-8 lg:text-right lg:pb-4">
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.2 }}
-              className="text-xl text-zinc-400 leading-relaxed ml-auto"
-            >
-              Explore our collection of award-winning digital experiences. Each project is a testament to our obsession with <span className="text-white font-medium">quality and performance</span>.
-            </motion.p>
-          </div>
-        </div>
 
         {/* Loading State */}
         {loading && (

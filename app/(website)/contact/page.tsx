@@ -2,9 +2,25 @@ import { Metadata } from 'next';
 import ContactContent from '@/components/pages/contact/ContactContent';
 
 export const metadata: Metadata = {
-  title: 'Start Your Project | Bidayalab',
-  description: 'Ready to scale? Contact Bidayalab for expert Web Development, AI Solutions, and Strategic Branding. Get a response within 24 hours.',
-  keywords: ['Contact Bidayalab', 'Hire AI Agency', 'Web Development Quote', 'Digital Agency Contact'],
+  title: 'Let\'s Build Something Amazing Together | Contact BidayaLab',
+  description: 'Ready to scale your business? Let\'s talk about AI automation, web development, or visual storytelling. We respond within 24 hours.',
+  keywords: [
+    'contact digital agency',
+    'hire AI automation agency',
+    'web development consultation',
+    'digital transformation partner',
+    'business automation quote',
+    'startup digital services'
+  ],
+  openGraph: {
+    title: 'Let\'s Build Something Amazing Together | BidayaLab',
+    description: 'Ready to scale? Contact us for AI automation, web development, and visual storytelling services.',
+    url: 'https://bidayalab.com/contact',
+    type: 'website',
+  },
+  alternates: {
+    canonical: 'https://bidayalab.com/contact'
+  }
 };
 
 export default function ContactPage() {

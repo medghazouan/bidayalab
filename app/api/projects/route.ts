@@ -48,7 +48,7 @@ export async function GET(request: Request) {
     // Handle diverse featured - get one project from each category
     if (featured === 'diverse') {
       const diverseProjects = await db
-        .collection('works')
+        .collection('projects')
         .aggregate([
           // Group by category and get one project from each
           { $sort: { order: 1, createdAt: -1 } },
@@ -121,7 +121,7 @@ export async function GET(request: Request) {
 
     // Use aggregation pipeline
     const result = await db
-      .collection('works')
+      .collection('projects')
       .aggregate([
         { $match: query },
         { $sort: { order: 1, createdAt: -1 } },

@@ -145,7 +145,7 @@ export default function Blogs() {
   return (
     <section
       id="blogs-section"
-      className="relative bg-[#000000] border-t border-zinc-900"
+      className="relative bg-transparent border-t border-zinc-900"
     >
       {/* Section Header - Same design as Services/Process/Works */}
       <div className="w-full px-4 md:px-8 pt-20 md:pt-32 pb-10 md:pb-16">
@@ -170,7 +170,7 @@ export default function Blogs() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
-          className="text-5xl md:text-7xl lg:text-8xl xl:text-9xl font-survalia text-white leading-[1.05] tracking-tight mb-4"
+          className="text-5xl md:text-7xl lg:text-8xl xl:text-9xl font-louis font-bold text-white leading-[1.05] tracking-tight mb-4"
         >
           Latest<br />
           <span className="text-[#beff01]">Insights.</span>

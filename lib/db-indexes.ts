@@ -12,19 +12,19 @@ export async function ensureIndexes(): Promise<boolean> {
     // Create all indexes in parallel for better performance
     await Promise.all([
       // Projects collection indexes
-      db.collection('works').createIndex(
+      db.collection('projects').createIndex(
         { slug: 1 },
         { unique: true, name: 'slug_unique', background: true }
       ),
-      db.collection('works').createIndex(
+      db.collection('projects').createIndex(
         { category: 1, order: 1, createdAt: -1 },
         { name: 'category_order_created', background: true }
       ),
-      db.collection('works').createIndex(
+      db.collection('projects').createIndex(
         { featured: 1, order: 1 },
         { name: 'featured_order', background: true }
       ),
-      db.collection('works').createIndex(
+      db.collection('projects').createIndex(
         { categorySlug: 1, order: 1 },
         { name: 'categorySlug_order', background: true }
       ),

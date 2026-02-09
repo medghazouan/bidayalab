@@ -3,6 +3,8 @@ import './globals.css';
 import { Providers } from './providers';
 import BidayalabAssistant from '@/components/chat/BidayalabAssistant';
 import GlobalSchema from '@/components/seo/GlobalSchema';
+import SmoothScroll from '@/components/ui/SmoothScroll';
+import SplashScreen from '@/components/ui/SplashScreen';
 
 import localFont from 'next/font/local';
 
@@ -24,13 +26,6 @@ const melon = localFont({
 const nNiely = localFont({
   src: './fonts/nNiely.ttf',
   variable: '--font-nniely',
-  display: 'swap',
-});
-
-// Survalia Font (Local) - Primary font for big titles
-const survalia = localFont({
-  src: './fonts/Survalia.ttf',
-  variable: '--font-survalia',
   display: 'swap',
 });
 
@@ -88,12 +83,16 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
       </head>
-      <body className={`${inter.className} ${melon.variable} ${nNiely.variable} ${survalia.variable} ${louis.variable}`} suppressHydrationWarning>
-        <Providers>
-          <GlobalSchema />
-          {children}
-          <BidayalabAssistant />
-        </Providers>
+      <body className={`${inter.className} ${melon.variable} ${nNiely.variable} ${louis.variable}`} suppressHydrationWarning>
+        <SplashScreen>
+          <SmoothScroll>
+            <Providers>
+              <GlobalSchema />
+              {children}
+              <BidayalabAssistant />
+            </Providers>
+          </SmoothScroll>
+        </SplashScreen>
         {/* Noise texture overlay for creative film grain effect */}
         <div className="noise-overlay" />
       </body>

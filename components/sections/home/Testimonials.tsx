@@ -1,9 +1,9 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
-import { ChevronLeft, ChevronRight, ArrowUpRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 // Featured Testimonials Data
 const featuredTestimonials = [
@@ -13,7 +13,7 @@ const featuredTestimonials = [
         position: 'CEO',
         company: 'TechVentures',
         quote: 'From day one, they got what we were trying to do—make our brand feel accessible, human, and forward-looking. The rebrand has completely reshaped how we show up in the market.',
-        image: '/testimonials/avatar-1.png',
+        image: '/testimonials/avatar-1.webp',
     },
     {
         id: 2,
@@ -21,7 +21,7 @@ const featuredTestimonials = [
         position: 'Marketing Director',
         company: 'GrowthLab',
         quote: 'Working with Bidayalab was transformative. They understood our vision instantly and delivered beyond expectations. Our conversion rates have never been higher.',
-        image: '/testimonials/avatar-2.png',
+        image: '/testimonials/avatar-2.webp',
     },
     {
         id: 3,
@@ -29,67 +29,15 @@ const featuredTestimonials = [
         position: 'Founder',
         company: 'InnovateMa',
         quote: 'The team\'s attention to detail and creative approach set them apart. They didn\'t just build a website—they built a complete digital experience.',
-        image: '/testimonials/avatar-3.png',
+        image: '/testimonials/avatar-3.webp',
     },
 ];
 
 // Stats Data
 const stats = [
-    { value: '$2.4M', label: 'Revenue generated for clients', company: 'TechVentures' },
-    { value: '4.8x', label: 'Average engagement increase', company: 'GrowthLab' },
-    { value: '97%', label: 'Client satisfaction rate', company: 'InnovateMa' },
-];
-
-// Testimonial Cards Data
-const testimonialCards = [
-    {
-        id: 1,
-        company: 'Nexus Digital',
-        icon: '◆',
-        quote: 'Our product was always strong under the hood, but we struggled to express that clearly. Now, the platform feels sharp, modern, and incredibly intuitive—it\'s made onboarding so much smoother.',
-        stats: [
-            { value: '60%', label: 'Training time reduction' },
-            { value: '$2.3M', label: 'Annual efficiency savings' },
-        ],
-        person: {
-            name: 'Karim Tazi',
-            position: 'COO',
-            company: 'Nexus Digital',
-            image: '/testimonials/person-1.png',
-        },
-    },
-    {
-        id: 2,
-        company: 'Velocity',
-        icon: '◎',
-        quote: 'We knew our tech was solid, but the brand didn\'t reflect that. After the redesign, everything just clicked—sales calls got easier, and people finally \'got\' what we do.',
-        stats: [
-            { value: '500x', label: 'Social reach gained' },
-            { value: '95%', label: 'Lead approval rate' },
-        ],
-        person: {
-            name: 'Laila Bennani',
-            position: 'CEO',
-            company: 'Velocity',
-            image: '/testimonials/person-2.png',
-        },
-    },
-    {
-        id: 3,
-        company: 'Zenith Labs',
-        icon: '✦',
-        quote: 'We came in with a fuzzy idea and left with a brand that feels completely aligned with our mission. The team really understood our product and turned that into something emotionally resonant.',
-        stats: [
-            { value: '4.6x', label: 'Conversion frequency' },
-            { value: '0.8 sec', label: 'Avg response time' },
-        ],
-        person: {
-            name: 'Omar Alaoui',
-            position: 'VP of Product',
-            company: 'Zenith Labs',
-            image: '/testimonials/person-3.png',
-        },
-    },
+    { value: '150+', label: 'Brands Transformed' },
+    { value: '48h', label: 'Average Turnaround' },
+    { value: '98%', label: 'Client Retention Rate' },
 ];
 
 export default function Testimonials() {
@@ -104,23 +52,39 @@ export default function Testimonials() {
         setActiveIndex((prev) => (prev - 1 + featuredTestimonials.length) % featuredTestimonials.length);
     };
 
-    // Auto-rotate testimonials every 5 seconds
+    // Auto-rotate testimonials every 5 seconds with progress tracking
+    const [progress, setProgress] = useState(0);
+    const INTERVAL_DURATION = 5000;
+    const TICK_INTERVAL = 50;
+    const activeIndexRef = useRef(activeIndex);
+
     useEffect(() => {
-        const interval = setInterval(() => {
-            setActiveIndex((prev) => (prev + 1) % featuredTestimonials.length);
-        }, 5000);
-        return () => clearInterval(interval);
+        activeIndexRef.current = activeIndex;
+    }, [activeIndex]);
+
+    useEffect(() => {
+        const progressTimer = setInterval(() => {
+            setProgress((prev) => {
+                const newProgress = prev + (100 / (INTERVAL_DURATION / TICK_INTERVAL));
+                if (newProgress >= 100) {
+                    setActiveIndex((activeIndexRef.current + 1) % featuredTestimonials.length);
+                    return 0;
+                }
+                return newProgress;
+            });
+        }, TICK_INTERVAL);
+
+        return () => clearInterval(progressTimer);
     }, []);
 
     return (
         <section
             id="testimonials-section"
-            className="relative bg-[#000000] border-t border-zinc-900"
+            className="relative bg-transparent border-t border-zinc-900"
             style={{ fontFamily: "'Inter Display', 'Inter', sans-serif" }}
         >
-            {/* Section Header - Same design as Services/Process/Works */}
+            {/* Section Header */}
             <div className="w-full px-4 md:px-8 pt-20 md:pt-32 pb-10 md:pb-16">
-                {/* Creative Modern Label */}
                 <motion.div
                     initial={{ opacity: 0, scale: 0.9 }}
                     whileInView={{ opacity: 1, scale: 1 }}
@@ -135,19 +99,17 @@ export default function Testimonials() {
                     </div>
                 </motion.div>
 
-                {/* Big Title */}
                 <motion.h2
                     initial={{ opacity: 0, y: 30 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.8 }}
-                    className="text-5xl md:text-7xl lg:text-8xl xl:text-9xl font-survalia text-white leading-[1.05] tracking-tight mb-4"
+                    className="text-5xl md:text-7xl lg:text-8xl xl:text-9xl font-louis font-bold text-white leading-[1.05] tracking-tight mb-4"
                 >
                     What Clients<br />
                     <span className="text-[#beff01]">Say About Us.</span>
                 </motion.h2>
 
-                {/* Description */}
                 <motion.p
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
@@ -215,10 +177,8 @@ export default function Testimonials() {
 
                     {/* Right - Quote */}
                     <div className="flex flex-col justify-center">
-                        {/* Quote Mark */}
                         <div className="text-6xl text-white font-serif mb-6">"</div>
 
-                        {/* Quote Text */}
                         <AnimatePresence mode="wait">
                             <motion.p
                                 key={activeTestimonial.id}
@@ -250,23 +210,33 @@ export default function Testimonials() {
                     </div>
                 </motion.div>
 
-                {/* Company Tabs */}
-                <div className="flex flex-wrap gap-8 md:gap-16 mb-6 border-t border-zinc-800 pt-6">
+                {/* Progress Line Indicators */}
+                <div className="flex gap-2 mb-4 pt-6">
                     {featuredTestimonials.map((t, i) => (
                         <button
                             key={t.id}
-                            onClick={() => setActiveIndex(i)}
-                            className={`flex items-center gap-2 text-sm font-louis font-medium uppercase tracking-wider transition-colors ${i === activeIndex ? 'text-white' : 'text-zinc-600 hover:text-zinc-400'
-                                }`}
+                            onClick={() => {
+                                setActiveIndex(i);
+                                setProgress(0);
+                            }}
+                            className="flex-1 h-1 bg-zinc-800 overflow-hidden cursor-pointer group"
                         >
-                            <span className="text-lg">✦</span>
-                            {t.company}
+                            <div
+                                className={`h-full transition-all ease-linear ${i <= activeIndex
+                                    ? 'bg-[#beff01]'
+                                    : 'bg-zinc-700 w-0 group-hover:w-full group-hover:bg-zinc-600'
+                                    }`}
+                                style={{
+                                    width: i === activeIndex ? `${progress}%` : i < activeIndex ? '100%' : undefined,
+                                    transition: i === activeIndex ? 'width 50ms linear' : 'width 300ms ease-out'
+                                }}
+                            />
                         </button>
                     ))}
                 </div>
 
                 {/* Stats Row */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16 py-8 border-t border-b border-zinc-800">
+                <div className="grid grid-cols-3 gap-4 md:gap-8 py-8 border-b border-zinc-800">
                     {stats.map((stat, i) => (
                         <motion.div
                             key={i}
@@ -274,78 +244,41 @@ export default function Testimonials() {
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
                             transition={{ duration: 0.5, delay: i * 0.1 }}
-                            className="text-center md:text-left"
+                            className="text-center"
                         >
-                            <div className="flex items-center gap-2 text-zinc-500 text-sm font-louis mb-2">
-                                <span>✦</span>
-                                {stat.company}
-                            </div>
-                            <div className="text-4xl md:text-5xl font-louis font-bold text-white mb-1">{stat.value}</div>
-                            <div className="text-zinc-400 font-louis">{stat.label}</div>
+                            <div className="text-3xl md:text-5xl font-louis font-bold text-white mb-1">{stat.value}</div>
+                            <div className="text-xs md:text-sm text-zinc-400 font-louis">{stat.label}</div>
                         </motion.div>
                     ))}
                 </div>
 
-                {/* Testimonial Cards Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    {testimonialCards.map((card, i) => (
-                        <motion.div
-                            key={card.id}
-                            initial={{ opacity: 0, y: 30 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ duration: 0.6, delay: i * 0.1 }}
-                            className="bg-zinc-900/50 border border-zinc-800 p-6 md:p-8 flex flex-col"
+                {/* Bottom CTA Row - Same as FAQ Section */}
+                <motion.div
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.6, delay: 0.2 }}
+                    className="mt-6 md:mt-8 flex flex-col md:flex-row md:items-center md:justify-between gap-6 pt-4"
+                >
+                    <p className="text-zinc-400 font-louis text-lg md:text-xl text-left">
+                        Ready to be our next success story?{" "}
+                        <span className="text-white">Let's make it happen.</span>
+                    </p>
+                    <a
+                        href="/contact"
+                        className="w-full md:w-auto group inline-flex items-center justify-center gap-3 px-8 py-4 bg-[#beff01] text-black font-louis font-bold text-lg transition-all duration-300 hover:bg-white"
+                    >
+                        Get in Touch
+                        <svg
+                            className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
                         >
-                            {/* Company Header */}
-                            <div className="flex items-center gap-2 mb-6">
-                                <span className="text-white text-lg">{card.icon}</span>
-                                <span className="text-white font-louis font-medium">{card.company}</span>
-                            </div>
-
-                            {/* Quote */}
-                            <div className="flex-1">
-                                <span className="text-2xl text-zinc-600 font-serif">"</span>
-                                <p className="text-white font-louis leading-relaxed mb-6">
-                                    {card.quote}
-                                </p>
-                            </div>
-
-
-                            {/* Stats */}
-                            <div className="grid grid-cols-2 gap-4 mb-6 pt-6 border-t border-zinc-800">
-                                {card.stats.map((stat, j) => (
-                                    <div key={j}>
-                                        <div className="text-2xl md:text-3xl font-louis font-bold text-white">{stat.value}</div>
-                                        <div className="text-xs text-zinc-500 font-louis">{stat.label}</div>
-                                    </div>
-                                ))}
-                            </div>
-
-                            {/* Person */}
-                            <div className="flex items-center gap-3 pt-4 border-t border-zinc-800">
-                                <div className="relative w-10 h-10 rounded-full overflow-hidden bg-zinc-800">
-                                    <Image
-                                        src={card.person.image}
-                                        alt={card.person.name}
-                                        fill
-                                        className="object-cover"
-                                        onError={(e) => {
-                                            const target = e.target as HTMLImageElement;
-                                            target.src = `https://ui-avatars.com/api/?name=${card.person.name}&size=40&background=1a1a1a&color=beff01`;
-                                        }}
-                                    />
-                                </div>
-                                <div>
-                                    <div className="text-white font-louis font-medium text-sm">{card.person.name}</div>
-                                    <div className="text-zinc-500 font-louis text-xs">
-                                        {card.person.position}, <span className="text-white">{card.person.company}</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </motion.div>
-                    ))}
-                </div>
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                        </svg>
+                    </a>
+                </motion.div>
             </div>
         </section>
     );

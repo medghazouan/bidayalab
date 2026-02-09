@@ -107,9 +107,10 @@ function WorkCard({ project, index }: { project: Project; index: number }) {
           </span>
         </div>
 
-        {/* Client Name - Centered (always visible) */}
-        <div className="absolute inset-0 flex items-center justify-center z-10">
-          <h3 className="text-3xl md:text-4xl lg:text-5xl font-louis font-bold text-white tracking-tight text-center px-6">
+        {/* Client Name - Centered (hides on hover with creative effect) */}
+        <div className="absolute inset-0 flex items-center justify-center z-10 overflow-hidden">
+          {/* Main client name - fades and scales on hover */}
+          <h3 className="text-3xl md:text-4xl lg:text-5xl font-louis font-black text-white tracking-tight text-center px-6 transition-all duration-700 ease-[cubic-bezier(0.33,1,0.68,1)] group-hover:opacity-0 group-hover:scale-75 group-hover:blur-md group-hover:-translate-y-8">
             {clientName}
           </h3>
         </div>
@@ -252,7 +253,7 @@ export default function Works() {
   return (
     <section
       id="works-section"
-      className="relative bg-[#000000] border-t border-zinc-900"
+      className="relative bg-transparent border-t border-zinc-900"
       style={{ fontFamily: "'Inter Display', 'Inter', sans-serif" }}
     >
       {/* Section Header - Same design as Services/Process */}
@@ -278,7 +279,7 @@ export default function Works() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
-          className="text-5xl md:text-7xl lg:text-8xl xl:text-9xl font-survalia text-white leading-[1.05] tracking-tight mb-4"
+          className="text-5xl md:text-7xl lg:text-8xl xl:text-9xl font-louis font-bold text-white leading-[1.05] tracking-tight mb-4"
         >
           Selected<br />
           <span className="text-[#beff01]">Case Studies.</span>
