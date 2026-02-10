@@ -12,8 +12,8 @@ export async function getBlogs(category: string = 'all') {
         await connectToDatabase();
 
         const query = category && category !== 'all'
-            ? { category, isPublished: true }
-            : { isPublished: true };
+            ? { category }
+            : {};
 
         const blogs = await Blog.find(query)
             .sort({ publicationDate: -1 })
@@ -36,7 +36,7 @@ export async function getBlogBySlug(slug: string) {
     try {
         await connectToDatabase();
 
-        const blog = await Blog.findOne({ slug, isPublished: true }).lean();
+        const blog = await Blog.findOne({ slug }).lean();
 
         if (!blog) {
             return { success: false, data: null };
@@ -59,7 +59,7 @@ export async function getProjects() {
     try {
         await connectToDatabase();
 
-        const projects = await Project.find({ isPublished: true })
+        const projects = await Project.find({ status: 'published' })
             .sort({ createdAt: -1 })
             .lean();
 
@@ -77,7 +77,7 @@ export async function getProjectBySlug(slug: string) {
     try {
         await connectToDatabase();
 
-        const project = await Project.findOne({ slug, isPublished: true }).lean();
+        const project = await Project.findOne({ slug, status: 'published' }).lean();
 
         if (!project) {
             return null;
@@ -99,8 +99,7 @@ export async function getRelatedBlogs(currentSlug: string, category: string, lim
 
         const blogs = await Blog.find({
             slug: { $ne: currentSlug },
-            category,
-            isPublished: true
+            category
         })
             .sort({ publicationDate: -1 })
             .limit(limit)

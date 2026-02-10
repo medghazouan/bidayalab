@@ -473,7 +473,7 @@ export default function UniversalProject({ project, relatedProjects }: { project
             {relatedProjects.length > 0 && (
                 <StackedSection index={6}>
                     <section className="bg-[#050505] border-t border-white/10 overflow-hidden py-16 md:py-24">
-                        <div className="px-6 md:px-12 mb-16">
+                        <div className="px-6 md:px-12 mb-8 md:mb-16">
                             <motion.h2
                                 initial={{ opacity: 0, y: 30 }}
                                 whileInView={{ opacity: 1, y: 0 }}
@@ -486,12 +486,13 @@ export default function UniversalProject({ project, relatedProjects }: { project
                             </motion.h2>
                         </div>
 
-                        {/* Infinite Marquee Slider - Full Width */}
-                        <div className="w-full overflow-hidden">
-                            <div className="flex w-max animate-marquee hover:[animation-play-state:paused] gap-0">
-                                {/* Triple the list for seamless loop */}
-                                {[...relatedProjects, ...relatedProjects, ...relatedProjects].map((p, i) => (
-                                    <div key={`${p._id}-${i}`} className="min-w-[400px] md:min-w-[500px] w-[30vw]">
+                        {/* Responsive Slider Container */}
+                        <div className="w-full relative">
+
+                            {/* Mobile: Manual Scroll Snap */}
+                            <div className="md:hidden flex overflow-x-auto snap-x snap-mandatory gap-4 px-6 pb-8 no-scrollbar">
+                                {relatedProjects.map((p, i) => (
+                                    <div key={`mobile-${p._id}-${i}`} className="min-w-[85vw] snap-center">
                                         <CreativeProjectCard
                                             project={{
                                                 ...p,
@@ -502,6 +503,25 @@ export default function UniversalProject({ project, relatedProjects }: { project
                                     </div>
                                 ))}
                             </div>
+
+                            {/* Desktop: Infinite Marquee */}
+                            <div className="hidden md:block w-full overflow-hidden">
+                                <div className="flex w-max animate-marquee hover:[animation-play-state:paused] gap-0">
+                                    {/* Triple the list for seamless loop */}
+                                    {[...relatedProjects, ...relatedProjects, ...relatedProjects].map((p, i) => (
+                                        <div key={`desktop-${p._id}-${i}`} className="min-w-[500px] w-[30vw]">
+                                            <CreativeProjectCard
+                                                project={{
+                                                    ...p,
+                                                    image: p.thumbnail || p.gallery?.[0],
+                                                }}
+                                                index={i}
+                                            />
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+
                         </div>
                     </section>
                 </StackedSection>
