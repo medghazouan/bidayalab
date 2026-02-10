@@ -11,7 +11,7 @@ import { getSettings } from "@/app/actions/settings";
 const navLinks = [
   { name: "Home", href: "/home" },
   { name: "Projects", href: "/works" },
-  { name: "Blogs", href: "/blog" },
+  { name: "Blogs", href: "/blogs" },
   { name: "Contact", href: "/contact" },
 ];
 
