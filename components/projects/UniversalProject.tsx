@@ -80,7 +80,7 @@ const useProjectData = (project: IProject) => {
     };
 };
 
-export default function UniversalProject({ project, relatedProjects }: { project: IProject, relatedProjects?: IProject[] }) {
+export default function UniversalProject({ project, relatedProjects = [] }: { project: IProject, relatedProjects?: IProject[] }) {
     const [selectedImage, setSelectedImage] = useState<string | null>(null);
     const data = useProjectData(project);
     const dateStr = new Date(project.completedAt).getFullYear().toString();
@@ -486,30 +486,30 @@ export default function UniversalProject({ project, relatedProjects }: { project
                             </motion.h2>
                         </div>
 
-                        {/* Responsive Slider Container */}
-                        <div className="w-full relative">
+                        {/* Continuous Marquee Slider - Double Loop for Seamless Effect */}
+                        <div className="w-full relative overflow-hidden group">
 
-                            {/* Mobile: Manual Scroll Snap */}
-                            <div className="md:hidden flex overflow-x-auto snap-x snap-mandatory gap-4 px-6 pb-8 no-scrollbar">
-                                {relatedProjects.map((p, i) => (
-                                    <div key={`mobile-${p._id}-${i}`} className="min-w-[85vw] snap-center">
-                                        <CreativeProjectCard
-                                            project={{
-                                                ...p,
-                                                image: p.thumbnail || p.gallery?.[0],
-                                            }}
-                                            index={i}
-                                        />
-                                    </div>
-                                ))}
-                            </div>
+                            <div className="flex w-max animate-marquee hover:[animation-play-state:paused] group-hover:[animation-play-state:paused]">
 
-                            {/* Desktop: Infinite Marquee */}
-                            <div className="hidden md:block w-full overflow-hidden">
-                                <div className="flex w-max animate-marquee hover:[animation-play-state:paused] gap-0">
-                                    {/* Triple the list for seamless loop */}
-                                    {[...relatedProjects, ...relatedProjects, ...relatedProjects].map((p, i) => (
-                                        <div key={`desktop-${p._id}-${i}`} className="min-w-[500px] w-[30vw]">
+                                {/* LOOP 1 */}
+                                <div className="flex shrink-0 gap-4 pr-4 bg-[#050505]">
+                                    {relatedProjects.map((p, i) => (
+                                        <div key={`loop1-${p._id}-${i}`} className="w-[85vw] md:w-[30vw] min-w-[300px] md:min-w-[500px]">
+                                            <CreativeProjectCard
+                                                project={{
+                                                    ...p,
+                                                    image: p.thumbnail || p.gallery?.[0],
+                                                }}
+                                                index={i}
+                                            />
+                                        </div>
+                                    ))}
+                                </div>
+
+                                {/* LOOP 2 (Duplicate for seamless scroll) */}
+                                <div className="flex shrink-0 gap-4 pr-4 bg-[#050505]">
+                                    {relatedProjects.map((p, i) => (
+                                        <div key={`loop2-${p._id}-${i}`} className="w-[85vw] md:w-[30vw] min-w-[300px] md:min-w-[500px]">
                                             <CreativeProjectCard
                                                 project={{
                                                     ...p,
