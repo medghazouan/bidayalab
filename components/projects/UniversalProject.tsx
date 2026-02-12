@@ -110,7 +110,7 @@ export default function UniversalProject({ project, relatedProjects = [] }: { pr
 
             {/* --- HERO SECTION (Immersive V12) --- */}
             <StackedSection index={0}>
-                <section className="relative h-screen w-full overflow-hidden flex flex-col justify-end">
+                <section className="relative min-h-[100dvh] w-full overflow-hidden flex flex-col justify-end pt-40 md:pt-48">
                     {/* 1. Background Media (Full Cover - Static Image for All) */}
                     <div className="absolute inset-0 z-0">
                         <Image
@@ -147,7 +147,7 @@ export default function UniversalProject({ project, relatedProjects = [] }: { pr
                                     initial={{ y: 50, opacity: 0 }}
                                     animate={{ y: 0, opacity: 1 }}
                                     transition={{ duration: 1, delay: 0.2 }}
-                                    className="text-[12vw] md:text-[9vw] leading-[0.8] font-black font-louis text-white uppercase tracking-tighter mix-blend-screen"
+                                    className="text-[10vw] md:text-[8vw] leading-[0.8] font-black font-louis text-white uppercase tracking-tighter mix-blend-screen"
                                 >
                                     {project.title}
                                 </motion.h1>
