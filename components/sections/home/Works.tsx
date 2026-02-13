@@ -12,9 +12,9 @@ interface Project {
   _id?: string;
   title: string;
   category: string;
-  image: string;
+  thumbnail: string;
   slug: string;
-  client?: string;
+  clientName?: string; // Updated to match API
   year?: string;
   createdAt?: string;
   description?: string;
@@ -24,11 +24,12 @@ const getCategoryDisplay = (category: string) => {
   const categoryMap: Record<string, string> = {
     'creative-studio': 'Branding',
     'digital-development': 'Development',
+    'web_development': 'Web Development', // Added mapping 
     'digital-marketing': 'Marketing',
-    'visual-storytelling': 'Visual Media',
-    'ai-automation': 'AI & Automation',
+    'visual_storytelling': 'Visual Storytelling', // Updated key to match DB (visual_storytelling)
+    'ai_automation': 'AI & Automation', // Updated key to match DB (ai_automation)
   };
-  return categoryMap[category] || category;
+  return categoryMap[category] || category.replace(/_/g, ' '); // Fallback: replace underscores with spaces
 };
 
 const getYearFromDate = (dateString?: string) => {
@@ -44,8 +45,8 @@ function WorkCard({ project, index }: { project: Project; index: number }) {
     return `/uploads/projects/${path}`;
   };
 
-  const assetUrl = getAssetUrl(project.image);
-  const clientName = project.client || project.title;
+  const assetUrl = getAssetUrl(project.thumbnail);
+  const clientName = project.clientName || project.title;
   const year = project.year || getYearFromDate(project.createdAt);
   const description = project.description || '';
 
@@ -107,10 +108,10 @@ function WorkCard({ project, index }: { project: Project; index: number }) {
           </span>
         </div>
 
-        {/* Client Name - Centered (hides on hover with creative effect) */}
-        <div className="absolute inset-0 flex items-center justify-center z-10 overflow-hidden">
-          {/* Main client name - fades and scales on hover */}
-          <h3 className="text-3xl md:text-4xl lg:text-5xl font-louis font-black text-white tracking-tight text-center px-6 transition-all duration-700 ease-[cubic-bezier(0.33,1,0.68,1)] group-hover:opacity-0 group-hover:scale-75 group-hover:blur-md group-hover:-translate-y-8">
+        {/* Client Name - Centered (Visible by default, Hides on Hover) */}
+        <div className="absolute inset-0 flex items-center justify-center z-10 overflow-hidden pointer-events-none">
+          {/* Main client name - fades out and scales down on hover */}
+          <h3 className="text-3xl md:text-4xl lg:text-5xl font-louis font-black text-white tracking-tight text-center px-6 transition-all duration-500 ease-[cubic-bezier(0.33,1,0.68,1)] group-hover:opacity-0 group-hover:scale-90 group-hover:blur-sm">
             {clientName}
           </h3>
         </div>
@@ -140,8 +141,6 @@ function WorkCard({ project, index }: { project: Project; index: number }) {
             </div>
           )}
         </div>
-
-
       </motion.div>
     </Link>
   );

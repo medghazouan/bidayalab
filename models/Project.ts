@@ -50,6 +50,8 @@ export interface IProject extends Document {
   // Links
   liveUrl?: string;
   caseStudyUrl?: string;
+  videoUrl?: string;
+  thumbnailUrl?: string;
 
   // Testimonial
   testimonial?: ITestimonial;
@@ -115,6 +117,8 @@ const ProjectSchema = new Schema<IProject>({
   // Links
   liveUrl: { type: String },
   caseStudyUrl: { type: String },
+  videoUrl: { type: String },
+  thumbnailUrl: { type: String },
 
   // Testimonial
   testimonial: TestimonialSchema

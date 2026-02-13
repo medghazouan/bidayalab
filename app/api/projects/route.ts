@@ -14,7 +14,7 @@ interface MongoProject {
   title: string;
   slug: string;
   description: string;
-  image: string;
+  thumbnail: string;
   category: string;
   featured: boolean;
   order: number;
@@ -65,16 +65,16 @@ export async function GET(request: Request) {
               title: 1,
               slug: 1,
               description: 1,
-              image: 1,
+              thumbnail: 1,
               category: 1,
-              client: 1,
+              clientName: 1,
               featured: 1,
               order: 1,
               createdAt: 1,
             }
           },
         ])
-        .toArray();
+        .toArray() as unknown as MongoProject[];
 
       return NextResponse.json({
         success: true,

@@ -65,7 +65,7 @@ const getCategoryLabel = (cat: string) => {
     }
 };
 
-const useProjectData = (project: IProject) => {
+const getProjectData = (project: IProject) => {
     const isAI = project.category === 'ai_automation';
     const isVisual = project.category === 'visual_storytelling';
 
@@ -80,9 +80,44 @@ const useProjectData = (project: IProject) => {
     };
 };
 
+const getEmbedUrl = (url: string) => {
+    if (!url) return '';
+
+    // Handle Vimeo (Extract ID: 1164611099)
+    // Supports: vimeo.com/123, vimeo.com/video/123, groups/name/videos/123, etc.
+    const vimeoMatch = url.match(/(?:vimeo\.com\/|player\.vimeo\.com\/video\/)([0-9]+)/);
+    if (vimeoMatch && vimeoMatch[1]) {
+        // Removed background=1/muted=1 to allow sound and controls.
+        return `https://player.vimeo.com/video/${vimeoMatch[1]}?autoplay=1&title=0&byline=0&portrait=0`;
+    }
+
+    // Handle YouTube
+    if (url.includes('youtube.com') || url.includes('youtu.be')) {
+        let videoId = '';
+        if (url.includes('youtu.be')) {
+            videoId = url.split('youtu.be/')[1].split('?')[0];
+        } else {
+            videoId = url.split('v=')[1]?.split('&')[0];
+        }
+
+        if (videoId) {
+            // Removed mute=1/controls=0 to allow sound and controls.
+            return `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`;
+        }
+    }
+
+    return url;
+};
+
 export default function UniversalProject({ project, relatedProjects = [] }: { project: IProject, relatedProjects?: IProject[] }) {
     const [selectedImage, setSelectedImage] = useState<string | null>(null);
-    const data = useProjectData(project);
+    const [isPlaying, setIsPlaying] = useState(false);
+
+    const handlePlay = () => {
+        setIsPlaying(true);
+    };
+
+    const data = getProjectData(project);
     const dateStr = new Date(project.completedAt).getFullYear().toString();
     const [mounted, setMounted] = useState(false);
     const sliderRef = useRef<HTMLDivElement>(null);
@@ -119,6 +154,7 @@ export default function UniversalProject({ project, relatedProjects = [] }: { pr
                             fill
                             className="object-cover"
                             priority
+                            sizes="100vw"
                         />
                     </div>
 
@@ -261,23 +297,39 @@ export default function UniversalProject({ project, relatedProjects = [] }: { pr
                     <StackedSection index={2}>
                         <section className="px-4 md:px-8 py-12 max-w-[1920px] mx-auto border-b border-white/5">
                             <div className="w-full aspect-video bg-zinc-900 border border-white/10 relative group overflow-hidden">
-                                {project.liveUrl?.includes('vimeo') || project.liveUrl?.includes('youtube') ? (
-                                    <iframe
-                                        src={project.liveUrl.replace('vimeo.com/', 'player.vimeo.com/video/').replace('watch?v=', 'embed/')}
-                                        className="w-full h-full"
-                                        allow="autoplay; fullscreen; picture-in-picture"
-                                        title="Project Video"
-                                    />
+                                {(project.videoUrl || project.liveUrl) ? (
+                                    <>
+                                        {isPlaying ? (
+                                            <iframe
+                                                src={getEmbedUrl(project.videoUrl || project.liveUrl || "")}
+                                                className="w-full h-full object-cover scale-100"
+                                                allow="autoplay; fullscreen; picture-in-picture"
+                                                title="Project Video"
+                                            />
+                                        ) : (
+                                            <div className="relative w-full h-full group cursor-pointer" onClick={handlePlay}>
+                                                <Image
+                                                    src={project.thumbnailUrl || project.thumbnail || "/placeholder.jpg"}
+                                                    alt="Video Thumbnail"
+                                                    fill
+                                                    className="object-cover transition-transform duration-700 group-hover:scale-105"
+                                                    sizes="(max-width: 768px) 100vw, 80vw"
+                                                />
+                                                <div className="absolute inset-0 bg-black/30 group-hover:bg-black/40 transition-colors duration-500" />
+                                                <div className="absolute inset-0 flex items-center justify-center">
+                                                    <div className="w-20 h-20 md:w-24 md:h-24 bg-white/10 backdrop-blur-md border border-white/20 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-500">
+                                                        <div className="w-16 h-16 md:w-20 md:h-20 bg-[#beff01] rounded-full flex items-center justify-center text-black pl-1">
+                                                            <Play size={32} fill="currentColor" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        )}
+                                    </>
                                 ) : (
-                                    <video
-                                        controls
-                                        className="w-full h-full object-cover"
-                                    >
-                                        <source src="/placeholder-video.mp4" type="video/mp4" />
-                                        <div className="flex items-center justify-center w-full h-full text-zinc-500">
-                                            Video Unavailable
-                                        </div>
-                                    </video>
+                                    <div className="relative w-full h-full flex items-center justify-center text-zinc-500">
+                                        Video Unavailable
+                                    </div>
                                 )}
                             </div>
                         </section>
@@ -383,6 +435,7 @@ export default function UniversalProject({ project, relatedProjects = [] }: { pr
                                         alt="Visual Anchor"
                                         fill
                                         className="object-cover transition-all duration-700 hover:scale-105 cursor-zoom-in"
+                                        sizes="(max-width: 1024px) 100vw, 50vw"
                                     />
                                 </motion.div>
                             )}
@@ -443,6 +496,7 @@ export default function UniversalProject({ project, relatedProjects = [] }: { pr
                                             alt={`Stream ${i}`}
                                             fill
                                             className="object-cover transition-all duration-700 scale-100 group-hover:scale-105"
+                                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                                         />
                                     </motion.div>
                                 ))}
