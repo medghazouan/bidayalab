@@ -15,11 +15,11 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Our Work | BidayaLab Portfolio',
     description: 'See how we\'ve helped ambitious businesses scale with AI, web, and visual solutions.',
-    url: 'https://bidayalab.com/works',
+    url: 'https://www.bidayalab.com/works',
     type: 'website',
   },
   alternates: {
-    canonical: 'https://bidayalab.com/works'
+    canonical: 'https://www.bidayalab.com/works'
   }
 };
 

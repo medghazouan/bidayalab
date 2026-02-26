@@ -88,7 +88,7 @@ export default function SplashScreen({ children }: { children: React.ReactNode }
                             </motion.div>
 
                             {/* Tagline - Single Color */}
-                            <motion.h1
+                            <motion.p
                                 initial={{ opacity: 0, y: 20 }}
                                 animate={{
                                     opacity: isExiting ? 0 : 1,
@@ -98,7 +98,7 @@ export default function SplashScreen({ children }: { children: React.ReactNode }
                                 className="font-louis text-lg md:text-2xl lg:text-3xl text-zinc-400 tracking-wide text-center px-6"
                             >
                                 Your Strategic Partner for Digital Transformation.
-                            </motion.h1>
+                            </motion.p>
 
                             {/* Loading Line */}
                             <motion.div

@@ -53,6 +53,7 @@ const louis = localFont({
 });
 
 export const metadata = {
+  metadataBase: new URL('https://www.bidayalab.com'),
   title: 'AI Automation & Web Development Agency Morocco | BidayaLab',
   description: "Transform your Moroccan SME with AI automation, custom web development & premium content. Stop losing clients to digital competitors. Marrakech-based agency.",
   icons: {
@@ -63,7 +64,7 @@ export const metadata = {
   openGraph: {
     title: 'AI Automation & Web Development Agency Morocco | BidayaLab',
     description: "Transform your Moroccan SME with AI automation, custom web development & premium content. Stop losing clients to digital competitors. Marrakech-based agency.",
-    url: 'https://bidayalab.com',
+    url: 'https://www.bidayalab.com',
     siteName: 'Bidayalab',
     locale: 'en_US',
     type: 'website',

@@ -7,6 +7,6 @@ export default function robots(): MetadataRoute.Robots {
             allow: '/',
             disallow: ['/dashboard/', '/api/', '/admin/'],
         },
-        sitemap: 'https://bidayalab.com/sitemap.xml',
+        sitemap: 'https://www.bidayalab.com/sitemap.xml',
     };
 }

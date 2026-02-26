@@ -11,7 +11,7 @@ function safeDate(dateValue: any): Date {
 }
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-    const baseUrl = 'https://bidayalab.com';
+    const baseUrl = 'https://www.bidayalab.com';
     const db = await getDatabase();
 
     // Static Routes

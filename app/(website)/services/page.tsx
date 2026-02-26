@@ -17,11 +17,11 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'AI Automation & Web Development Services | BidayaLab',
     description: 'We build digital solutions that scale your business. AI chatbots, custom websites, and premium visual content.',
-    url: 'https://bidayalab.com/services',
+    url: 'https://www.bidayalab.com/services',
     type: 'website',
   },
   alternates: {
-    canonical: 'https://bidayalab.com/services'
+    canonical: 'https://www.bidayalab.com/services'
   }
 };
 

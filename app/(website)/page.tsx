@@ -19,13 +19,13 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Digital Transformation Agency for SMEs | BidayaLab',
     description: 'We help ambitious startups and SMEs scale with AI automation, custom web development, and visual storytelling. Let\'s build your digital future together.',
-    url: 'https://bidayalab.com',
+    url: 'https://www.bidayalab.com',
     siteName: 'BidayaLab',
     locale: 'en_US',
     type: 'website',
     images: [
       {
-        url: 'https://bidayalab.com/assets/images/og-image.jpg',
+        url: 'https://www.bidayalab.com/assets/images/og-image.jpg',
         width: 1200,
         height: 630,
         alt: 'BidayaLab - Digital Transformation Agency'
@@ -38,7 +38,7 @@ export const metadata: Metadata = {
     description: 'AI automation, custom web development, and visual storytelling for ambitious businesses.',
   },
   alternates: {
-    canonical: 'https://bidayalab.com'
+    canonical: 'https://www.bidayalab.com'
   },
   robots: {
     index: true,
