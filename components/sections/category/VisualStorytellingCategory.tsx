@@ -24,11 +24,11 @@ export default function VisualStorytellingCategory({ projects }: { projects: IPr
                     {projects.map((project) => (
                         <Link href={`/works/${project.slug}`} key={String(project._id)} className="block group relative">
                             <div className="relative w-full aspect-[16/7] overflow-hidden grayscale-[50%] group-hover:grayscale-0 transition-all duration-700">
-                                <Image src={project.image} alt={project.title} fill className="object-cover transform group-hover:scale-105 transition-transform duration-1000" />
+                                <Image src={project.thumbnail} alt={project.title} fill className="object-cover transform group-hover:scale-105 transition-transform duration-1000" />
                                 <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-80" />
 
                                 <div className="absolute bottom-8 left-6 md:bottom-12 md:left-12">
-                                    <div className="text-[#FF2600] font-bold text-sm uppercase tracking-widest mb-2">{project.client}</div>
+                                    <div className="text-[#FF2600] font-bold text-sm uppercase tracking-widest mb-2">{project.clientName}</div>
                                     <h2 className="text-4xl md:text-7xl font-black uppercase leading-none">{project.title}</h2>
                                 </div>
                             </div>

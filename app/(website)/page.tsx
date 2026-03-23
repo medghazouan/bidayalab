@@ -54,5 +54,53 @@ export const metadata: Metadata = {
 };
 
 export default function HomePage() {
-  return <HomeContent />;
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "@id": "https://www.bidayalab.com/#faq",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What services does BidayaLab offer?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "We offer AI automation (chatbots, workflow automation), custom web development (websites, web apps, e-commerce), and visual storytelling (video production, photography, motion graphics)."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Who is BidayaLab for?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "We work with ambitious startups and SMEs who have quality products or services and want to scale efficiently through smart automation and custom digital platforms."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How long does a typical project take?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Project timelines vary based on complexity. A simple website takes 2-4 weeks, while complex AI automation systems may take 6-12 weeks. We'll provide a detailed timeline during our initial consultation."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Do you offer ongoing support?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes! We believe in building long-term partnerships. All our projects include post-launch support, and we offer ongoing maintenance and optimization packages."
+        }
+      }
+    ]
+  };
+
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
+      <HomeContent />
+    </>
+  );
 }

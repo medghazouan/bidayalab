@@ -1,5 +1,4 @@
 import { MetadataRoute } from 'next';
-import { getDatabase } from '@/lib/mongodb';
 
 export const revalidate = 3600; // Revalidate every hour
 
@@ -12,40 +11,56 @@ function safeDate(dateValue: any): Date {
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const baseUrl = 'https://www.bidayalab.com';
-    const db = await getDatabase();
 
-    // Static Routes
-    const staticRoutes = [
+    // Static Routes — all public indexable pages
+    const staticPaths = [
         '',
         '/about',
-        '/services',
         '/works',
         '/blogs',
         '/contact',
-    ].map((route) => ({
-        url: `${baseUrl}${route}`,
-        lastModified: new Date(),
-        changeFrequency: 'monthly' as const,
-        priority: route === '' ? 1 : 0.8,
-    }));
+        '/privacy',
+        '/terms',
+    ];
 
-    // Fetch Projects
-    const works = await db.collection('projects').find({ status: 'published' }).project({ slug: 1, updatedAt: 1 }).toArray();
-    const workRoutes = works.map((work) => ({
-        url: `${baseUrl}/works/${work.slug}`,
-        lastModified: safeDate(work.updatedAt),
-        changeFrequency: 'weekly' as const,
-        priority: 0.7,
-    }));
+    const now = new Date();
 
-    // Fetch Blogs
-    const blogs = await db.collection('blogs').find({}).project({ slug: 1, updatedAt: 1 }).toArray();
-    const blogRoutes = blogs.map((blog) => ({
-        url: `${baseUrl}/blogs/${blog.slug}`,
-        lastModified: safeDate(blog.updatedAt),
-        changeFrequency: 'weekly' as const,
-        priority: 0.7,
-    }));
+    const staticRoutes = staticPaths.map((route) => {
+        return {
+            url: `${baseUrl}${route}`,
+            lastModified: now,
+        };
+    });
+
+    // Dynamic routes from database — wrapped in try/catch to prevent 500
+    let workRoutes: MetadataRoute.Sitemap = [];
+    let blogRoutes: MetadataRoute.Sitemap = [];
+
+    try {
+        const { getDatabase } = await import('@/lib/mongodb');
+        const db = await getDatabase();
+
+        // Fetch Projects
+        const works = await db.collection('projects').find({ status: 'published' }).project({ slug: 1, updatedAt: 1 }).toArray();
+        workRoutes = works.map((work) => {
+            return {
+                url: `${baseUrl}/works/${work.slug}`,
+                lastModified: safeDate(work.updatedAt),
+            };
+        });
+
+        // Fetch Blogs
+        const blogs = await db.collection('blogs').find({}).project({ slug: 1, updatedAt: 1 }).toArray();
+        blogRoutes = blogs.map((blog) => {
+            return {
+                url: `${baseUrl}/blogs/${blog.slug}`,
+                lastModified: safeDate(blog.updatedAt),
+            };
+        });
+    } catch (error) {
+        // If DB is unreachable, return static routes only — no 500
+        console.error('Sitemap: Failed to fetch dynamic routes from database:', error);
+    }
 
     return [...staticRoutes, ...workRoutes, ...blogRoutes];
 }

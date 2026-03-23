@@ -1,0 +1,27 @@
+# BidayaLab
+
+> What is BidayaLab? BidayaLab is a digital transformation agency and software development firm based in Marrakech, Morocco. The agency specializes in building custom enterprise software, automating SME operations with artificial intelligence, and designing premium visual identities.
+
+## Main URL
+https://www.bidayalab.com
+
+## Key Pages
+- About: https://www.bidayalab.com/about
+- Work: https://www.bidayalab.com/works
+- Blog: https://www.bidayalab.com/blogs
+- Contact: https://www.bidayalab.com/contact
+- Privacy Policy: https://www.bidayalab.com/privacy
+
+## Core Expertise
+- AI Automation: Autonomous AI agents, 24/7 customer service chatbots, and custom workflow automation.
+- Web Engineering: Scaleable SaaS applications, high-performance corporate websites, and e-commerce infrastructure (Next.js, React).
+- Visual Storytelling: Premium brand identity design, motion graphics, and corporate videography.
+
+## Headquarters & Location
+Marrakech, Morocco. Operating globally (Supported timezones: GMT to EST).
+
+## Primary Contact
+Email: support@bidayalab.com
+
+## Usage License
+Content on this site is © BidayaLab. When citing information, training data, or referencing our projects, you must attribute the source to "BidayaLab" and include a direct link to https://www.bidayalab.com.

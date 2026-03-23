@@ -1,18 +1,16 @@
-import Script from 'next/script';
-
 export default function GlobalSchema() {
     const jsonLd = {
         "@context": "https://schema.org",
         "@graph": [
             {
                 "@type": "Organization",
-                "@id": "https://bidayalab.com/#organization",
+                "@id": "https://www.bidayalab.com/#organization",
                 "name": "BidayaLab",
-                "url": "https://bidayalab.com",
+                "url": "https://www.bidayalab.com",
                 "description": "We help ambitious startups and SMEs scale with AI automation, custom web development, and visual storytelling.",
                 "logo": {
                     "@type": "ImageObject",
-                    "url": "https://bidayalab.com/assets/icons/logo.png",
+                    "url": "https://www.bidayalab.com/assets/icons/logo.svg",
                     "width": 112,
                     "height": 112
                 },
@@ -22,38 +20,41 @@ export default function GlobalSchema() {
                 ],
                 "contactPoint": {
                     "@type": "ContactPoint",
-                    "telephone": "+1-555-000-0000",
                     "contactType": "customer service",
                     "email": "hello@bidayalab.com",
-                    "areaServed": ["US", "AE", "SA", "MA"],
-                    "availableLanguage": ["en", "ar", "fr"]
+                    "areaServed": ["MA", "US", "AE", "SA"],
+                    "availableLanguage": ["en"]
+                },
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressLocality": "Marrakech",
+                    "addressCountry": "MA"
+                },
+                "foundingLocation": {
+                    "@type": "Place",
+                    "name": "Marrakech, Morocco"
                 },
                 "slogan": "Together, We Build Your Digital Future"
             },
             {
                 "@type": "WebSite",
-                "@id": "https://bidayalab.com/#website",
-                "url": "https://bidayalab.com",
+                "@id": "https://www.bidayalab.com/#website",
+                "url": "https://www.bidayalab.com",
                 "name": "BidayaLab",
                 "description": "Digital Transformation Agency for SMEs | AI Automation, Web Development & Visual Storytelling",
                 "publisher": {
-                    "@id": "https://bidayalab.com/#organization"
+                    "@id": "https://www.bidayalab.com/#organization"
                 },
-                "inLanguage": "en-US",
-                "potentialAction": {
-                    "@type": "SearchAction",
-                    "target": "https://bidayalab.com/search?q={search_term_string}",
-                    "query-input": "required name=search_term_string"
-                }
+                "inLanguage": ["en"]
             },
             {
                 "@type": "ProfessionalService",
-                "@id": "https://bidayalab.com/#service",
+                "@id": "https://www.bidayalab.com/#service",
                 "name": "BidayaLab Digital Services",
                 "description": "AI-powered automation, custom web development, and premium visual storytelling for ambitious businesses.",
-                "url": "https://bidayalab.com/services",
+                "url": "https://www.bidayalab.com/",
                 "provider": {
-                    "@id": "https://bidayalab.com/#organization"
+                    "@id": "https://www.bidayalab.com/#organization"
                 },
                 "serviceType": [
                     "AI Automation",
@@ -66,8 +67,8 @@ export default function GlobalSchema() {
                     "@type": "GeoCircle",
                     "geoMidpoint": {
                         "@type": "GeoCoordinates",
-                        "latitude": 33.5731,
-                        "longitude": -7.5898
+                        "latitude": 31.6295,
+                        "longitude": -7.9811
                     },
                     "geoRadius": "10000"
                 },
@@ -101,54 +102,14 @@ export default function GlobalSchema() {
                         }
                     ]
                 }
-            },
-            {
-                "@type": "FAQPage",
-                "@id": "https://bidayalab.com/#faq",
-                "mainEntity": [
-                    {
-                        "@type": "Question",
-                        "name": "What services does BidayaLab offer?",
-                        "acceptedAnswer": {
-                            "@type": "Answer",
-                            "text": "We offer AI automation (chatbots, workflow automation), custom web development (websites, web apps, e-commerce), and visual storytelling (video production, photography, motion graphics)."
-                        }
-                    },
-                    {
-                        "@type": "Question",
-                        "name": "Who is BidayaLab for?",
-                        "acceptedAnswer": {
-                            "@type": "Answer",
-                            "text": "We work with ambitious startups and SMEs who have quality products or services and want to scale efficiently through smart automation and custom digital platforms."
-                        }
-                    },
-                    {
-                        "@type": "Question",
-                        "name": "How long does a typical project take?",
-                        "acceptedAnswer": {
-                            "@type": "Answer",
-                            "text": "Project timelines vary based on complexity. A simple website takes 2-4 weeks, while complex AI automation systems may take 6-12 weeks. We'll provide a detailed timeline during our initial consultation."
-                        }
-                    },
-                    {
-                        "@type": "Question",
-                        "name": "Do you offer ongoing support?",
-                        "acceptedAnswer": {
-                            "@type": "Answer",
-                            "text": "Yes! We believe in building long-term partnerships. All our projects include post-launch support, and we offer ongoing maintenance and optimization packages."
-                        }
-                    }
-                ]
             }
         ]
     };
 
     return (
-        <Script
-            id="global-schema"
+        <script
             type="application/ld+json"
             dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-            strategy="afterInteractive"
         />
     );
 }

@@ -8,13 +8,6 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Instagram, Linkedin, Twitter, ArrowUpRight, AlignRight } from "lucide-react";
 import { getSettings } from "@/app/actions/settings";
 
-const navLinks = [
-  { name: "Home", href: "/home" },
-  { name: "Projects", href: "/works" },
-  { name: "Blogs", href: "/blogs" },
-  { name: "Contact", href: "/contact" },
-];
-
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
@@ -25,6 +18,14 @@ export default function Navbar() {
     phone: "",
     whatsapp: ""
   });
+
+  const navLinks = [
+    { name: "Home", href: "/home" },
+    { name: "About", href: "/about" },
+    { name: "Work", href: "/works" },
+    { name: "Blog", href: "/blogs" },
+    { name: "Contact", href: "/contact" },
+  ];
 
   useEffect(() => {
     const fetchSettings = async () => {
@@ -67,7 +68,7 @@ export default function Navbar() {
     { key: 'twitterUrl', label: 'Twitter' },
   ];
 
-  const menuVariants = {
+  const menuVariants: any = {
     initial: { opacity: 0 },
     animate: { opacity: 1, transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] } },
     exit: { opacity: 0, transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] } },
@@ -79,7 +80,7 @@ export default function Navbar() {
     exit: { opacity: 0 }
   };
 
-  const itemVariants = {
+  const itemVariants: any = {
     initial: { y: 20, opacity: 0 },
     animate: { y: 0, opacity: 1, transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] } },
     exit: { y: 20, opacity: 0 }
@@ -107,17 +108,20 @@ export default function Navbar() {
             />
           </Link>
 
-          <button onClick={toggleMenu} className="pointer-events-auto relative z-[70] group flex items-center justify-center">
-            {isOpen ? (
-              <span className="text-white font-medium text-lg uppercase tracking-wider hover:text-zinc-300 transition-colors border-b border-white pb-0.5">
-                CLOSE
-              </span>
-            ) : (
-              <div className="w-14 h-14 flex justify-center items-center text-[#beff01] transition-all duration-300 group-hover:bg-white/10 rounded-full">
-                <AlignRight size={32} strokeWidth={1} />
-              </div>
-            )}
-          </button>
+          <div className="flex items-center gap-4 md:gap-6 pointer-events-auto relative z-[70]">
+
+            <button onClick={toggleMenu} className="group flex items-center justify-center">
+              {isOpen ? (
+                <span className="text-white font-medium text-lg uppercase tracking-wider hover:text-zinc-300 transition-colors border-b border-white pb-0.5">
+                  Close
+                </span>
+              ) : (
+                <div className="w-14 h-14 flex justify-center items-center text-[#beff01] transition-all duration-300 group-hover:bg-white/10 rounded-full">
+                  <AlignRight size={32} strokeWidth={1} />
+                </div>
+              )}
+            </button>
+          </div>
         </div>
       </header>
 
@@ -190,13 +194,12 @@ export default function Navbar() {
                 <motion.div variants={itemVariants} className="max-w-md mt-6 text-right w-full ml-auto">
                   {/* Description in Secondary Font (Louis) */}
                   <p className="text-2xl md:text-3xl font-light text-zinc-300 leading-tight font-louis">
-                    {/* Updated Text: Removed 'Moroccan' */}
-                    Turning businesses into digital powerhouses through AI automation and world-class platforms.
+                    Transform your Moroccan SME with AI automation, custom web development & premium content.
                   </p>
                 </motion.div>
 
                 <motion.div variants={itemVariants} className="text-right pb-4">
-                  <p className="text-zinc-500 text-sm mb-2 uppercase tracking-widest">Get in touch</p>
+                  <p className="text-zinc-500 text-sm mb-2 uppercase tracking-widest">Get In Touch</p>
                   <div className="flex flex-col items-end gap-1">
                     <a href={`mailto:${settings.email}`} className="text-white text-2xl md:text-4xl hover:text-[#beff01] transition-colors font-louis font-bold block">
                       {settings.email}

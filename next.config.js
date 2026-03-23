@@ -96,6 +96,17 @@ const nextConfig = {
         destination: '/',
         permanent: true,
       },
+      {
+        source: '/:path*',
+        has: [
+          {
+            type: 'host',
+            value: 'bidayalab.com',
+          },
+        ],
+        destination: 'https://www.bidayalab.com/:path*',
+        permanent: true,
+      },
     ];
   },
 

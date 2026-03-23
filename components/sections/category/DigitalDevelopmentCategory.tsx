@@ -23,17 +23,17 @@ export default function DigitalDevelopmentCategory({ projects }: { projects: IPr
                         <Link href={`/works/${project.slug}`} key={String(project._id)} className="group relative block bg-zinc-900/50 border border-zinc-800 hover:border-blue-500/50 rounded-2xl p-6 md:p-8 transition-all">
                             <div className="grid lg:grid-cols-2 gap-8 items-center">
                                 <div>
-                                    <div className="inline-block px-3 py-1 rounded bg-blue-500/10 text-blue-400 text-xs font-mono mb-4">{project.year}</div>
+                                    <div className="inline-block px-3 py-1 rounded bg-blue-500/10 text-blue-400 text-xs font-mono mb-4">{project.completedAt ? new Date(project.completedAt).getFullYear() : ''}</div>
                                     <h2 className="text-3xl md:text-4xl font-bold mb-4 group-hover:text-blue-100 transition-colors">{project.title}</h2>
                                     <p className="text-zinc-400 mb-6 max-w-lg line-clamp-2">{project.description}</p>
                                     <div className="flex flex-wrap gap-2">
-                                        {project.technologies?.slice(0, 4).map((t, i) => (
+                                        {project.techStack?.slice(0, 4).map((t: string, i: number) => (
                                             <span key={i} className="text-xs font-mono text-zinc-500 border border-zinc-700 px-2 py-1 rounded bg-zinc-950">{t}</span>
                                         ))}
                                     </div>
                                 </div>
                                 <div className="relative aspect-video rounded-xl overflow-hidden border border-zinc-800 bg-zinc-950">
-                                    <Image src={project.image} alt={project.title} fill className="object-cover opacity-80 group-hover:opacity-100 transition-opacity" />
+                                    <Image src={project.thumbnail} alt={project.title} fill className="object-cover opacity-80 group-hover:opacity-100 transition-opacity" />
                                 </div>
                             </div>
                         </Link>

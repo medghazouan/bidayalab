@@ -47,10 +47,41 @@ export default function ContactContent() {
         </div>
       </section>
 
+      {/* Address & What Happens Next */}
+      <section className="py-10 px-4 md:px-12 border-b border-white/5">
+        <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-8">
+          <div className="p-6 border border-white/10 bg-white/[0.02]">
+            <p className="text-[#beff01] text-xs font-louis uppercase tracking-widest mb-2">Our Office</p>
+            <p className="text-white text-lg font-louis font-bold">Marrakech, Morocco</p>
+            <p className="text-zinc-400 text-sm font-louis mt-1">Available for in-person meetings by appointment</p>
+          </div>
+          <div className="p-6 border border-white/10 bg-white/[0.02]">
+            <p className="text-[#beff01] text-xs font-louis uppercase tracking-widest mb-2">What Happens Next?</p>
+            <ol className="text-zinc-300 text-sm font-louis space-y-1 list-decimal list-inside">
+              <li>We&apos;ll review your project details within 24 hours</li>
+              <li>Our team will schedule a free consultation call</li>
+              <li>You&apos;ll receive a tailored proposal and timeline</li>
+            </ol>
+          </div>
+        </div>
+      </section>
+
       {/* Main Content */}
       <main className="relative z-10">
         <ContactSection />
       </main>
+
+      {/* Privacy Notice */}
+      <section className="pb-10 px-4 md:px-12">
+        <div className="max-w-7xl mx-auto text-center">
+          <p className="text-xs text-zinc-600 font-louis">
+            By submitting this form, you agree to our{' '}
+            <a href="/privacy" className="text-zinc-400 hover:text-[#beff01] underline transition-colors">Privacy Policy</a>
+            {' '}and{' '}
+            <a href="/terms" className="text-zinc-400 hover:text-[#beff01] underline transition-colors">Terms of Service</a>.
+          </p>
+        </div>
+      </section>
     </div>
   );
 }

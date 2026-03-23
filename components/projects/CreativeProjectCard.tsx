@@ -13,7 +13,7 @@ export interface ProjectCardProps {
         client?: string; // Optional because API might return clientName
         clientName?: string; // Some APIs return clientName
         year?: string;
-        createdAt?: string;
+        createdAt?: string | Date;
         description?: string;
     };
     index: number;
@@ -33,7 +33,7 @@ const getCategoryDisplay = (category: string) => {
     return categoryMap[category] || category.replace(/_/g, ' ');
 };
 
-const getYearFromDate = (dateString?: string) => {
+const getYearFromDate = (dateString?: string | Date) => {
     if (!dateString) return new Date().getFullYear().toString();
     return new Date(dateString).getFullYear().toString();
 };
