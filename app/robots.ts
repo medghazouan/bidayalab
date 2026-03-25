@@ -10,7 +10,7 @@ export default function robots(): MetadataRoute.Robots {
             },
             {
                 // Explicitly allow Google and major AI chatbots for brand visibility.
-                userAgent: ['GPTBot', 'ChatGPT-User', 'ClaudeBot', 'Google-Extended'],
+                userAgent: ['GPTBot', 'ChatGPT-User', 'ClaudeBot', 'Google-Extended', 'PerplexityBot'],
                 allow: '/',
             },
             {

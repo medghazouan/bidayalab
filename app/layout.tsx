@@ -97,7 +97,7 @@ export const metadata: Metadata = {
     creator: '@bidayalab',
   },
   alternates: {
-    canonical: 'https://www.bidayalab.com',
+    canonical: 'https://www.bidayalab.com/',
   }
 };
 

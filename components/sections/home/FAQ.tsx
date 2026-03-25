@@ -36,6 +36,11 @@ const faqs = [
     question: 'How do we get started?',
     answer: 'Simply reach out through our contact form or book a free discovery call. We will discuss your goals, challenges, and vision. From there, we will propose a tailored strategy and roadmap to bring your project to life.',
   },
+  {
+    id: 7,
+    question: 'Do you offer ongoing support?',
+    answer: 'Yes! We believe in building long-term partnerships. All our projects include post-launch support, and we offer ongoing maintenance and optimization packages to ensure your digital assets continue to perform at their best.',
+  },
 ];
 
 // FAQ Item Component

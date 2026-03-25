@@ -18,6 +18,7 @@ const Blogs = dynamic(() => import('@/components/sections/home/Blogs'), {
   loading: () => <div className="h-[300px]" />,
 });
 
+
 const FAQ = dynamic(() => import('@/components/sections/home/FAQ'), {
   loading: () => <div className="h-[400px]" />,
 });

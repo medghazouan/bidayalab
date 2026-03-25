@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 import HomeContent from '@/components/pages/home/HomeContent';
 
 export const metadata: Metadata = {
-  title: 'Digital Transformation Agency for SMEs | AI & Web Solutions | BidayaLab',
+  title: 'Digital Transformation Agency for SMEs | BidayaLab',
   description: 'We help ambitious startups and SMEs scale with AI automation, custom web development, and visual storytelling. Let\'s build your digital future together.',
   keywords: [
     'digital transformation agency',
@@ -38,7 +38,7 @@ export const metadata: Metadata = {
     description: 'AI automation, custom web development, and visual storytelling for ambitious businesses.',
   },
   alternates: {
-    canonical: 'https://www.bidayalab.com'
+    canonical: 'https://www.bidayalab.com/'
   },
   robots: {
     index: true,
@@ -61,18 +61,10 @@ export default function HomePage() {
     "mainEntity": [
       {
         "@type": "Question",
-        "name": "What services does BidayaLab offer?",
+        "name": "What services does Bidayalab offer?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "We offer AI automation (chatbots, workflow automation), custom web development (websites, web apps, e-commerce), and visual storytelling (video production, photography, motion graphics)."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "Who is BidayaLab for?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "We work with ambitious startups and SMEs who have quality products or services and want to scale efficiently through smart automation and custom digital platforms."
+          "text": "We offer a comprehensive suite of digital services including brand strategy & identity design, web development, digital marketing, AI automation solutions, and visual storytelling through photo & video production. Each service is tailored to help businesses grow and stand out in the digital landscape."
         }
       },
       {
@@ -80,7 +72,39 @@ export default function HomePage() {
         "name": "How long does a typical project take?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Project timelines vary based on complexity. A simple website takes 2-4 weeks, while complex AI automation systems may take 6-12 weeks. We'll provide a detailed timeline during our initial consultation."
+          "text": "Project timelines vary based on scope and complexity. A brand identity project typically takes 4-6 weeks, web development ranges from 6-12 weeks, and ongoing marketing campaigns are structured monthly. We provide detailed timelines during our initial consultation."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is your pricing structure?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "We offer flexible pricing models including project-based fees, retainer packages, and custom solutions. Pricing is determined by project scope, deliverables, and timeline. Contact us for a personalized quote tailored to your specific needs."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Do you work with international clients?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Absolutely! We work with clients globally. Our team is experienced in remote collaboration and we use modern tools to ensure seamless communication across different time zones. We have successfully delivered projects for clients in Europe, North America, and the Middle East."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What makes Bidayalab different from other agencies?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "We combine creative excellence with data-driven strategy. Our team brings together expertise in branding, development, marketing, and AI—all under one roof. This integrated approach ensures cohesive results and eliminates the need for multiple agency partnerships."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How do we get started?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Simply reach out through our contact form or book a free discovery call. We will discuss your goals, challenges, and vision. From there, we will propose a tailored strategy and roadmap to bring your project to life."
         }
       },
       {
@@ -88,7 +112,7 @@ export default function HomePage() {
         "name": "Do you offer ongoing support?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Yes! We believe in building long-term partnerships. All our projects include post-launch support, and we offer ongoing maintenance and optimization packages."
+          "text": "Yes! We believe in building long-term partnerships. All our projects include post-launch support, and we offer ongoing maintenance and optimization packages to ensure your digital assets continue to perform at their best."
         }
       }
     ]

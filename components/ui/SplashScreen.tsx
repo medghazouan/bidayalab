@@ -79,10 +79,11 @@ export default function SplashScreen({ children }: { children: React.ReactNode }
                             >
                                 <Image
                                     src="/assets/icons/newlogo.png"
-                                    alt="Bidayalab"
+                                    alt="BidayaLab - Digital Transformation Agency Logo"
                                     width={280}
                                     height={80}
                                     priority
+                                    fetchPriority="high"
                                     className="w-48 md:w-72 h-auto"
                                 />
                             </motion.div>

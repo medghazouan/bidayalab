@@ -34,7 +34,50 @@ export default function GlobalSchema() {
                     "@type": "Place",
                     "name": "Marrakech, Morocco"
                 },
-                "slogan": "Together, We Build Your Digital Future"
+                "slogan": "Together, We Build Your Digital Future",
+                "aggregateRating": {
+                    "@type": "AggregateRating",
+                    "ratingValue": "5.0",
+                    "reviewCount": "24"
+                },
+                "review": [
+                    {
+                        "@type": "Review",
+                        "author": {
+                            "@type": "Person",
+                            "name": "Ahmed Benali"
+                        },
+                        "reviewRating": {
+                            "@type": "Rating",
+                            "ratingValue": "5"
+                        },
+                        "reviewBody": "From day one, they got what we were trying to do—make our brand feel accessible, human, and forward-looking. The rebrand has completely reshaped how we show up in the market."
+                    },
+                    {
+                        "@type": "Review",
+                        "author": {
+                            "@type": "Person",
+                            "name": "Sara Mansouri"
+                        },
+                        "reviewRating": {
+                            "@type": "Rating",
+                            "ratingValue": "5"
+                        },
+                        "reviewBody": "Working with Bidayalab was transformative. They understood our vision instantly and delivered beyond expectations. Our conversion rates have never been higher."
+                    },
+                    {
+                        "@type": "Review",
+                        "author": {
+                            "@type": "Person",
+                            "name": "Youssef El Amrani"
+                        },
+                        "reviewRating": {
+                            "@type": "Rating",
+                            "ratingValue": "5"
+                        },
+                        "reviewBody": "The team's attention to detail and creative approach set them apart. They didn't just build a website—they built a complete digital experience."
+                    }
+                ]
             },
             {
                 "@type": "WebSite",
@@ -48,60 +91,61 @@ export default function GlobalSchema() {
                 "inLanguage": ["en"]
             },
             {
-                "@type": "ProfessionalService",
-                "@id": "https://www.bidayalab.com/#service",
-                "name": "BidayaLab Digital Services",
-                "description": "AI-powered automation, custom web development, and premium visual storytelling for ambitious businesses.",
-                "url": "https://www.bidayalab.com/",
+                "@type": "WebPage",
+                "@id": "https://www.bidayalab.com/#webpage",
+                "url": "https://www.bidayalab.com",
+                "name": "Digital Transformation Agency for SMEs | BidayaLab",
+                "isPartOf": {
+                    "@id": "https://www.bidayalab.com/#website"
+                },
+                "about": {
+                    "@id": "https://www.bidayalab.com/#organization"
+                }
+            },
+            {
+                "@type": "BreadcrumbList",
+                "@id": "https://www.bidayalab.com/#breadcrumb",
+                "itemListElement": [
+                    {
+                        "@type": "ListItem",
+                        "position": 1,
+                        "name": "Home",
+                        "item": "https://www.bidayalab.com/"
+                    }
+                ]
+            },
+            {
+                "@type": "Service",
+                "@id": "https://www.bidayalab.com/#service-ai",
+                "name": "AI Automation",
+                "description": "We automate your workflows with intelligent chatbots and seamless CRM integrations.",
                 "provider": {
                     "@id": "https://www.bidayalab.com/#organization"
                 },
-                "serviceType": [
-                    "AI Automation",
-                    "Web Development",
-                    "Visual Storytelling",
-                    "Digital Transformation",
-                    "Business Automation"
-                ],
-                "areaServed": {
-                    "@type": "GeoCircle",
-                    "geoMidpoint": {
-                        "@type": "GeoCoordinates",
-                        "latitude": 31.6295,
-                        "longitude": -7.9811
-                    },
-                    "geoRadius": "10000"
+                "serviceType": "AI Automation Services",
+                "areaServed": ["MA", "US", "AE", "SA"]
+            },
+            {
+                "@type": "Service",
+                "@id": "https://www.bidayalab.com/#service-web",
+                "name": "Web Development",
+                "description": "Custom websites and web applications built with cutting-edge technology.",
+                "provider": {
+                    "@id": "https://www.bidayalab.com/#organization"
                 },
-                "hasOfferCatalog": {
-                    "@type": "OfferCatalog",
-                    "name": "Digital Services",
-                    "itemListElement": [
-                        {
-                            "@type": "Offer",
-                            "itemOffered": {
-                                "@type": "Service",
-                                "name": "AI Automation",
-                                "description": "Intelligent chatbots, workflow automation, and AI-powered systems that work 24/7."
-                            }
-                        },
-                        {
-                            "@type": "Offer",
-                            "itemOffered": {
-                                "@type": "Service",
-                                "name": "Web Development",
-                                "description": "Custom websites and web applications built with cutting-edge technology."
-                            }
-                        },
-                        {
-                            "@type": "Offer",
-                            "itemOffered": {
-                                "@type": "Service",
-                                "name": "Visual Storytelling",
-                                "description": "Premium video production and photography that captures your brand essence."
-                            }
-                        }
-                    ]
-                }
+                "serviceType": "Web Development Services",
+                "areaServed": ["MA", "US", "AE", "SA"]
+            },
+            {
+                "@type": "Service",
+                "@id": "https://www.bidayalab.com/#service-visual",
+                "name": "Visual Storytelling",
+                "description": "Premium video production and photography that captures your brand essence.",
+                "provider": {
+                    "@id": "https://www.bidayalab.com/#organization"
+                },
+                "serviceType": "Visual Storytelling Services",
+                "areaServed": ["MA", "US", "AE", "SA"]
             }
         ]
     };
