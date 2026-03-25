@@ -1,29 +1,27 @@
 'use client';
 
-import { Suspense } from 'react';
-import { motion } from 'framer-motion';
+import { useState, useEffect } from 'react';
 import { ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 import dynamic from 'next/dynamic';
 
-// Dynamic import with direct path to avoid ESM resolution issues
+// Defer Spline loading until after page is interactive
 const Spline = dynamic(
     () => import('@splinetool/react-spline').then((mod) => mod.default),
     {
         ssr: false,
-        loading: () => <SplineLoader />
+        loading: () => null
     }
 );
 
-function SplineLoader() {
-    return (
-        <div className="w-full h-full flex items-center justify-center">
-            <div className="w-8 h-8 border-2 border-[#beff01] border-t-transparent rounded-full animate-spin" />
-        </div>
-    );
-}
-
 export default function Hero() {
+    const [showSpline, setShowSpline] = useState(false);
+
+    // Defer Spline loading by 1.5s to let the page become interactive first
+    useEffect(() => {
+        const timer = setTimeout(() => setShowSpline(true), 1500);
+        return () => clearTimeout(timer);
+    }, []);
 
     const scrollToWorks = () => {
         const worksSection = document.getElementById('works-section');
@@ -35,12 +33,12 @@ export default function Hero() {
     return (
         <section className="relative w-full min-h-[100dvh] bg-black text-white flex items-end overflow-hidden">
 
-            {/* Robot Positioned on the Right - Scaled Up */}
-            <div className="absolute inset-y-0 right-0 w-full lg:w-[65%] z-0 scale-110 origin-right">
-                <Suspense fallback={<SplineLoader />}>
+            {/* Robot - only loaded after page is interactive */}
+            {showSpline && (
+                <div className="absolute inset-y-0 right-0 w-full lg:w-[65%] z-0 scale-110 origin-right hero-fade-in">
                     <Spline scene="https://prod.spline.design/1cGkc8CVxlalgcaC/scene.splinecode" />
-                </Suspense>
-            </div>
+                </div>
+            )}
 
             {/* Gradient Overlay for Text Readability */}
             <div className="absolute inset-0 bg-gradient-to-r from-black via-black/80 to-transparent z-[1]" />
@@ -49,12 +47,7 @@ export default function Hero() {
             {/* Content: Bottom Left */}
             <div className="relative z-10 w-full max-w-[1920px] mx-auto px-4 md:px-12 pb-12 md:pb-24 pt-32">
 
-                <motion.div
-                    initial={{ opacity: 0, y: 50 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.8 }}
-                    className="max-w-full lg:max-w-4xl"
-                >
+                <div className="max-w-full lg:max-w-4xl hero-slide-up">
                     {/* Title Part 1 */}
                     <span className="block text-xs md:text-base uppercase tracking-[0.2em] md:tracking-[0.3em] text-[#beff01] font-louis mb-3 md:mb-4">
                         Together, We Build Your Digital Future
@@ -65,15 +58,10 @@ export default function Hero() {
                         Let&apos;s Scale<br />
                         <span className="inline">Your Business</span><span className="inline">.</span>
                     </h1>
-                </motion.div>
+                </div>
 
-                {/* Buttons with Motivational Sentences */}
-                <motion.div
-                    initial={{ opacity: 0, y: 30 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.8, delay: 0.3 }}
-                    className="flex flex-col sm:flex-row gap-4 md:gap-6 mt-8 md:mt-12"
-                >
+                {/* Buttons */}
+                <div className="flex flex-col sm:flex-row gap-4 md:gap-6 mt-8 md:mt-12 hero-slide-up-delayed">
                     {/* Primary CTA */}
                     <div className="flex flex-col items-start">
                         <span className="text-xs md:text-sm text-zinc-400 mb-2 font-louis tracking-wide">Ready to grow together?</span>
@@ -82,7 +70,7 @@ export default function Hero() {
                             className="group px-6 md:px-10 py-4 md:py-5 bg-[#beff01] text-black text-base md:text-lg font-bold font-louis uppercase tracking-wider transition-all flex items-center justify-center gap-2 md:gap-3"
                         >
                             <span>Let&apos;s Talk Growth</span>
-                            <ArrowRight className="w-4 h-4 md:w-5 md:h-5 transition-transform group-hover:translate-x-1" />
+                            <ArrowRight className="w-4 h-4 md:w-5 md:h-5 transition-transform group-hover:translate-x-1" aria-hidden="true" />
                         </Link>
                     </div>
 
@@ -96,7 +84,7 @@ export default function Hero() {
                             View Our Work
                         </button>
                     </div>
-                </motion.div>
+                </div>
 
             </div>
         </section>

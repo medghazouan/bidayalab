@@ -112,13 +112,8 @@ export default function SplashScreen({ children }: { children: React.ReactNode }
                 )}
             </AnimatePresence>
 
-            {/* Main Content - always rendered for LCP/FCP */}
-            <div
-                aria-hidden={isLoading}
-                style={{ visibility: isLoading ? 'hidden' : 'visible' }}
-            >
-                {children}
-            </div>
+            {/* Main Content - always visible for LCP/FCP measurement */}
+            {children}
         </>
     );
 }

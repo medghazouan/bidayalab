@@ -1,7 +1,8 @@
 import { Inter } from 'next/font/google';
 import './globals.css';
 import { Providers } from './providers';
-import BidayalabAssistant from '@/components/chat/BidayalabAssistant';
+import dynamic from 'next/dynamic';
+const BidayalabAssistant = dynamic(() => import('@/components/chat/BidayalabAssistant'));
 import GlobalSchema from '@/components/seo/GlobalSchema';
 import SmoothScroll from '@/components/ui/SmoothScroll';
 import SplashScreen from '@/components/ui/SplashScreen';
