@@ -98,7 +98,7 @@ export default function BidayalabAssistant() {
                         className="fixed bottom-24 right-4 md:right-6 z-[9998] max-w-[260px]"
                     >
                         <div className="bg-[#111] border border-white/10 rounded-2xl p-4">
-                            <button onClick={handleDismissToast} className="absolute top-2 right-2 p-1 text-zinc-500 hover:text-white">
+                            <button onClick={handleDismissToast} aria-label="Dismiss notification" className="absolute top-2 right-2 p-1 text-zinc-500 hover:text-white">
                                 <X size={14} />
                             </button>
                             <p className="text-white text-sm font-louis font-bold">Need help?</p>
@@ -139,14 +139,14 @@ export default function BidayalabAssistant() {
                                             <p className="text-[11px] text-zinc-400 font-louis">Ready to help you grow</p>
                                         </div>
                                     </div>
-                                    <button onClick={() => setIsOpen(false)} className="w-9 h-9 rounded-xl bg-white/5 hover:bg-white/10 flex items-center justify-center text-zinc-400 hover:text-white transition-colors">
+                                    <button onClick={() => setIsOpen(false)} aria-label="Close chat" className="w-9 h-9 rounded-xl bg-white/5 hover:bg-white/10 flex items-center justify-center text-zinc-400 hover:text-white transition-colors">
                                         <X size={16} />
                                     </button>
                                 </div>
                             </div>
 
                             {/* Messages */}
-                            <div className="flex-1 overflow-y-auto px-5 py-4 space-y-4">
+                            <div className="flex-1 overflow-y-auto px-5 py-4 space-y-4" aria-live="polite" aria-relevant="additions">
                                 {/* Welcome Message */}
                                 {messages.length === 0 && (
                                     <motion.div
@@ -202,7 +202,7 @@ export default function BidayalabAssistant() {
                                 ))}
 
                                 {loading && (
-                                    <div className="flex gap-2">
+                                    <div className="flex gap-2" role="status" aria-label="Loading response">
                                         <div className="w-6 h-6 rounded-md bg-[#beff01] flex items-center justify-center">
                                             <Bot className="w-3.5 h-3.5 text-black" strokeWidth={2.5} />
                                         </div>
@@ -219,7 +219,9 @@ export default function BidayalabAssistant() {
                             {/* Input */}
                             <div className="p-4 bg-black/50">
                                 <div className="flex items-center gap-2 bg-zinc-900 rounded-2xl px-4 py-2 border border-white/5 focus-within:border-[#beff01]/30 transition-colors">
+                                    <label htmlFor="chat-input" className="sr-only">Chat message</label>
                                     <input
+                                        id="chat-input"
                                         type="text"
                                         value={input}
                                         onChange={(e) => setInput(e.target.value)}
@@ -230,9 +232,10 @@ export default function BidayalabAssistant() {
                                     <button
                                         onClick={handleSend}
                                         disabled={!input.trim() || loading}
+                                        aria-label="Send message"
                                         className="w-10 h-10 bg-[#beff01] rounded-xl flex items-center justify-center text-black hover:bg-[#d4ff4d] disabled:opacity-30 disabled:bg-zinc-800 transition-all"
                                     >
-                                        <Send size={16} />
+                                        <Send size={16} aria-hidden="true" />
                                     </button>
                                 </div>
                             </div>
@@ -247,6 +250,8 @@ export default function BidayalabAssistant() {
                 onClick={() => { setShowToast(false); setIsOpen(!isOpen); }}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
+                aria-label={isOpen ? 'Close chat assistant' : 'Open chat assistant'}
+                aria-expanded={isOpen}
                 className="fixed bottom-6 right-4 md:right-6 z-[9990]"
             >
                 <div className="w-14 h-14 md:w-16 md:h-16 bg-[#beff01] rounded-2xl flex items-center justify-center transition-all">

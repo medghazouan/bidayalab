@@ -49,19 +49,24 @@ function FAQItem({ faq, isOpen, onToggle }: { faq: typeof faqs[0]; isOpen: boole
     >
       <button
         onClick={onToggle}
+        aria-expanded={isOpen}
+        aria-controls={`faq-answer-${faq.id}`}
         className="w-full py-6 md:py-8 pl-4 pr-4 md:pl-8 md:pr-8 flex items-start justify-between gap-4 text-left group"
       >
-        <span className={`text-lg md:text-xl lg:text-2xl font-louis font-medium transition-colors duration-300 ${isOpen ? 'text-[#beff01]' : 'text-white group-hover:text-[#beff01]'}`}>
+        <span id={`faq-question-${faq.id}`} className={`text-lg md:text-xl lg:text-2xl font-louis font-medium transition-colors duration-300 ${isOpen ? 'text-[#beff01]' : 'text-white group-hover:text-[#beff01]'}`}>
           {faq.question}
         </span>
         <div className={`flex-shrink-0 w-10 h-10 rounded-full border border-zinc-700 flex items-center justify-center transition-all duration-500 ${isOpen ? 'bg-[#beff01] border-[#beff01] rotate-180' : 'group-hover:border-[#beff01] rotate-0'}`}>
-          <Plus className={`w-5 h-5 transition-colors duration-300 ${isOpen ? 'text-black' : 'text-white group-hover:text-[#beff01]'}`} />
+          <Plus aria-hidden="true" className={`w-5 h-5 transition-colors duration-300 ${isOpen ? 'text-black' : 'text-white group-hover:text-[#beff01]'}`} />
         </div>
       </button>
 
       <AnimatePresence>
         {isOpen && (
           <motion.div
+            id={`faq-answer-${faq.id}`}
+            role="region"
+            aria-labelledby={`faq-question-${faq.id}`}
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: 'auto', opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
@@ -109,7 +114,7 @@ export default function FAQ() {
         >
           <div className="flex items-center gap-3 px-5 py-2.5 bg-[#beff01]">
             <span className="text-sm font-louis font-bold text-black uppercase tracking-wide">FAQ</span>
-            <svg className="w-4 h-4 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg aria-hidden="true" className="w-4 h-4 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
             </svg>
           </div>
@@ -172,6 +177,7 @@ export default function FAQ() {
             >
               Get in Touch
               <svg
+                aria-hidden="true"
                 className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1"
                 fill="none"
                 viewBox="0 0 24 24"

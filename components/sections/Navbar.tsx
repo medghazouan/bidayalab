@@ -95,7 +95,7 @@ export default function Navbar() {
       `}</style>
 
       {/* MINIMAL HEADER - Scrolls with page */}
-      <header className="absolute top-0 left-0 right-0 z-[60] px-4 md:px-8 py-2 md:py-4 pointer-events-none transition-all duration-300">
+      <header role="banner" className="absolute top-0 left-0 right-0 z-[60] px-4 md:px-8 py-2 md:py-4 pointer-events-none transition-all duration-300">
         <div className="flex items-center justify-between max-w-[1920px] mx-auto">
           <Link href="/home" className="pointer-events-auto relative z-[70]">
             <Image
@@ -110,7 +110,7 @@ export default function Navbar() {
 
           <div className="flex items-center gap-4 md:gap-6 pointer-events-auto relative z-[70]">
 
-            <button onClick={toggleMenu} className="group flex items-center justify-center">
+            <button onClick={toggleMenu} aria-label={isOpen ? 'Close menu' : 'Open menu'} aria-expanded={isOpen} className="group flex items-center justify-center">
               {isOpen ? (
                 <span className="text-white font-medium text-lg uppercase tracking-wider hover:text-zinc-300 transition-colors border-b border-white pb-0.5">
                   Close
@@ -133,6 +133,8 @@ export default function Navbar() {
             initial="initial"
             animate="animate"
             exit="exit"
+            role="dialog"
+            aria-label="Navigation menu"
             className="fixed inset-0 bg-black/95 backdrop-blur-sm z-[50] w-full h-[100dvh] flex flex-col pt-32 pb-8 px-4 md:px-8 overflow-hidden"
           >
             <motion.div

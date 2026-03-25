@@ -55,7 +55,7 @@ export default function Testimonials() {
     // Auto-rotate testimonials every 5 seconds with progress tracking
     const [progress, setProgress] = useState(0);
     const INTERVAL_DURATION = 5000;
-    const TICK_INTERVAL = 50;
+    const TICK_INTERVAL = 200;
     const activeIndexRef = useRef(activeIndex);
 
     useEffect(() => {
@@ -93,7 +93,7 @@ export default function Testimonials() {
                 >
                     <div className="flex items-center gap-3 px-5 py-2.5 bg-[#beff01]">
                         <span className="text-sm font-louis font-bold text-black uppercase tracking-wide">Testimonials</span>
-                        <svg className="w-4 h-4 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <svg aria-hidden="true" className="w-4 h-4 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
                         </svg>
                     </div>
@@ -145,8 +145,9 @@ export default function Testimonials() {
                             >
                                 <Image
                                     src={activeTestimonial.image}
-                                    alt={activeTestimonial.name}
+                                    alt={`Photo of ${activeTestimonial.name}, ${activeTestimonial.position} at ${activeTestimonial.company}`}
                                     fill
+                                    sizes="(max-width: 768px) 100vw, 400px"
                                     className="object-cover"
                                     onError={(e) => {
                                         const target = e.target as HTMLImageElement;
@@ -193,28 +194,33 @@ export default function Testimonials() {
                         </AnimatePresence>
 
                         {/* Navigation Arrows */}
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-2" role="group" aria-label="Testimonial navigation">
                             <button
                                 onClick={prevTestimonial}
+                                aria-label="Previous testimonial"
                                 className="w-12 h-12 border border-zinc-700 flex items-center justify-center text-white hover:bg-zinc-800 transition-colors"
                             >
-                                <ChevronLeft className="w-5 h-5" />
+                                <ChevronLeft className="w-5 h-5" aria-hidden="true" />
                             </button>
                             <button
                                 onClick={nextTestimonial}
+                                aria-label="Next testimonial"
                                 className="w-12 h-12 border border-zinc-700 flex items-center justify-center text-white hover:bg-zinc-800 transition-colors"
                             >
-                                <ChevronRight className="w-5 h-5" />
+                                <ChevronRight className="w-5 h-5" aria-hidden="true" />
                             </button>
                         </div>
                     </div>
                 </motion.div>
 
                 {/* Progress Line Indicators */}
-                <div className="flex gap-2 mb-4 pt-6">
+                <div className="flex gap-2 mb-4 pt-6" role="tablist" aria-label="Testimonial indicators">
                     {featuredTestimonials.map((t, i) => (
                         <button
                             key={t.id}
+                            role="tab"
+                            aria-selected={i === activeIndex}
+                            aria-label={`Testimonial ${i + 1} of ${featuredTestimonials.length}: ${t.name}`}
                             onClick={() => {
                                 setActiveIndex(i);
                                 setProgress(0);
@@ -270,6 +276,7 @@ export default function Testimonials() {
                     >
                         Get in Touch
                         <svg
+                            aria-hidden="true"
                             className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1"
                             fill="none"
                             viewBox="0 0 24 24"

@@ -32,7 +32,7 @@
                 },
                 {
                     "key": "Content-Security-Policy",
-                    "value": "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://prod.spline.design https://*.vercel-scripts.com https://*.google-analytics.com https://*.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' https: data: blob:; connect-src 'self' https: wss:; frame-src 'self' https://prod.spline.design; media-src 'self' https:; object-src 'none'; base-uri 'self'; form-action 'self'"
+                    "value": "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' blob: https://prod.spline.design https://*.vercel-scripts.com https://*.google-analytics.com https://*.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' https: data: blob:; connect-src 'self' https: wss: blob:; worker-src 'self' blob:; frame-src 'self' https://prod.spline.design; media-src 'self' https:; object-src 'none'; base-uri 'self'; form-action 'self'"
                 }
             ]
         }

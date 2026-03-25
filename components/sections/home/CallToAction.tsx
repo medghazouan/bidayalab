@@ -113,10 +113,10 @@ function LeadForm() {
 
         {/* Industry Selection */}
         <div className="space-y-4">
-          <label className="text-xs font-bold font-louis text-black uppercase tracking-widest">
+          <label id="industry-label" className="text-xs font-bold font-louis text-black uppercase tracking-widest">
             01. Select Your Industry
           </label>
-          <div className="flex flex-wrap gap-3">
+          <div className="flex flex-wrap gap-3" role="radiogroup" aria-labelledby="industry-label">
             {['E-Com', 'SaaS', 'Real Estate', 'Finance', 'Health', 'Other'].map((ind) => (
               <label key={ind} className="cursor-pointer group flex-1 min-w-[100px]">
                 <input type="radio" name="industry" value={ind} required className="peer sr-only" />
@@ -134,11 +134,12 @@ function LeadForm() {
 
         {/* Email Input */}
         <div className="space-y-4">
-          <label className="text-xs font-bold font-louis text-black uppercase tracking-widest">
-            02. Your Coordinates
+          <label htmlFor="lead-email" className="text-xs font-bold font-louis text-black uppercase tracking-widest">
+            02. Your Email Address
           </label>
           <div className="relative group">
             <input
+              id="lead-email"
               type="email"
               name="email"
               required
@@ -180,9 +181,13 @@ function LeadForm() {
             </div>
           </button>
 
-          <p className="text-center text-xs font-bold text-black/40 mt-6 uppercase tracking-widest">
-            Limited Spots Available for {new Date().toLocaleString('default', { month: 'long' })}
-          </p>
+          <div aria-live="polite" className="text-center text-xs font-bold text-black/40 mt-6 uppercase tracking-widest">
+            {status === 'error' ? (
+              <p role="alert" className="text-red-600">Something went wrong. Please try again.</p>
+            ) : (
+              <p>Limited Spots Available for {new Date().toLocaleString('default', { month: 'long' })}</p>
+            )}
+          </div>
         </div>
 
       </form>

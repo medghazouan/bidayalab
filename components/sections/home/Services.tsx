@@ -70,7 +70,7 @@ export default function Services() {
             }
         };
 
-        window.addEventListener('scroll', handleScroll);
+        window.addEventListener('scroll', handleScroll, { passive: true });
         handleScroll(); // Check initial state
 
         return () => window.removeEventListener('scroll', handleScroll);
@@ -127,7 +127,7 @@ export default function Services() {
                 >
                     <div className="flex items-center gap-3 px-5 py-2.5 bg-[#beff01]">
                         <span className="text-sm font-louis font-bold text-black uppercase tracking-wide">Services</span>
-                        <svg className="w-4 h-4 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <svg aria-hidden="true" className="w-4 h-4 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
                         </svg>
                     </div>

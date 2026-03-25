@@ -61,9 +61,14 @@ export const metadata: Metadata = {
   description: "Transform your SME with AI automation, custom web development & premium content. Stop losing clients to digital competitors. Marrakech-based agency.",
   keywords: ["AI Automation Morocco", "Web Development Agency Marrakech", "Digital Transformation", "Next.js Web Developer", "SEO Services Morocco"],
   icons: {
-    icon: '/assets/icons/logo.svg',
-    shortcut: '/assets/icons/logo.svg',
-    apple: '/assets/icons/logo.svg',
+    icon: [
+      { url: '/favicon.ico', sizes: '32x32' },
+      { url: '/favicon-48x48.png', sizes: '48x48', type: 'image/png' },
+      { url: '/icon-192x192.png', sizes: '192x192', type: 'image/png' },
+      { url: '/icon-512x512.png', sizes: '512x512', type: 'image/png' },
+    ],
+    shortcut: '/favicon.ico',
+    apple: '/apple-icon.png',
   },
   robots: {
     index: true,
@@ -111,6 +116,7 @@ export default function RootLayout({
         <GlobalSchema />
       </head>
       <body className={`${inter.className} ${melon.variable} ${nNiely.variable} ${louis.variable}`} suppressHydrationWarning>
+        <a href="#main-content" className="skip-to-content">Skip to main content</a>
         <SplashScreen>
           <SmoothScroll>
             <Providers>

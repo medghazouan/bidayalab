@@ -79,6 +79,8 @@ export default function Footer() {
               <Link
                 href={settings.linkedinUrl}
                 target="_blank"
+                rel="noopener noreferrer"
+                aria-label="LinkedIn (opens in new tab)"
                 className="text-zinc-400 hover:text-white uppercase tracking-wider text-xs flex items-center gap-1.5 group"
               >
                 LinkedIn
@@ -89,6 +91,8 @@ export default function Footer() {
               <Link
                 href={settings.instagramUrl}
                 target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Instagram (opens in new tab)"
                 className="text-zinc-400 hover:text-white uppercase tracking-wider text-xs flex items-center gap-1.5 group"
               >
                 Instagram
@@ -103,12 +107,12 @@ export default function Footer() {
               <Link
                 key={link.href}
                 href={link.href}
-                className="text-xs text-zinc-600 hover:text-zinc-400 uppercase tracking-wider transition-colors"
+                className="text-xs text-zinc-400 hover:text-zinc-300 uppercase tracking-wider transition-colors"
               >
                 {link.name}
               </Link>
             ))}
-            <p className="text-xs text-zinc-600 uppercase tracking-widest font-medium">© {currentYear} BidayaLab</p>
+            <p className="text-xs text-zinc-400 uppercase tracking-widest font-medium">© {currentYear} BidayaLab</p>
           </div>
         </div>
 

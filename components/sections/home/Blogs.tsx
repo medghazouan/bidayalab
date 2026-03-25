@@ -158,7 +158,7 @@ export default function Blogs() {
         >
           <div className="flex items-center gap-3 px-5 py-2.5 bg-[#beff01]">
             <span className="text-sm font-louis font-bold text-black uppercase tracking-wide">Articles</span>
-            <svg className="w-4 h-4 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg aria-hidden="true" className="w-4 h-4 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
             </svg>
           </div>
@@ -192,7 +192,7 @@ export default function Blogs() {
       <div className="px-4 md:px-8 pb-20 md:pb-32">
         {/* Blogs Grid */}
         {loading ? (
-          <div className="flex items-center justify-center py-20">
+          <div className="flex items-center justify-center py-20" role="status" aria-label="Loading articles">
             <div className="inline-block animate-spin rounded-full h-16 w-16 border-4 border-[#beff01] border-t-transparent"></div>
           </div>
         ) : blogs.length === 0 ? (

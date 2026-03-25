@@ -112,14 +112,13 @@ export default function SplashScreen({ children }: { children: React.ReactNode }
                 )}
             </AnimatePresence>
 
-            {/* Main Content */}
-            <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: isLoading ? 0 : 1 }}
-                transition={{ duration: 0.5, delay: 0.3 }}
+            {/* Main Content - always rendered for LCP/FCP */}
+            <div
+                aria-hidden={isLoading}
+                style={{ visibility: isLoading ? 'hidden' : 'visible' }}
             >
                 {children}
-            </motion.div>
+            </div>
         </>
     );
 }
