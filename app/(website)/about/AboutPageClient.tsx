@@ -26,8 +26,8 @@ export default function AboutPageClient() {
                 </div>
                 
                 <h1 className="text-[10vw] md:text-[8vw] font-black leading-[0.85] tracking-tighter uppercase text-white mb-10">
-                  We Architect <br />
-                  <span className="text-zinc-600">Futures.</span>
+                  Digital Transformation<br />
+                  <span className="text-zinc-600">Agency in Marrakech.</span>
                 </h1>
                 
                 <div className="grid md:grid-cols-2 gap-8 items-start">

@@ -9,9 +9,9 @@ export default function Footer() {
   const [settings, setSettings] = useState({
     linkedinUrl: "",
     instagramUrl: "",
-    email: "",
-    phone: "",
-    whatsapp: ""
+    email: "support@bidayalab.com",
+    phone: "+212 751 388 901",
+    whatsapp: "+212 751 388 901"
   });
   const currentYear = new Date().getFullYear();
 
@@ -22,9 +22,9 @@ export default function Footer() {
         setSettings({
           linkedinUrl: data.linkedinUrl || "",
           instagramUrl: data.instagramUrl || "",
-          email: data.email || "",
-          phone: data.phone || "",
-          whatsapp: data.whatsapp || ""
+          email: data.email || "support@bidayalab.com",
+          phone: data.phone || "+212 751 388 901",
+          whatsapp: data.whatsapp || "+212 751 388 901"
         });
       }
     };

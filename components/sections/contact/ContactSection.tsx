@@ -28,7 +28,7 @@ export default function ContactSection() {
   const [errorMessage, setErrorMessage] = useState('');
 
   const [contactSettings, setContactSettings] = useState({
-    email: "bidayalab1@gmail.com",
+    email: "support@bidayalab.com",
     phone: "+212 751 388 901",
     whatsapp: "+212 751 388 901",
     linkedinUrl: "https://linkedin.com",
@@ -40,7 +40,7 @@ export default function ContactSection() {
       const data = await getSettings();
       if (data) {
         setContactSettings({
-          email: data.email || "bidayalab1@gmail.com",
+          email: data.email || "support@bidayalab.com",
           phone: data.phone || "+212 751 388 901",
           whatsapp: data.whatsapp || "+212 751 388 901",
           linkedinUrl: data.linkedinUrl || "https://linkedin.com",

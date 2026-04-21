@@ -55,8 +55,9 @@ export default function Hero() {
 
                     {/* Title Part 2 */}
                     <h1 className="font-louis font-bold text-[10vw] sm:text-[9vw] md:text-[8vw] leading-[0.95] tracking-tighter text-white uppercase">
-                        Let&apos;s Scale<br />
-                        <span className="inline">Your Business</span><span className="inline">.</span>
+                        AI Automation &amp;<br />
+                        <span className="inline">Web Development</span><br />
+                        <span className="inline text-zinc-500">for SMEs.</span>
                     </h1>
                 </div>
 

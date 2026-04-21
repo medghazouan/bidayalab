@@ -9,6 +9,40 @@ import { Loader2 } from 'lucide-react';
 import CallToAction from '@/components/sections/home/CallToAction';
 import CreativeProjectCard from '@/components/projects/CreativeProjectCard';
 
+// Placeholder case studies shown when DB has no content yet
+const PLACEHOLDER_PROJECTS = [
+    {
+        _id: 'case-1',
+        title: 'AI Chatbot for E-Commerce — 45% Reduction in Support Tickets',
+        slug: 'ai-chatbot-ecommerce',
+        description: 'We deployed a custom AI chatbot for a Moroccan e-commerce brand that handles product inquiries, order tracking, and returns — reducing human support tickets by 45% within the first month.',
+        category: 'AI Automation',
+        thumbnail: '/assets/images/services/ai-automation.webp',
+        gallery: ['/assets/images/services/ai-automation.webp'],
+        tags: ['AI Chatbot', 'E-Commerce', 'Automation'],
+    },
+    {
+        _id: 'case-2',
+        title: 'High-Converting SaaS Platform — 3x Faster Load Times',
+        slug: 'saas-platform-redesign',
+        description: 'A full redesign and rebuild of a SaaS dashboard using Next.js and React, achieving 3x faster page loads and a 60% increase in trial-to-paid conversion rate.',
+        category: 'Web Development',
+        thumbnail: '/assets/images/services/web-development.webp',
+        gallery: ['/assets/images/services/web-development.webp'],
+        tags: ['Next.js', 'SaaS', 'Performance'],
+    },
+    {
+        _id: 'case-3',
+        title: 'Brand Film Campaign — 2.5x Social Engagement Boost',
+        slug: 'brand-film-campaign',
+        description: 'A premium brand documentary and social content package for a hospitality client in Marrakech, resulting in 2.5x higher engagement across Instagram and LinkedIn.',
+        category: 'Visual Storytelling',
+        thumbnail: '/assets/images/services/visual-storytelling.webp',
+        gallery: ['/assets/images/services/visual-storytelling.webp'],
+        tags: ['Brand Film', 'Photography', 'Social Media'],
+    },
+];
+
 export default function WorksPageClient() {
     const [projects, setProjects] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
@@ -20,7 +54,8 @@ export default function WorksPageClient() {
             try {
                 const data = await getProjects();
                 // Fisher-Yates shuffle to randomize the order
-                const shuffled = [...(data || [])];
+                const source = data && data.length > 0 ? data : PLACEHOLDER_PROJECTS;
+                const shuffled = [...source];
                 for (let i = shuffled.length - 1; i > 0; i--) {
                     const j = Math.floor(Math.random() * (i + 1));
                     [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
@@ -64,10 +99,10 @@ export default function WorksPageClient() {
                         transition={{ duration: 0.8 }}
                     >
                         <h1 className="text-[12vw] md:text-[10vw] font-bold font-louis leading-[0.85] tracking-tighter uppercase text-white mix-blend-difference">
-                            Our <span className="text-zinc-700">Work</span>
+                            Case Studies &<br /><span className="text-zinc-700">Client Results</span>
                         </h1>
                         <p className="mt-8 text-lg md:text-xl text-zinc-400 max-w-xl font-sans border-l-2 border-[#beff01] pl-6">
-                            See how we've helped ambitious businesses scale with AI, web, and visual solutions.
+                            Real results from AI automation, web development, and visual storytelling projects for SMEs worldwide.
                         </p>
                     </motion.div>
                 </div>

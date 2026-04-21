@@ -38,7 +38,7 @@ export default function ContactContent() {
             transition={{ duration: 0.8 }}
           >
             <h1 className="text-[12vw] md:text-[10vw] font-bold font-louis leading-[0.85] tracking-tighter uppercase text-white mix-blend-difference">
-              Start <span className="text-zinc-700">Now</span>
+              Contact <span className="text-zinc-700">BidayaLab</span>
             </h1>
             <p className="mt-8 text-lg md:text-xl text-zinc-400 max-w-xl font-louis border-l-2 border-[#beff01] pl-6">
               Ready to scale? Let's discuss how we can help your business grow with expert Web Development and AI Solutions.

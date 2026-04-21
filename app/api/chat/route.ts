@@ -28,7 +28,7 @@ export async function POST(req: NextRequest) {
         if (settings) {
             const contactInfo = `
             \n[CURRENT CONTACT INFORMATION]
-            Email: ${settings.email || "bidayalab1@gmail.com"}
+            Email: ${settings.email || "support@bidayalab.com"}
             Phone: ${settings.phone || "+212 751 388 901"}
             WhatsApp: ${settings.whatsapp || "+212 751 388 901"}
             LinkedIn: ${settings.linkedinUrl}

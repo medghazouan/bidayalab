@@ -4,6 +4,7 @@ import { Providers } from './providers';
 import dynamic from 'next/dynamic';
 const BidayalabAssistant = dynamic(() => import('@/components/chat/BidayalabAssistant'));
 import GlobalSchema from '@/components/seo/GlobalSchema';
+import GoogleAnalytics from '@/components/seo/GoogleAnalytics';
 import SmoothScroll from '@/components/ui/SmoothScroll';
 import SplashScreen from '@/components/ui/SplashScreen';
 import { Metadata } from 'next';
@@ -115,6 +116,7 @@ export default function RootLayout({
         <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <GlobalSchema />
+        <GoogleAnalytics />
       </head>
       <body className={`${inter.className} ${melon.variable} ${nNiely.variable} ${louis.variable}`} suppressHydrationWarning>
         <a href="#main-content" className="skip-to-content">Skip to main content</a>

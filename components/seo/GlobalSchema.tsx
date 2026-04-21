@@ -21,9 +21,10 @@ export default function GlobalSchema() {
                 "contactPoint": {
                     "@type": "ContactPoint",
                     "contactType": "customer service",
-                    "email": "hello@bidayalab.com",
+                    "telephone": "+212-751-388-901",
+                    "email": "support@bidayalab.com",
                     "areaServed": ["MA", "US", "AE", "SA"],
-                    "availableLanguage": ["en"]
+                    "availableLanguage": ["en", "fr", "ar"]
                 },
                 "address": {
                     "@type": "PostalAddress",
@@ -146,6 +147,41 @@ export default function GlobalSchema() {
                 },
                 "serviceType": "Visual Storytelling Services",
                 "areaServed": ["MA", "US", "AE", "SA"]
+            },
+            {
+                "@type": "LocalBusiness",
+                "@id": "https://www.bidayalab.com/#localbusiness",
+                "name": "BidayaLab",
+                "image": "https://www.bidayalab.com/assets/icons/logo.svg",
+                "url": "https://www.bidayalab.com",
+                "telephone": "+212-751-388-901",
+                "email": "support@bidayalab.com",
+                "priceRange": "$$",
+                "address": {
+                    "@type": "PostalAddress",
+                    "streetAddress": "Marrakech",
+                    "addressLocality": "Marrakech",
+                    "addressRegion": "Marrakech-Safi",
+                    "postalCode": "40000",
+                    "addressCountry": "MA"
+                },
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 31.6295,
+                    "longitude": -7.9811
+                },
+                "openingHoursSpecification": [
+                    {
+                        "@type": "OpeningHoursSpecification",
+                        "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+                        "opens": "09:00",
+                        "closes": "18:00"
+                    }
+                ],
+                "sameAs": [
+                    "https://www.linkedin.com/company/bidayalab",
+                    "https://www.instagram.com/bidayalab"
+                ]
             }
         ]
     };

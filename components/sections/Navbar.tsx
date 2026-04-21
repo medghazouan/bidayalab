@@ -20,7 +20,7 @@ export default function Navbar() {
   });
 
   const navLinks = [
-    { name: "Home", href: "/home" },
+    { name: "Home", href: "/" },
     { name: "About", href: "/about" },
     { name: "Work", href: "/works" },
     { name: "Blog", href: "/blogs" },
@@ -97,10 +97,10 @@ export default function Navbar() {
       {/* MINIMAL HEADER - Scrolls with page */}
       <header role="banner" className="absolute top-0 left-0 right-0 z-[60] px-4 md:px-8 py-2 md:py-4 pointer-events-none transition-all duration-300">
         <div className="flex items-center justify-between max-w-[1920px] mx-auto">
-          <Link href="/home" className="pointer-events-auto relative z-[70]">
+          <Link href="/" className="pointer-events-auto relative z-[70]">
             <Image
               src="/assets/icons/newlogo.png"
-              alt="Bidayalab"
+              alt="BidayaLab - Digital Transformation Agency in Marrakech"
               width={180}
               height={60}
               priority

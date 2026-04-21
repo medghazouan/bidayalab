@@ -12,7 +12,8 @@ const services = [
         title: 'AI Automation',
         description: 'Together, we automate your workflows so you can focus on what matters—growing your business. From intelligent chatbots to seamless CRM integrations, we build AI systems that work around the clock for you.',
         categories: ['Chatbots', 'Workflow Automation', 'Lead Generation', 'Email Automation', 'CRM Integration', 'Data Processing'],
-        image: '/assets/images/services/ai-automation.webp'
+        image: '/assets/images/services/ai-automation.webp',
+        alt: 'AI automation workflow and chatbot integration for small business'
     },
     {
         id: 'service2',
@@ -20,7 +21,8 @@ const services = [
         title: 'Web Development',
         description: 'We craft custom digital platforms that turn your visitors into loyal customers. Fast, responsive, and built with cutting-edge technology—let\'s create something that sets you apart from the competition.',
         categories: ['Custom Websites', 'E-commerce', 'Web Apps', 'Landing Pages', 'CMS Integration', 'API Development'],
-        image: '/assets/images/services/web-development.webp'
+        image: '/assets/images/services/web-development.webp',
+        alt: 'Custom web development and e-commerce solutions by BidayaLab'
     },
     {
         id: 'service3',
@@ -28,7 +30,8 @@ const services = [
         title: 'Visual Storytelling',
         description: 'We bring your brand to life with premium video and photography that resonates. From product shoots to brand documentaries, let\'s tell your story in a way that captivates your audience.',
         categories: ['Video Production', 'Photography', 'Motion Graphics', 'Brand Films', 'Product Shoots', 'Social Content'],
-        image: '/assets/images/services/visual-storytelling.webp'
+        image: '/assets/images/services/visual-storytelling.webp',
+        alt: 'Professional brand film and photography production for digital marketing'
     }
 ];
 
@@ -336,7 +339,7 @@ function ServiceCard({
             >
                 <Image
                     src={service.image}
-                    alt={service.title}
+                    alt={service.alt || service.title}
                     fill
                     className="object-cover transition-transform duration-700 hover:scale-105"
                     sizes="(max-width: 768px) 100vw, 65vw"
