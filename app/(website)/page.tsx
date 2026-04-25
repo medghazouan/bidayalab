@@ -38,7 +38,12 @@ export const metadata: Metadata = {
     description: 'AI automation, custom web development, and visual storytelling for ambitious businesses.',
   },
   alternates: {
-    canonical: 'https://www.bidayalab.com/'
+    canonical: 'https://www.bidayalab.com/',
+    languages: {
+      en: 'https://www.bidayalab.com/',
+      fr: 'https://www.bidayalab.com/fr',
+      'x-default': 'https://www.bidayalab.com/',
+    },
   },
   robots: {
     index: true,

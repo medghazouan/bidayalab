@@ -19,7 +19,12 @@ export const metadata: Metadata = {
     type: 'website',
   },
   alternates: {
-    canonical: 'https://www.bidayalab.com/contact'
+    canonical: 'https://www.bidayalab.com/contact',
+    languages: {
+      en: 'https://www.bidayalab.com/contact',
+      fr: 'https://www.bidayalab.com/fr/contact',
+      'x-default': 'https://www.bidayalab.com/contact',
+    },
   }
 };
 

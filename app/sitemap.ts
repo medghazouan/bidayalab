@@ -23,7 +23,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         '/privacy',
         '/terms',
         '/fr',
+        '/fr/about',
+        '/fr/services',
+        '/fr/works',
         '/fr/blogs',
+        '/fr/contact',
     ];
 
     const now = new Date();

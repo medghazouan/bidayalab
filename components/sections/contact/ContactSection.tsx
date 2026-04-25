@@ -6,15 +6,42 @@ import { Mail, Phone, Loader2, CheckCircle2, AlertCircle, Sparkles, ArrowRight, 
 import { FaWhatsapp, FaLinkedinIn, FaInstagram } from 'react-icons/fa';
 import Link from 'next/link';
 import { getSettings } from '@/app/actions/settings';
+import { useLocale, t } from '@/lib/i18n';
 
-// Service Options for "Helpful" Form
 const SERVICE_OPTIONS = [
-  { id: 'ai-automation', label: 'AI Automation', icon: Bot },
-  { id: 'web-dev', label: 'Web Development', icon: Globe },
-  { id: 'visual-storytelling', label: 'Visual Storytelling', icon: Layers },
-];
+  { id: 'ai-automation', icon: Bot, label: { en: 'AI Automation', fr: 'Automatisation IA' } },
+  { id: 'web-dev', icon: Globe, label: { en: 'Web Engineering', fr: 'Ingénierie Web' } },
+  { id: 'visual-storytelling', icon: Layers, label: { en: 'Brand & Motion', fr: 'Marque & Motion' } },
+] as const;
 
 export default function ContactSection() {
+  const lang = useLocale();
+  const c = {
+    successTitleA: { en: 'Message', fr: 'Message' },
+    successTitleB: { en: 'Received', fr: 'Reçu' },
+    successBody: { en: "We've received your request and our team is already reviewing it. Expect a response at", fr: 'On a reçu votre demande et l’équipe l’examine déjà. Vous recevrez une réponse à' },
+    successThanks: { en: 'Thank you', fr: 'Merci' },
+    successSoon: { en: 'very soon.', fr: 'très vite.' },
+    sendAnother: { en: 'Send Another Message', fr: 'Envoyer un autre message' },
+    introTitleA: { en: "Let's Build", fr: 'On construit' },
+    introTitleB: { en: 'The Future.', fr: 'l’avenir.' },
+    introLead: { en: "Whether you need a cutting-edge web platform, an AI-powered tool, or a complete digital transformation, we're here to help.", fr: "Plateforme web sur-mesure, automatisation IA ou refonte digitale complète — on est là pour vous aider." },
+    follow: { en: 'Follow Us', fr: 'Suivez-nous' },
+    helpLabel: { en: 'What can we help you with?', fr: 'Comment peut-on vous aider ?' },
+    detailsLabel: { en: 'Your Details', fr: 'Vos coordonnées' },
+    namePh: { en: 'Your Name', fr: 'Votre nom' },
+    bizPh: { en: 'Business Name', fr: 'Nom de l’entreprise' },
+    emailPh: { en: 'Email Address', fr: 'Adresse e-mail' },
+    phonePh: { en: 'Phone Number', fr: 'Téléphone' },
+    moreLabel: { en: 'Tell us more', fr: 'Parlez-nous du projet' },
+    msgPh: { en: 'Describe your project, goals, and timeline...', fr: 'Décrivez le projet, les objectifs et le planning...' },
+    sending: { en: 'Sending...', fr: 'Envoi...' },
+    submit: { en: 'Send Request', fr: 'Envoyer la demande' },
+    chatLabel: { en: 'Chat with us', fr: 'Discuter avec nous' },
+    emailLabel: { en: 'Email', fr: 'Email' },
+    phoneLabel: { en: 'Phone', fr: 'Téléphone' },
+    waLabel: { en: 'WhatsApp', fr: 'WhatsApp' },
+  } as const;
   const [formData, setFormData] = useState({
     name: '',
     businessName: '',
@@ -54,22 +81,22 @@ export default function ContactSection() {
   const contactInfo = [
     {
       icon: Mail,
-      title: 'Email',
+      title: t(lang, c.emailLabel),
       info: contactSettings.email,
       link: `mailto:${contactSettings.email}`,
       color: "group-hover:text-blue-400"
     },
     {
       icon: Phone,
-      title: 'Phone',
+      title: t(lang, c.phoneLabel),
       info: contactSettings.phone,
       link: `tel:${contactSettings.phone.replace(/\s+/g, '')}`,
       color: "group-hover:text-green-400"
     },
     {
       icon: FaWhatsapp,
-      title: 'WhatsApp',
-      info: "Chat with us",
+      title: t(lang, c.waLabel),
+      info: t(lang, c.chatLabel),
       link: `https://wa.me/${contactSettings.whatsapp.replace(/[^0-9]/g, '')}`,
       color: "group-hover:text-[#25D366]"
     }
@@ -163,7 +190,7 @@ export default function ContactSection() {
                   transition={{ delay: 0.2 }}
                   className="text-4xl md:text-5xl font-black font-louis text-white mb-6 uppercase tracking-tight"
                 >
-                  Message <span className="text-[#beff01]">Received</span>
+                  {t(lang, c.successTitleA)} <span className="text-[#beff01]">{t(lang, c.successTitleB)}</span>
                 </motion.h3>
 
                 <motion.p
@@ -172,7 +199,7 @@ export default function ContactSection() {
                   transition={{ delay: 0.3 }}
                   className="text-zinc-400 text-lg md:text-xl mb-10 max-w-lg mx-auto font-light leading-relaxed"
                 >
-                  Thank you <span className="text-white font-medium">{formData.name}</span>. We've received your request and our team is already reviewing it. Expect a response at <span className="text-[#beff01] underline decoration-[#beff01]/30 underline-offset-4">{formData.email}</span> very soon.
+                  {t(lang, c.successThanks)} <span className="text-white font-medium">{formData.name}</span>. {t(lang, c.successBody)} <span className="text-[#beff01] underline decoration-[#beff01]/30 underline-offset-4">{formData.email}</span> {t(lang, c.successSoon)}
                 </motion.p>
 
                 <motion.button
@@ -182,7 +209,7 @@ export default function ContactSection() {
                   onClick={resetForm}
                   className="group relative inline-flex items-center gap-2 px-8 py-4 bg-white text-black font-bold font-louis uppercase tracking-wider hover:bg-[#beff01] transition-all duration-300"
                 >
-                  <span>Send Another Message</span>
+                  <span>{t(lang, c.sendAnother)}</span>
                   <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
                 </motion.button>
               </div>
@@ -201,9 +228,9 @@ export default function ContactSection() {
           >
             {/* Intro Box */}
             <div className="p-8 rounded-none bg-zinc-900/30 border border-white/5 backdrop-blur-sm">
-              <h2 className="text-3xl font-black font-louis text-white mb-4">Let's Build<br /><span className="text-[#beff01]">The Future.</span></h2>
+              <h2 className="text-3xl font-black font-louis text-white mb-4">{t(lang, c.introTitleA)}<br /><span className="text-[#beff01]">{t(lang, c.introTitleB)}</span></h2>
               <p className="text-zinc-400 leading-relaxed text-sm md:text-base">
-                Whether you need a cutting-edge web platform, an AI-powered tool, or a complete digital transformation, we're here to help.
+                {t(lang, c.introLead)}
               </p>
             </div>
 
@@ -232,7 +259,7 @@ export default function ContactSection() {
 
             {/* Socials Row */}
             <div className="p-6 rounded-none bg-zinc-900/30 border border-white/5 flex flex-col gap-4">
-              <p className="text-xs font-bold font-louis text-zinc-500 uppercase tracking-widest text-center">Follow Us</p>
+              <p className="text-xs font-bold font-louis text-zinc-500 uppercase tracking-widest text-center">{t(lang, c.follow)}</p>
               <div className="flex justify-center gap-4">
                 {socialLinks.map((social, idx) => {
                   const Icon = social.icon;
@@ -270,7 +297,7 @@ export default function ContactSection() {
                 <div className="space-y-4">
                   <label className="text-sm font-bold font-louis text-white uppercase tracking-widest flex items-center gap-2">
                     <span className="w-2 h-2 rounded-full bg-[#beff01]" />
-                    What can we help you with?
+                    {t(lang, c.helpLabel)}
                   </label>
                   <div className="flex flex-wrap gap-3">
                     {SERVICE_OPTIONS.map((service) => {
@@ -290,7 +317,7 @@ export default function ContactSection() {
                                             `}
                         >
                           <Icon size={16} className={isSelected ? 'text-black' : 'text-zinc-500'} />
-                          {service.label}
+                          {t(lang, service.label)}
                         </button>
                       )
                     })}
@@ -301,14 +328,14 @@ export default function ContactSection() {
                 <div className="space-y-4">
                   <label className="text-sm font-bold font-louis text-white uppercase tracking-widest flex items-center gap-2">
                     <span className="w-2 h-2 rounded-full bg-[#beff01]" />
-                    Your Details
+                    {t(lang, c.detailsLabel)}
                   </label>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-2">
                       <input
                         type="text"
                         name="name"
-                        placeholder="Your Name"
+                        placeholder={t(lang, c.namePh)}
                         value={formData.name}
                         onChange={handleChange}
                         required
@@ -319,7 +346,7 @@ export default function ContactSection() {
                       <input
                         type="text"
                         name="businessName"
-                        placeholder="Business Name"
+                        placeholder={t(lang, c.bizPh)}
                         value={formData.businessName}
                         onChange={handleChange}
                         className="w-full bg-transparent border-b border-white/20 px-0 py-4 text-white text-lg placeholder-zinc-700 focus:outline-none focus:border-[#beff01] transition-colors"
@@ -329,7 +356,7 @@ export default function ContactSection() {
                       <input
                         type="email"
                         name="email"
-                        placeholder="Email Address"
+                        placeholder={t(lang, c.emailPh)}
                         value={formData.email}
                         onChange={handleChange}
                         required
@@ -340,7 +367,7 @@ export default function ContactSection() {
                       <input
                         type="tel"
                         name="phone"
-                        placeholder="Phone Number"
+                        placeholder={t(lang, c.phonePh)}
                         value={formData.phone}
                         onChange={handleChange}
                         className="w-full bg-transparent border-b border-white/20 px-0 py-4 text-white text-lg placeholder-zinc-700 focus:outline-none focus:border-[#beff01] transition-colors"
@@ -353,12 +380,12 @@ export default function ContactSection() {
                 <div className="space-y-4">
                   <label className="text-sm font-bold font-louis text-white uppercase tracking-widest flex items-center gap-2">
                     <span className="w-2 h-2 rounded-full bg-[#beff01]" />
-                    Tell us more
+                    {t(lang, c.moreLabel)}
                   </label>
                   <textarea
                     name="message"
                     rows={4}
-                    placeholder="Describe your project, goals, and timeline..."
+                    placeholder={t(lang, c.msgPh)}
                     value={formData.message}
                     onChange={handleChange}
                     required
@@ -384,11 +411,11 @@ export default function ContactSection() {
                     {status === 'loading' ? (
                       <>
                         <Loader2 size={24} className="animate-spin" />
-                        <span>Sends...</span>
+                        <span>{t(lang, c.sending)}</span>
                       </>
                     ) : (
                       <>
-                        <span>Send Request</span>
+                        <span>{t(lang, c.submit)}</span>
                         <div className="w-8 h-8 flex items-center justify-center rounded-none bg-black text-white group-hover:bg-black group-hover:text-[#beff01] transition-all group-hover:rotate-45">
                           <ArrowRight size={14} />
                         </div>

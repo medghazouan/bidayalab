@@ -25,6 +25,11 @@ export const metadata: Metadata = {
   },
   alternates: {
     canonical: 'https://www.bidayalab.com/blogs',
+    languages: {
+      en: 'https://www.bidayalab.com/blogs',
+      fr: 'https://www.bidayalab.com/fr/blogs',
+      'x-default': 'https://www.bidayalab.com/blogs',
+    },
   },
 };
 

@@ -4,43 +4,92 @@ import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { useLocale, t, localeHref } from '@/lib/i18n';
 
-// Featured Testimonials Data
-const featuredTestimonials = [
-    {
-        id: 1,
-        name: 'Ahmed Benali',
-        position: 'CEO',
-        company: 'TechVentures',
-        quote: 'From day one, they got what we were trying to do—make our brand feel accessible, human, and forward-looking. The rebrand has completely reshaped how we show up in the market.',
-        image: '/testimonials/avatar-1.webp',
-    },
-    {
-        id: 2,
-        name: 'Sara Mansouri',
-        position: 'Marketing Director',
-        company: 'GrowthLab',
-        quote: 'Working with Bidayalab was transformative. They understood our vision instantly and delivered beyond expectations. Our conversion rates have never been higher.',
-        image: '/testimonials/avatar-2.webp',
-    },
-    {
-        id: 3,
-        name: 'Youssef El Amrani',
-        position: 'Founder',
-        company: 'InnovateMa',
-        quote: 'The team\'s attention to detail and creative approach set them apart. They didn\'t just build a website—they built a complete digital experience.',
-        image: '/testimonials/avatar-3.webp',
-    },
-];
+const TESTIMONIALS_BY_LOCALE = {
+    en: [
+        {
+            id: 1,
+            name: 'Ahmed Benali',
+            position: 'CEO',
+            company: 'TechVentures',
+            quote: 'From day one, they got what we were trying to do—make our brand feel accessible, human, and forward-looking. The rebrand has completely reshaped how we show up in the market.',
+            image: '/testimonials/avatar-1.webp',
+        },
+        {
+            id: 2,
+            name: 'Sara Mansouri',
+            position: 'Marketing Director',
+            company: 'GrowthLab',
+            quote: 'Working with BidayaLab was transformative. They understood our vision instantly and delivered beyond expectations. Our conversion rates have never been higher.',
+            image: '/testimonials/avatar-2.webp',
+        },
+        {
+            id: 3,
+            name: 'Youssef El Amrani',
+            position: 'Founder',
+            company: 'InnovateMa',
+            quote: "The team’s attention to detail and creative approach set them apart. They didn’t just build a website—they built a complete digital experience.",
+            image: '/testimonials/avatar-3.webp',
+        },
+    ],
+    fr: [
+        {
+            id: 1,
+            name: 'Ahmed Benali',
+            position: 'CEO',
+            company: 'TechVentures',
+            quote: "Dès le premier jour, ils ont compris ce qu’on cherchait — une marque accessible, humaine, tournée vers l’avenir. Le rebrand a totalement transformé notre présence sur le marché.",
+            image: '/testimonials/avatar-1.webp',
+        },
+        {
+            id: 2,
+            name: 'Sara Mansouri',
+            position: 'Directrice Marketing',
+            company: 'GrowthLab',
+            quote: "Travailler avec BidayaLab a tout changé. Ils ont saisi notre vision tout de suite et ont dépassé nos attentes. Nos taux de conversion n’ont jamais été aussi hauts.",
+            image: '/testimonials/avatar-2.webp',
+        },
+        {
+            id: 3,
+            name: 'Youssef El Amrani',
+            position: 'Fondateur',
+            company: 'InnovateMa',
+            quote: "L’attention au détail et l’approche créative les distinguent. Ils n’ont pas juste construit un site — ils ont construit une expérience digitale complète.",
+            image: '/testimonials/avatar-3.webp',
+        },
+    ],
+} as const;
 
-// Stats Data
-const stats = [
-    { value: '150+', label: 'Brands Transformed' },
-    { value: '48h', label: 'Average Turnaround' },
-    { value: '98%', label: 'Client Retention Rate' },
-];
+const STATS_BY_LOCALE = {
+    en: [
+        { value: '150+', label: 'Brands Transformed' },
+        { value: '48h', label: 'Average Turnaround' },
+        { value: '98%', label: 'Client Retention Rate' },
+    ],
+    fr: [
+        { value: '150+', label: 'Marques transformées' },
+        { value: '48h', label: 'Délai moyen de réponse' },
+        { value: '98 %', label: 'Taux de fidélisation' },
+    ],
+} as const;
 
 export default function Testimonials() {
+    const lang = useLocale();
+    const featuredTestimonials = TESTIMONIALS_BY_LOCALE[lang];
+    const stats = STATS_BY_LOCALE[lang];
+    const headerCopy = {
+        label: { en: 'Testimonials', fr: 'Témoignages' },
+        titleA: { en: "Operators we’ve", fr: "Des opérateurs pour qui on" },
+        titleB: { en: 'moved the number for.', fr: 'a fait bouger le chiffre.' },
+        description: {
+            en: 'Quotes from founders whose conversion, ops or launch metric we agreed to move — and did. Numbers verified from their analytics, not invented for the website.',
+            fr: "Citations de fondateurs dont on a accepté de bouger un indicateur — conversion, ops ou ROI de lancement — et qu’on a bougé. Chiffres vérifiés sur leurs analytics, pas inventés pour le site.",
+        },
+        outroLead: { en: 'Ready to be our next success story?', fr: 'Prêts à être la prochaine réussite ?' },
+        outroSpan: { en: "Let’s make it happen.", fr: "On la met en route ensemble." },
+        outroCta: { en: 'Get in Touch', fr: 'Nous contacter' },
+    } as const;
     const [activeIndex, setActiveIndex] = useState(0);
     const activeTestimonial = featuredTestimonials[activeIndex];
 
@@ -92,7 +141,7 @@ export default function Testimonials() {
                     className="inline-block mb-2"
                 >
                     <div className="flex items-center gap-3 px-5 py-2.5 bg-[#beff01]">
-                        <span className="text-sm font-louis font-bold text-black uppercase tracking-wide">Testimonials</span>
+                        <span className="text-sm font-louis font-bold text-black uppercase tracking-wide">{t(lang, headerCopy.label)}</span>
                         <svg aria-hidden="true" className="w-4 h-4 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
                         </svg>
@@ -106,8 +155,8 @@ export default function Testimonials() {
                     transition={{ duration: 0.8 }}
                     className="text-5xl md:text-7xl lg:text-8xl xl:text-9xl font-louis font-bold text-white leading-[1.05] tracking-tight mb-4"
                 >
-                    Operators we&apos;ve<br />
-                    <span className="text-[#beff01]">moved the number for.</span>
+                    {t(lang, headerCopy.titleA)}<br />
+                    <span className="text-[#beff01]">{t(lang, headerCopy.titleB)}</span>
                 </motion.h2>
 
                 <motion.p
@@ -117,7 +166,7 @@ export default function Testimonials() {
                     transition={{ duration: 0.6, delay: 0.2 }}
                     className="text-lg md:text-xl text-zinc-400 font-louis max-w-3xl"
                 >
-                    Quotes from founders whose conversion, ops or launch metric we agreed to move — and did. Numbers verified from their analytics, not invented for the website.
+                    {t(lang, headerCopy.description)}
                 </motion.p>
             </div>
 
@@ -267,14 +316,14 @@ export default function Testimonials() {
                     className="mt-6 md:mt-8 flex flex-col md:flex-row md:items-center md:justify-between gap-6 pt-4"
                 >
                     <p className="text-zinc-400 font-louis text-lg md:text-xl text-left">
-                        Ready to be our next success story?{" "}
-                        <span className="text-white">Let's make it happen.</span>
+                        {t(lang, headerCopy.outroLead)}{" "}
+                        <span className="text-white">{t(lang, headerCopy.outroSpan)}</span>
                     </p>
                     <a
-                        href="/contact"
+                        href={localeHref(lang, '/contact')}
                         className="w-full md:w-auto group inline-flex items-center justify-center gap-3 px-8 py-4 bg-[#beff01] text-black font-louis font-bold text-lg transition-all duration-300 hover:bg-white"
                     >
-                        Get in Touch
+                        {t(lang, headerCopy.outroCta)}
                         <svg
                             aria-hidden="true"
                             className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1"

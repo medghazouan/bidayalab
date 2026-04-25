@@ -16,7 +16,12 @@ export const metadata: Metadata = {
     description: 'Marrakech-based agency helping SMEs scale with AI, web development, and visual storytelling.',
   },
   alternates: {
-    canonical: 'https://www.bidayalab.com/about'
+    canonical: 'https://www.bidayalab.com/about',
+    languages: {
+      en: 'https://www.bidayalab.com/about',
+      fr: 'https://www.bidayalab.com/fr/about',
+      'x-default': 'https://www.bidayalab.com/about',
+    },
   }
 };
 

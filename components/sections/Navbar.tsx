@@ -8,6 +8,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Instagram, Linkedin, Twitter, ArrowUpRight, AlignRight } from "lucide-react";
 import { getSettings } from "@/app/actions/settings";
 import LocaleSwitcher from "@/components/ui/LocaleSwitcher";
+import { useLocale, t, localeHref, type Locale } from "@/lib/i18n";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -20,13 +21,20 @@ export default function Navbar() {
     whatsapp: ""
   });
 
+  const lang: Locale = useLocale();
   const navLinks = [
-    { name: "Home", href: "/" },
-    { name: "About", href: "/about" },
-    { name: "Work", href: "/works" },
-    { name: "Blog", href: "/blogs" },
-    { name: "Contact", href: "/contact" },
-  ];
+    { name: { en: 'Home', fr: 'Accueil' }, href: '/' },
+    { name: { en: 'About', fr: 'À propos' }, href: '/about' },
+    { name: { en: 'Work', fr: 'Réalisations' }, href: '/works' },
+    { name: { en: 'Blog', fr: 'Blog' }, href: '/blogs' },
+    { name: { en: 'Contact', fr: 'Contact' }, href: '/contact' },
+  ] as const;
+  const closeLabel = { en: 'Close', fr: 'Fermer' } as const;
+  const taglineCopy = {
+    en: 'Transform your Moroccan SME with AI automation, custom web development & premium content.',
+    fr: 'Transformez votre PME marocaine avec l’automatisation IA, le développement web sur-mesure et du contenu premium.',
+  } as const;
+  const getInTouchCopy = { en: 'Get In Touch', fr: 'Nous contacter' } as const;
 
   useEffect(() => {
     const fetchSettings = async () => {
@@ -98,7 +106,7 @@ export default function Navbar() {
       {/* MINIMAL HEADER - Scrolls with page */}
       <header role="banner" className="absolute top-0 left-0 right-0 z-[60] px-4 md:px-8 py-2 md:py-4 pointer-events-none transition-all duration-300">
         <div className="flex items-center justify-between max-w-[1920px] mx-auto">
-          <Link href="/" className="pointer-events-auto relative z-[70]">
+          <Link href={localeHref(lang, '/')} className="pointer-events-auto relative z-[70]">
             <Image
               src="/assets/icons/newlogo.png"
               alt="BidayaLab - Digital Transformation Agency in Marrakech"
@@ -116,7 +124,7 @@ export default function Navbar() {
             <button onClick={toggleMenu} aria-label={isOpen ? 'Close menu' : 'Open menu'} aria-expanded={isOpen} className="group flex items-center justify-center">
               {isOpen ? (
                 <span className="text-white font-medium text-lg uppercase tracking-wider hover:text-zinc-300 transition-colors border-b border-white pb-0.5">
-                  Close
+                  {t(lang, closeLabel)}
                 </span>
               ) : (
                 <div className="w-14 h-14 flex justify-center items-center text-[#beff01] transition-all duration-300 group-hover:bg-white/10 rounded-full">
@@ -152,23 +160,26 @@ export default function Navbar() {
 
                 {/* NAV LINKS CONTAINER */}
                 <div className="flex flex-col items-start gap-4 md:gap-2 mt-4 md:mt-8">
-                  {navLinks.map((link, index) => (
-                    <div key={index} className="overflow-visible relative group">
-                      <motion.div variants={itemVariants}>
-                        <Link
-                          href={link.href}
-                          onClick={toggleMenu}
-                          className={`text-[13vw] md:text-[7vw] leading-[0.85] font-normal tracking-tight hover:text-[#beff01] transition-colors duration-300 block font-louis font-bold uppercase ${pathname === link.href ? 'text-[#beff01]' : 'text-zinc-200'}`}
-                          style={{}}
-                        >
-                          {link.name}
-                          <span className="text-sm md:text-lg align-top ml-2 md:ml-4 opacity-50 font-mono tracking-widest text-zinc-500">
-                            /0{index + 1}
-                          </span>
-                        </Link>
-                      </motion.div>
-                    </div>
-                  ))}
+                  {navLinks.map((link, index) => {
+                    const localized = localeHref(lang, link.href);
+                    return (
+                      <div key={index} className="overflow-visible relative group">
+                        <motion.div variants={itemVariants}>
+                          <Link
+                            href={localized}
+                            onClick={toggleMenu}
+                            className={`text-[13vw] md:text-[7vw] leading-[0.85] font-normal tracking-tight hover:text-[#beff01] transition-colors duration-300 block font-louis font-bold uppercase ${pathname === localized ? 'text-[#beff01]' : 'text-zinc-200'}`}
+                            style={{}}
+                          >
+                            {t(lang, link.name)}
+                            <span className="text-sm md:text-lg align-top ml-2 md:ml-4 opacity-50 font-mono tracking-widest text-zinc-500">
+                              /0{index + 1}
+                            </span>
+                          </Link>
+                        </motion.div>
+                      </div>
+                    );
+                  })}
                 </div>
 
                 {/* SOCIALS - DYNAMIC FETCH FROM DB (GENERIC ARROW STYLE) */}
@@ -199,12 +210,12 @@ export default function Navbar() {
                 <motion.div variants={itemVariants} className="max-w-md mt-6 text-right w-full ml-auto">
                   {/* Description in Secondary Font (Louis) */}
                   <p className="text-2xl md:text-3xl font-light text-zinc-300 leading-tight font-louis">
-                    Transform your Moroccan SME with AI automation, custom web development & premium content.
+                    {t(lang, taglineCopy)}
                   </p>
                 </motion.div>
 
                 <motion.div variants={itemVariants} className="text-right pb-4">
-                  <p className="text-zinc-500 text-sm mb-2 uppercase tracking-widest">Get In Touch</p>
+                  <p className="text-zinc-500 text-sm mb-2 uppercase tracking-widest">{t(lang, getInTouchCopy)}</p>
                   <div className="flex flex-col items-end gap-1">
                     <a href={`mailto:${settings.email}`} className="text-white text-2xl md:text-4xl hover:text-[#beff01] transition-colors font-louis font-bold block">
                       {settings.email}

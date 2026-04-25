@@ -1,42 +1,91 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { useRef, useEffect, useState } from 'react';
+import { useRef, useEffect, useState, useMemo } from 'react';
 import Image from 'next/image';
+import { useLocale, type Locale } from '@/lib/i18n';
 
-// BidayaLab's services
-const services = [
-    {
-        id: 'service1',
-        number: '01',
-        title: 'AI Automation',
-        description: 'Cut 60–80% of repetitive ops in 30 days. We map the bottleneck, deploy n8n / Make / GPT agents, and hand you a system that works while you sleep — with the SOPs and dashboards to prove it.',
-        categories: ['n8n Workflows', 'GPT Agents', 'CRM Sync', 'Lead Scoring', 'Email · WhatsApp Bots', 'KPI Dashboards'],
-        image: '/assets/images/services/ai-automation.webp',
-        alt: 'AI automation workflow and chatbot integration for small business'
-    },
-    {
-        id: 'service2',
-        number: '02',
-        title: 'Web Engineering',
-        description: 'Sites that load in under 1s and convert above 3%. Next.js, Shopify Hydrogen, headless CMS — engineered for SEO, speed and revenue. We replace the slow WordPress build that’s costing you customers.',
-        categories: ['Next.js Builds', 'Shopify Hydrogen', 'Conversion Funnels', 'Headless CMS', 'API Integrations', 'CWV · SEO'],
-        image: '/assets/images/services/web-development.webp',
-        alt: 'Custom web development and e-commerce solutions by BidayaLab'
-    },
-    {
-        id: 'service3',
-        number: '03',
-        title: 'Brand & Motion',
-        description: 'A brand system that earns the price tag. Identity, motion, product film and editorial photo — built so your launch isn’t mistaken for the competitor next to you on the shelf.',
-        categories: ['Brand Identity', 'Motion Design', 'Product Film', 'Editorial Photo', 'Launch Systems', 'Social Cuts'],
-        image: '/assets/images/services/visual-storytelling.webp',
-        alt: 'Professional brand film and photography production for digital marketing'
-    }
-];
+// BidayaLab's services — EN/FR translations
+const SERVICES_BY_LOCALE = {
+    en: [
+        {
+            id: 'service1',
+            number: '01',
+            title: 'AI Automation',
+            description: 'Cut 60–80% of repetitive ops in 30 days. We map the bottleneck, deploy n8n / Make / GPT agents, and hand you a system that works while you sleep — with the SOPs and dashboards to prove it.',
+            categories: ['n8n Workflows', 'GPT Agents', 'CRM Sync', 'Lead Scoring', 'Email · WhatsApp Bots', 'KPI Dashboards'],
+            image: '/assets/images/services/ai-automation.webp',
+            alt: 'AI automation workflow and chatbot integration for small business',
+        },
+        {
+            id: 'service2',
+            number: '02',
+            title: 'Web Engineering',
+            description: 'Sites that load in under 1s and convert above 3%. Next.js, Shopify Hydrogen, headless CMS — engineered for SEO, speed and revenue. We replace the slow WordPress build that’s costing you customers.',
+            categories: ['Next.js Builds', 'Shopify Hydrogen', 'Conversion Funnels', 'Headless CMS', 'API Integrations', 'CWV · SEO'],
+            image: '/assets/images/services/web-development.webp',
+            alt: 'Custom web development and e-commerce solutions by BidayaLab',
+        },
+        {
+            id: 'service3',
+            number: '03',
+            title: 'Brand & Motion',
+            description: 'A brand system that earns the price tag. Identity, motion, product film and editorial photo — built so your launch isn’t mistaken for the competitor next to you on the shelf.',
+            categories: ['Brand Identity', 'Motion Design', 'Product Film', 'Editorial Photo', 'Launch Systems', 'Social Cuts'],
+            image: '/assets/images/services/visual-storytelling.webp',
+            alt: 'Professional brand film and photography production for digital marketing',
+        },
+    ],
+    fr: [
+        {
+            id: 'service1',
+            number: '01',
+            title: 'Automatisation IA',
+            description: 'On supprime 60–80 % des tâches répétitives en 30 jours. On cartographie le goulot, on déploie n8n / Make / agents GPT, et on vous remet un système qui tourne pendant que vous dormez — avec les procédures et tableaux de bord pour le prouver.',
+            categories: ['Workflows n8n', 'Agents GPT', 'Sync CRM', 'Scoring leads', 'Bots Email · WhatsApp', 'Tableaux de bord'],
+            image: '/assets/images/services/ai-automation.webp',
+            alt: 'Automatisation IA et intégration de chatbot pour PME',
+        },
+        {
+            id: 'service2',
+            number: '02',
+            title: 'Ingénierie Web',
+            description: 'Des sites qui chargent en moins d’une seconde et qui convertissent au-delà de 3 %. Next.js, Shopify Hydrogen, CMS headless — mesurés sur le SEO, la vitesse et le chiffre d’affaires. On remplace le WordPress lent qui vous coûte des clients.',
+            categories: ['Sites Next.js', 'Shopify Hydrogen', 'Tunnels de conversion', 'CMS Headless', 'Intégrations API', 'CWV · SEO'],
+            image: '/assets/images/services/web-development.webp',
+            alt: 'Développement web sur-mesure et e-commerce par BidayaLab',
+        },
+        {
+            id: 'service3',
+            number: '03',
+            title: 'Marque & Motion',
+            description: 'Un système de marque qui justifie le prix. Identité, motion, film produit et photo éditoriale — conçu pour que votre lancement ne soit pas confondu avec le concurrent d’à côté.',
+            categories: ['Identité visuelle', 'Motion Design', 'Film produit', 'Photo éditoriale', 'Systèmes de lancement', 'Cuts réseaux sociaux'],
+            image: '/assets/images/services/visual-storytelling.webp',
+            alt: 'Production photo & vidéo pour marques marocaines premium',
+        },
+    ],
+} as const;
+
+type ServiceItem = (typeof SERVICES_BY_LOCALE)['en'][number];
 
 
 export default function Services() {
+    const lang: Locale = useLocale();
+    const services = useMemo(() => SERVICES_BY_LOCALE[lang], [lang]);
+    const headerCopy = useMemo(
+        () => ({
+            label: lang === 'fr' ? 'Services' : 'Services',
+            titleA: lang === 'fr' ? 'Trois services.' : 'Three services.',
+            titleB: lang === 'fr' ? 'Une promesse : un chiffre.' : 'One promise: a number.',
+            description:
+                lang === 'fr'
+                    ? "Chaque mission est livrée avec un résultat mesuré — lift de conversion, heures économisées, revenus par visiteur. Si on ne l’atteint pas, on refait sur notre temps."
+                    : 'Every engagement ships with a measured outcome attached — conversion lift, hours saved, revenue per visitor. If we don’t hit it, we rebuild on our time.',
+            categoriesLabel: lang === 'fr' ? 'Catégories' : 'Categories',
+        }),
+        [lang],
+    );
     const [activeServiceId, setActiveServiceId] = useState<string>(services[0].id);
     const [navState, setNavState] = useState<'top' | 'fixed' | 'bottom'>('top');
     const [bottomOffset, setBottomOffset] = useState<number>(0);
@@ -129,7 +178,7 @@ export default function Services() {
                     className="inline-block mb-2"
                 >
                     <div className="flex items-center gap-3 px-5 py-2.5 bg-[#beff01]">
-                        <span className="text-sm font-louis font-bold text-black uppercase tracking-wide">Services</span>
+                        <span className="text-sm font-louis font-bold text-black uppercase tracking-wide">{headerCopy.label}</span>
                         <svg aria-hidden="true" className="w-4 h-4 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
                         </svg>
@@ -144,8 +193,8 @@ export default function Services() {
                     transition={{ duration: 0.8 }}
                     className="text-5xl md:text-7xl lg:text-8xl xl:text-9xl font-louis font-bold text-white leading-[1.05] tracking-tight mb-4"
                 >
-                    Three services.<br />
-                    <span className="text-[#beff01]">One promise: a number.</span>
+                    {headerCopy.titleA}<br />
+                    <span className="text-[#beff01]">{headerCopy.titleB}</span>
                 </motion.h2>
 
                 {/* Description */}
@@ -156,7 +205,7 @@ export default function Services() {
                     transition={{ duration: 0.6, delay: 0.2 }}
                     className="text-lg md:text-xl text-zinc-400 font-louis max-w-3xl"
                 >
-                    Every engagement ships with a measured outcome attached — conversion lift, hours saved, revenue per visitor. If we don&rsquo;t hit it, we rebuild on our time.
+                    {headerCopy.description}
                 </motion.p>
             </div>
 
@@ -268,6 +317,7 @@ export default function Services() {
                         <ServiceCard
                             key={service.id}
                             service={service}
+                            categoriesLabel={headerCopy.categoriesLabel}
                             index={index}
                             onInView={(inView) => {
                                 if (inView) {
@@ -286,11 +336,13 @@ export default function Services() {
 function ServiceCard({
     service,
     index,
-    onInView
+    onInView,
+    categoriesLabel,
 }: {
-    service: typeof services[0];
+    service: ServiceItem;
     index: number;
     onInView: (inView: boolean) => void;
+    categoriesLabel: string;
 }) {
     const cardRef = useRef<HTMLDivElement>(null);
 
@@ -391,7 +443,7 @@ function ServiceCard({
                         className="flex flex-col gap-3"
                     >
                         <span className="text-zinc-500 font-louis text-xs uppercase tracking-wider">
-                            Categories
+                            {categoriesLabel}
                         </span>
                         <div className="flex flex-wrap gap-2">
                             {service.categories.map((category, catIndex) => (

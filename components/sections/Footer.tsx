@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { ArrowUpRight } from 'lucide-react';
 import { getSettings } from '@/app/actions/settings';
+import { useLocale, t, localeHref } from '@/lib/i18n';
 
 export default function Footer() {
   const [settings, setSettings] = useState({
@@ -31,19 +32,20 @@ export default function Footer() {
     fetchSettings();
   }, []);
 
+  const lang = useLocale();
   const pageLinks = [
-    { name: 'Home', href: '/' },
-    { name: 'About', href: '/about' },
-    { name: 'Services', href: '/services' },
-    { name: 'Work', href: '/works' },
-    { name: 'Blog', href: '/blogs' },
-    { name: 'Contact', href: '/contact' },
-  ];
+    { name: { en: 'Home', fr: 'Accueil' }, href: '/' },
+    { name: { en: 'About', fr: 'À propos' }, href: '/about' },
+    { name: { en: 'Services', fr: 'Services' }, href: '/services' },
+    { name: { en: 'Work', fr: 'Réalisations' }, href: '/works' },
+    { name: { en: 'Blog', fr: 'Blog' }, href: '/blogs' },
+    { name: { en: 'Contact', fr: 'Contact' }, href: '/contact' },
+  ] as const;
 
   const legalLinks = [
-    { name: 'Privacy Policy', href: '/privacy' },
-    { name: 'Terms of Service', href: '/terms' },
-  ];
+    { name: { en: 'Privacy Policy', fr: 'Confidentialité' }, href: '/privacy' },
+    { name: { en: 'Terms of Service', fr: "Conditions d’utilisation" }, href: '/terms' },
+  ] as const;
 
   return (
     <footer className="relative bg-black py-10 overflow-hidden font-louis">
@@ -55,10 +57,10 @@ export default function Footer() {
             {pageLinks.map((link) => (
               <Link
                 key={link.href}
-                href={link.href}
+                href={localeHref(lang, link.href)}
                 className="text-sm text-zinc-400 hover:text-white uppercase tracking-wider transition-colors font-light"
               >
-                {link.name}
+                {t(lang, link.name)}
               </Link>
             ))}
           </nav>
@@ -106,10 +108,10 @@ export default function Footer() {
             {legalLinks.map((link) => (
               <Link
                 key={link.href}
-                href={link.href}
+                href={localeHref(lang, link.href)}
                 className="text-xs text-zinc-400 hover:text-zinc-300 uppercase tracking-wider transition-colors"
               >
-                {link.name}
+                {t(lang, link.name)}
               </Link>
             ))}
             <p className="text-xs text-zinc-400 uppercase tracking-widest font-medium">© {currentYear} BidayaLab</p>

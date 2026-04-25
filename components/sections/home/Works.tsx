@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { ArrowUpRight, Zap, ArrowRight } from 'lucide-react';
 import { motion, useInView } from 'framer-motion';
 import { useQuery } from '@tanstack/react-query';
+import { useLocale, t, localeHref } from '@/lib/i18n';
 
 interface Project {
   id: string;
@@ -38,7 +39,7 @@ const getYearFromDate = (dateString?: string) => {
 };
 
 // Custom Project Card matching the screenshot design
-function WorkCard({ project, index }: { project: Project; index: number }) {
+function WorkCard({ project, index, lang }: { project: Project; index: number; lang: 'en' | 'fr' }) {
   const getAssetUrl = (path: string) => {
     if (!path) return null;
     if (path.startsWith("/") || path.startsWith("http")) return path;
@@ -51,7 +52,7 @@ function WorkCard({ project, index }: { project: Project; index: number }) {
   const description = project.description || '';
 
   return (
-    <Link href={`/works/${project.slug}`} className="block h-full">
+    <Link href={localeHref(lang, `/works/${project.slug}`)} className="block h-full">
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -149,7 +150,7 @@ function WorkCard({ project, index }: { project: Project; index: number }) {
 
 
 // Stats Card Component with count-up animation
-function StatsCard() {
+function StatsCard({ lang }: { lang: 'en' | 'fr' }) {
   const [count, setCount] = useState(0);
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
@@ -208,8 +209,9 @@ function StatsCard() {
           transition={{ duration: 0.5, delay: 0.7 }}
           className="text-lg md:text-xl text-zinc-400 font-louis mt-4"
         >
-          <span className="font-semibold text-white">projects delivered</span><br />
-          with excellence across <span className="font-semibold text-white">multiple industries.</span>
+          <span className="font-semibold text-white">{lang === 'fr' ? 'projets livrés' : 'projects delivered'}</span><br />
+          {lang === 'fr' ? "avec exigence dans " : 'with excellence across '}
+          <span className="font-semibold text-white">{lang === 'fr' ? 'plusieurs secteurs.' : 'multiple industries.'}</span>
         </motion.p>
       </div>
 
@@ -221,10 +223,10 @@ function StatsCard() {
         transition={{ duration: 0.5, delay: 0.8 }}
       >
         <Link
-          href="/works"
+          href={localeHref(lang, '/works')}
           className="group inline-flex items-center justify-center gap-2 w-full bg-[#beff01] text-black font-louis font-bold text-base py-4 px-6 transition-all duration-300 hover:bg-white"
         >
-          View all
+          {lang === 'fr' ? 'Tout voir' : 'View all'}
           <ArrowUpRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
         </Link>
       </motion.div>
@@ -233,6 +235,27 @@ function StatsCard() {
 }
 
 export default function Works() {
+  const lang = useLocale();
+  const headerCopy = {
+    label: { en: 'Works', fr: 'Réalisations' },
+    titleA: { en: 'The numbers', fr: 'Les chiffres' },
+    titleB: { en: "we’ve shipped.", fr: "qu’on a livrés." },
+    description: {
+      en: "Each case below ships with a metric attached — conversion lift, ops automated, launch ROI — pulled from the client’s own analytics, not invented for the portfolio.",
+      fr: "Chaque cas ci-dessous est livré avec un indicateur — lift de conversion, opérations automatisées, ROI de lancement — issu des analytics du client, pas inventé pour le portfolio.",
+    },
+    emptyTitle: { en: 'Currently Cooking Up Some Amazing Projects', fr: 'Nouveaux projets en cours de préparation' },
+    emptyBody: {
+      en: "We’re working on some exciting new work right now. But here’s the thing—",
+      fr: "On est en train de finaliser plusieurs projets. Mais voici l’idée—",
+    },
+    emptyHighlight: {
+      en: 'your project could be the next showcase piece',
+      fr: 'votre projet pourrait être le prochain cas vitrine',
+    },
+    emptyCta: { en: "Let’s Create Your Success Story", fr: "Démarrons votre histoire à succès" },
+    emptyOutro: { en: ". Let’s make something incredible together.", fr: ". Construisons quelque chose d’incroyable ensemble." },
+  } as const;
   const { data, isLoading } = useQuery<{ success: boolean; projects: Project[] }>({
     queryKey: ['projects', 'featured'],
     queryFn: async () => {
@@ -265,7 +288,7 @@ export default function Works() {
           className="inline-block mb-2"
         >
           <div className="flex items-center gap-3 px-5 py-2.5 bg-[#beff01]">
-            <span className="text-sm font-louis font-bold text-black uppercase tracking-wide">Works</span>
+            <span className="text-sm font-louis font-bold text-black uppercase tracking-wide">{t(lang, headerCopy.label)}</span>
             <svg aria-hidden="true" className="w-4 h-4 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
             </svg>
@@ -280,8 +303,8 @@ export default function Works() {
           transition={{ duration: 0.8 }}
           className="text-5xl md:text-7xl lg:text-8xl xl:text-9xl font-louis font-bold text-white leading-[1.05] tracking-tight mb-4"
         >
-          The numbers<br />
-          <span className="text-[#beff01]">we&apos;ve shipped.</span>
+          {t(lang, headerCopy.titleA)}<br />
+          <span className="text-[#beff01]">{t(lang, headerCopy.titleB)}</span>
         </motion.h2>
 
         {/* Description */}
@@ -292,7 +315,7 @@ export default function Works() {
           transition={{ duration: 0.6, delay: 0.2 }}
           className="text-lg md:text-xl text-zinc-400 font-louis max-w-3xl"
         >
-          Each case below ships with a metric attached — conversion lift, ops automated, launch ROI — pulled from the client&apos;s own analytics, not invented for the portfolio.
+          {t(lang, headerCopy.description)}
         </motion.p>
       </div>
 
@@ -310,30 +333,29 @@ export default function Works() {
           >
             <Zap className="w-16 h-16 text-[#beff01] mx-auto mb-6" />
             <h3 className="text-2xl font-bold text-white mb-4">
-              Currently Cooking Up Some Amazing Projects
+              {t(lang, headerCopy.emptyTitle)}
             </h3>
             <p className="text-gray-400 text-lg mb-8 max-w-2xl mx-auto">
-              We&apos;re working on some exciting new work right now. But here&apos;s the thing—
-              <span className="text-white font-semibold"> your project could be the next showcase piece</span>.
-              Let&apos;s make something incredible together.
+              {t(lang, headerCopy.emptyBody)}
+              <span className="text-white font-semibold"> {t(lang, headerCopy.emptyHighlight)}</span>{t(lang, headerCopy.emptyOutro)}
             </p>
             <Link
-              href="/contact"
+              href={localeHref(lang, '/contact')}
               className="inline-flex items-center gap-3 bg-[#beff01] text-black font-bold px-10 py-5 hover:bg-[#a8e600] transition-all"
             >
-              <span>Let&apos;s Create Your Success Story</span>
+              <span>{t(lang, headerCopy.emptyCta)}</span>
               <ArrowRight className="w-5 h-5" />
             </Link>
           </motion.div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-0">
             {/* Row 1: 2 Projects */}
-            {projects[0] && <WorkCard project={projects[0]} index={0} />}
-            {projects[1] && <WorkCard project={projects[1]} index={1} />}
+            {projects[0] && <WorkCard project={projects[0]} index={0} lang={lang} />}
+            {projects[1] && <WorkCard project={projects[1]} index={1} lang={lang} />}
 
             {/* Row 2: 1 Project + Stats Card */}
-            {projects[2] && <WorkCard project={projects[2]} index={2} />}
-            <StatsCard />
+            {projects[2] && <WorkCard project={projects[2]} index={2} lang={lang} />}
+            <StatsCard lang={lang} />
           </div>
         )}
       </div>

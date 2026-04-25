@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { BookOpen, ArrowUpRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useQuery } from '@tanstack/react-query';
+import { useLocale, t, localeHref } from '@/lib/i18n';
 
 interface Blog {
   id: string;
@@ -15,10 +16,11 @@ interface Blog {
   slug: string;
   publicationDate: string;
   excerpt?: string;
+  lang?: 'en' | 'fr';
 }
 
 // Blog Card Component matching the screenshot design
-function BlogCard({ blog, index }: { blog: Blog; index: number }) {
+function BlogCard({ blog, index, lang }: { blog: Blog; index: number; lang: 'en' | 'fr' }) {
   const getAssetUrl = (path: string) => {
     if (!path) return null;
     if (path.startsWith("/") || path.startsWith("http")) return path;
@@ -30,14 +32,14 @@ function BlogCard({ blog, index }: { blog: Blog; index: number }) {
   const formatDate = (dateString: string) => {
     try {
       const date = new Date(dateString);
-      return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+      return date.toLocaleDateString(lang === 'fr' ? 'fr-FR' : 'en-US', { month: 'short', day: 'numeric', year: 'numeric' });
     } catch {
       return dateString;
     }
   };
 
   const getCategoryDisplay = (category: string) => {
-    const categoryMap: Record<string, string> = {
+    const en: Record<string, string> = {
       'ai-automation': 'AI & Tech',
       'digital-marketing': 'Marketing',
       'web-development': 'Development',
@@ -45,11 +47,19 @@ function BlogCard({ blog, index }: { blog: Blog; index: number }) {
       'trends': 'Trends',
       'strategy': 'Strategy',
     };
-    return categoryMap[category] || category;
+    const fr: Record<string, string> = {
+      'ai-automation': 'IA & Tech',
+      'digital-marketing': 'Marketing',
+      'web-development': 'Développement',
+      'branding': 'Branding',
+      'trends': 'Tendances',
+      'strategy': 'Stratégie',
+    };
+    return (lang === 'fr' ? fr : en)[category] || category;
   };
 
   return (
-    <Link href={`/blogs/${blog.slug}`} className="block h-full">
+    <Link href={localeHref(lang, `/blogs/${blog.slug}`)} className="block h-full">
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -126,10 +136,26 @@ function BlogCard({ blog, index }: { blog: Blog; index: number }) {
 }
 
 export default function Blogs() {
+  const lang = useLocale();
+  const headerCopy = {
+    label: { en: 'Articles', fr: 'Articles' },
+    titleA: { en: 'Latest', fr: 'Dernières' },
+    titleB: { en: 'Insights.', fr: 'réflexions.' },
+    description: {
+      en: 'Deep dives into AI, digital transformation, and growth strategies. Practical knowledge to help you stay ahead.',
+      fr: "Plongées approfondies sur l’IA, la transformation digitale et les stratégies de croissance. Du savoir pratique pour garder une longueur d’avance.",
+    },
+    emptyTitle: { en: 'More Content Coming Soon', fr: 'Plus de contenu à venir' },
+    emptyBody: {
+      en: "We’re crafting some amazing articles right now. Stay tuned for insightful content!",
+      fr: "On prépare de nouveaux articles. Restez à l’écoute pour du contenu à forte valeur.",
+    },
+    allLink: { en: 'All Articles', fr: 'Tous les articles' },
+  } as const;
   const { data, isLoading } = useQuery<{ success: boolean; blogs: Blog[] }>({
-    queryKey: ['blogs', 'latest'],
+    queryKey: ['blogs', 'latest', lang],
     queryFn: async () => {
-      const response = await fetch('/api/blogs?limit=3');
+      const response = await fetch(`/api/blogs?limit=3&lang=${lang}`);
       if (!response.ok) throw new Error('Failed to fetch');
       return response.json();
     },
@@ -157,7 +183,7 @@ export default function Blogs() {
           className="inline-block mb-2"
         >
           <div className="flex items-center gap-3 px-5 py-2.5 bg-[#beff01]">
-            <span className="text-sm font-louis font-bold text-black uppercase tracking-wide">Articles</span>
+            <span className="text-sm font-louis font-bold text-black uppercase tracking-wide">{t(lang, headerCopy.label)}</span>
             <svg aria-hidden="true" className="w-4 h-4 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
             </svg>
@@ -172,8 +198,8 @@ export default function Blogs() {
           transition={{ duration: 0.8 }}
           className="text-5xl md:text-7xl lg:text-8xl xl:text-9xl font-louis font-bold text-white leading-[1.05] tracking-tight mb-4"
         >
-          Latest<br />
-          <span className="text-[#beff01]">Insights.</span>
+          {t(lang, headerCopy.titleA)}<br />
+          <span className="text-[#beff01]">{t(lang, headerCopy.titleB)}</span>
         </motion.h2>
 
         {/* Description */}
@@ -184,7 +210,7 @@ export default function Blogs() {
           transition={{ duration: 0.6, delay: 0.2 }}
           className="text-lg md:text-xl text-zinc-400 font-louis max-w-3xl"
         >
-          Deep dives into AI, digital transformation, and growth strategies. Practical knowledge to help you stay ahead.
+          {t(lang, headerCopy.description)}
         </motion.p>
       </div>
 
@@ -203,10 +229,10 @@ export default function Blogs() {
           >
             <BookOpen className="w-16 h-16 text-[#beff01] mx-auto mb-6" />
             <h3 className="text-2xl font-bold text-white mb-4">
-              More Content Coming Soon
+              {t(lang, headerCopy.emptyTitle)}
             </h3>
             <p className="text-gray-400 text-lg max-w-2xl mx-auto">
-              We&apos;re crafting some amazing articles right now. Stay tuned for insightful content!
+              {t(lang, headerCopy.emptyBody)}
             </p>
           </motion.div>
         ) : (
@@ -214,7 +240,7 @@ export default function Blogs() {
             {/* 3-Column Grid */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 mb-8">
               {blogs.map((blog, index) => (
-                <BlogCard key={blog.id || blog._id || index} blog={blog} index={index} />
+                <BlogCard key={blog.id || blog._id || index} blog={blog} index={index} lang={lang} />
               ))}
             </div>
 
@@ -224,10 +250,10 @@ export default function Blogs() {
                 [{blogs.length}]
               </span>
               <Link
-                href="/blogs"
+                href={localeHref(lang, '/blogs')}
                 className="inline-flex items-center gap-2 text-white font-louis font-medium hover:text-[#beff01] transition-colors"
               >
-                All Articles
+                {t(lang, headerCopy.allLink)}
                 <ArrowUpRight className="w-4 h-4" />
               </Link>
             </div>

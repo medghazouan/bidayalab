@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { ArrowUpRight } from 'lucide-react';
+import { useLocale, t, localeHref } from '@/lib/i18n';
 
 /**
  * Home CTA — ported from the laboratory-direction CtaSection.
@@ -13,12 +14,43 @@ import { ArrowUpRight } from 'lucide-react';
  * Louis display font, mono eyebrow.
  */
 export default function CallToAction() {
-  const proofs = [
-    { value: '+218%', label: 'Avg conversion lift' },
-    { value: '−94%', label: 'Manual hours / month' },
-    { value: '< 24h', label: 'Reply guaranteed' },
-    { value: '3', label: 'Slots open this quarter' },
-  ];
+  const lang = useLocale();
+  const labels = {
+    eyebrow: { en: 'Ready? · Free 30-min audit', fr: 'Prêt ? · Audit gratuit 30 min' },
+    titleA: { en: '30-minute brief.', fr: 'Brief de 30 minutes.' },
+    titleB: { en: 'Priced answer in 48h.', fr: "Réponse chiffrée en 48h." },
+    description: {
+      en: "No commitment, no disguised sales pitch. You leave with a written highest-leverage fix and an honest price tag — even if we’re not the ones building it.",
+      fr: "Aucun engagement, aucun pitch déguisé. Vous repartez avec un correctif à plus fort levier écrit, et un tarif honnête — même si ce n’est pas nous qui le construisons.",
+    },
+    bullet1: {
+      en: 'Senior operator on the call — same one on the build.',
+      fr: "Opérateur senior à l’appel — le même sur la construction.",
+    },
+    bullet2: {
+      en: 'Measured-or-reworked guarantee, written into the contract.',
+      fr: "Garantie mesuré ou refait, écrite dans le contrat.",
+    },
+    bullet3: {
+      en: "Honest pricing from 28k MAD · we tell you straight if we’re not the fit.",
+      fr: "Tarifs transparents à partir de 28k MAD · on vous dit franchement si on n’est pas le bon choix.",
+    },
+    primary: { en: 'Get my growth audit', fr: "Réserver mon audit gratuit" },
+    secondary: { en: 'See the numbers', fr: 'Voir les chiffres' },
+  } as const;
+  const proofs = lang === 'fr'
+    ? [
+        { value: '+218 %', label: 'Lift de conversion moyen' },
+        { value: '−94 %', label: 'Heures manuelles / mois' },
+        { value: '< 24h', label: 'Réponse garantie' },
+        { value: '3', label: 'Places ouvertes ce trimestre' },
+      ]
+    : [
+        { value: '+218%', label: 'Avg conversion lift' },
+        { value: '−94%', label: 'Manual hours / month' },
+        { value: '< 24h', label: 'Reply guaranteed' },
+        { value: '3', label: 'Slots open this quarter' },
+      ];
 
   return (
     <section className="relative w-full px-4 md:px-8 xl:px-12 py-24 md:py-32 bg-[#050505]">
@@ -55,38 +87,38 @@ export default function CallToAction() {
             >
               <span className="inline-flex items-center gap-3 font-mono text-[10px] md:text-xs tracking-[0.22em] uppercase text-[#beff01]">
                 <span className="inline-block h-px w-8 bg-[#beff01]" />
-                Ready? · Free 30-min audit
+                {t(lang, labels.eyebrow)}
               </span>
 
               <h2 className="font-louis font-bold uppercase text-white text-[clamp(2.4rem,6.5vw,5rem)] leading-[0.95] tracking-tighter">
-                30-minute brief.<br />
-                <span className="text-[#beff01]">Priced answer in 48h.</span>
+                {t(lang, labels.titleA)}<br />
+                <span className="text-[#beff01]">{t(lang, labels.titleB)}</span>
               </h2>
 
               <p className="text-base md:text-lg lg:text-xl text-zinc-400 font-louis leading-relaxed max-w-xl">
-                No commitment, no disguised sales pitch. You leave with a written highest-leverage fix and an honest price tag — even if we&apos;re not the ones building it.
+                {t(lang, labels.description)}
               </p>
 
               {/* Risk-reversal microcopy — three proof bullets */}
               <ul className="flex flex-col gap-2.5 text-sm md:text-base text-zinc-300 max-w-xl pt-2">
-                <li className="flex items-start gap-3"><span className="mt-2 w-1.5 h-1.5 rounded-full bg-[#beff01] flex-shrink-0" />Senior operator on the call — same one on the build.</li>
-                <li className="flex items-start gap-3"><span className="mt-2 w-1.5 h-1.5 rounded-full bg-[#beff01] flex-shrink-0" />Measured-or-reworked guarantee, written into the contract.</li>
-                <li className="flex items-start gap-3"><span className="mt-2 w-1.5 h-1.5 rounded-full bg-[#beff01] flex-shrink-0" />Honest pricing from 28k MAD · we tell you straight if we&apos;re not the fit.</li>
+                <li className="flex items-start gap-3"><span className="mt-2 w-1.5 h-1.5 rounded-full bg-[#beff01] flex-shrink-0" />{t(lang, labels.bullet1)}</li>
+                <li className="flex items-start gap-3"><span className="mt-2 w-1.5 h-1.5 rounded-full bg-[#beff01] flex-shrink-0" />{t(lang, labels.bullet2)}</li>
+                <li className="flex items-start gap-3"><span className="mt-2 w-1.5 h-1.5 rounded-full bg-[#beff01] flex-shrink-0" />{t(lang, labels.bullet3)}</li>
               </ul>
 
               <div className="flex flex-wrap items-center gap-4 pt-4">
                 <Link
-                  href="/contact"
+                  href={localeHref(lang, '/contact')}
                   className="group inline-flex items-center gap-3 px-7 md:px-9 py-4 md:py-5 bg-[#beff01] text-black font-louis font-bold uppercase tracking-wider text-sm md:text-base hover:bg-white transition-colors"
                 >
-                  Get my growth audit
+                  {t(lang, labels.primary)}
                   <ArrowUpRight className="w-4 h-4 md:w-5 md:h-5 transition-transform group-hover:rotate-45" aria-hidden="true" />
                 </Link>
                 <Link
-                  href="/works"
+                  href={localeHref(lang, '/works')}
                   className="inline-flex items-center gap-3 px-7 md:px-9 py-4 md:py-5 border border-white/20 text-white font-louis font-bold uppercase tracking-wider text-sm md:text-base hover:bg-white/5 hover:border-white/40 transition-colors"
                 >
-                  See the numbers
+                  {t(lang, labels.secondary)}
                 </Link>
               </div>
             </motion.div>
