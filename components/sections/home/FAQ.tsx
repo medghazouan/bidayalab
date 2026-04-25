@@ -4,42 +4,42 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Plus, Minus } from 'lucide-react';
 
-// FAQ Data
+// FAQ Data — objection-handling, every answer ties back to a measurable outcome
 const faqs = [
   {
     id: 1,
-    question: 'What services does Bidayalab offer?',
-    answer: 'We offer a comprehensive suite of digital services including brand strategy & identity design, web development, digital marketing, AI automation solutions, and visual storytelling through photo & video production. Each service is tailored to help businesses grow and stand out in the digital landscape.',
+    question: 'How is BidayaLab different from a freelancer or a generalist agency?',
+    answer: 'Three differences. (1) We commit to a measured outcome on every project — conversion lift, hours saved, revenue per visitor — written into the proposal, not a vague brief. (2) Senior-only team, no juniors learning on your budget. (3) AI automation, web engineering and brand sit in one studio, so your funnel ships as a system, not as four disconnected vendors.',
   },
   {
     id: 2,
-    question: 'How long does a typical project take?',
-    answer: 'Project timelines vary based on scope and complexity. A brand identity project typically takes 4-6 weeks, web development ranges from 6-12 weeks, and ongoing marketing campaigns are structured monthly. We provide detailed timelines during our initial consultation.',
+    question: 'What does a project actually cost?',
+    answer: 'Web from 45,000 MAD. AI automation builds from 28,000 MAD. Brand systems from 38,000 MAD. We publish starting prices instead of hiding them behind a discovery call — you should know the order of magnitude before you talk to us. Final scope is fixed in writing after the free 30-min audit.',
   },
   {
     id: 3,
-    question: 'What is your pricing structure?',
-    answer: 'We offer flexible pricing models including project-based fees, retainer packages, and custom solutions. Pricing is determined by project scope, deliverables, and timeline. Contact us for a personalized quote tailored to your specific needs.',
+    question: 'How long until I see real results?',
+    answer: 'AI automation: 2–4 weeks to first measurable hours saved. Web/Shopify rebuild: 6–10 weeks to launch, conversion lift typically visible within 30 days post-launch. Brand systems: 4–6 weeks to a launchable identity. Every project ships with a baseline measurement at week 1 and a result snapshot at handover.',
   },
   {
     id: 4,
-    question: 'Do you work with international clients?',
-    answer: 'Absolutely! We work with clients globally. Our team is experienced in remote collaboration and we use modern tools to ensure seamless communication across different time zones. We have successfully delivered projects for clients in Europe, North America, and the Middle East.',
+    question: 'What if the project does not hit the agreed result?',
+    answer: 'We rebuild on our time until it does. The measured-or-reworked guarantee is written into the contract — not a marketing line. We can do this because we only take on engagements where we have line-of-sight to the outcome, which is also why availability is intentionally limited.',
   },
   {
     id: 5,
-    question: 'What makes Bidayalab different from other agencies?',
-    answer: 'We combine creative excellence with data-driven strategy. Our team brings together expertise in branding, development, marketing, and AI—all under one roof. This integrated approach ensures cohesive results and eliminates the need for multiple agency partnerships.',
+    question: 'Do you work with clients outside Morocco?',
+    answer: 'Yes. ~40% of current engagements are EU/MENA (France, UAE, KSA, North America). The team is remote-first, fluent in French/Arabic/English, and we run a 9 AM–9 PM Morocco-time window which covers GMT to EST without late nights.',
   },
   {
     id: 6,
-    question: 'How do we get started?',
-    answer: 'Simply reach out through our contact form or book a free discovery call. We will discuss your goals, challenges, and vision. From there, we will propose a tailored strategy and roadmap to bring your project to life.',
+    question: 'Why are you only running 3 projects per quarter?',
+    answer: 'Because the guarantee is real. Senior-only delivery + a written outcome means we cap intake to keep quality non-negotiable. Slots open quarterly — if this one is full we will tell you straight and put you in the next intake instead of slow-walking you.',
   },
   {
     id: 7,
-    question: 'Do you offer ongoing support?',
-    answer: 'Yes! We believe in building long-term partnerships. All our projects include post-launch support, and we offer ongoing maintenance and optimization packages to ensure your digital assets continue to perform at their best.',
+    question: 'What happens after launch — do we lose you?',
+    answer: 'No. Every build includes a 30-day measurement window after handover where we tune until the metric is hit. After that you can keep us on a retainer (analytics, iteration, new features) or take it fully in-house — your codebase, your dashboards, your accounts.',
   },
 ];
 
@@ -133,8 +133,8 @@ export default function FAQ() {
           transition={{ duration: 0.8 }}
           className="text-5xl md:text-7xl lg:text-8xl xl:text-9xl font-louis font-bold text-white leading-[1.05] tracking-tight mb-4"
         >
-          Questions?<br />
-          <span className="text-[#beff01]">Answers.</span>
+          The objections.<br />
+          <span className="text-[#beff01]">Answered straight.</span>
         </motion.h2>
 
         {/* Description */}
@@ -145,7 +145,7 @@ export default function FAQ() {
           transition={{ duration: 0.6, delay: 0.2 }}
           className="text-lg md:text-xl text-zinc-400 font-louis max-w-3xl"
         >
-          Everything you need to know about working with us. Can not find what you are looking for? Let us talk.
+          The questions every serious buyer asks before hiring an agency. Honest pricing, real timelines, written guarantees — no hedging.
         </motion.p>
       </div>
 
@@ -173,14 +173,14 @@ export default function FAQ() {
             className="mt-6 md:mt-8 flex flex-col md:flex-row md:items-center md:justify-between gap-6 pt-4"
           >
             <p className="text-zinc-400 font-louis text-lg md:text-xl text-left">
-              Still have questions?{" "}
-              <span className="text-white">Let's clarify them.</span>
+              Have a question we did not answer?{" "}
+              <span className="text-white">Get a written reply in &lt; 24h.</span>
             </p>
             <a
               href="/contact"
               className="w-full md:w-auto group inline-flex items-center justify-center gap-3 px-8 py-4 bg-[#beff01] text-black font-louis font-bold text-lg transition-all duration-300 hover:bg-white"
             >
-              Get in Touch
+              Get my growth audit
               <svg
                 aria-hidden="true"
                 className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1"

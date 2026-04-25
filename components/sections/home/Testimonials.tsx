@@ -106,8 +106,8 @@ export default function Testimonials() {
                     transition={{ duration: 0.8 }}
                     className="text-5xl md:text-7xl lg:text-8xl xl:text-9xl font-louis font-bold text-white leading-[1.05] tracking-tight mb-4"
                 >
-                    What Clients<br />
-                    <span className="text-[#beff01]">Say About Us.</span>
+                    Operators we&apos;ve<br />
+                    <span className="text-[#beff01]">moved the number for.</span>
                 </motion.h2>
 
                 <motion.p
@@ -117,7 +117,7 @@ export default function Testimonials() {
                     transition={{ duration: 0.6, delay: 0.2 }}
                     className="text-lg md:text-xl text-zinc-400 font-louis max-w-3xl"
                 >
-                    Real results from real partnerships. See how we've helped ambitious brands scale faster and look better doing it.
+                    Quotes from founders whose conversion, ops or launch metric we agreed to move — and did. Numbers verified from their analytics, not invented for the website.
                 </motion.p>
             </div>
 

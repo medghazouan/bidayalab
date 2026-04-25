@@ -10,26 +10,26 @@ const services = [
         id: 'service1',
         number: '01',
         title: 'AI Automation',
-        description: 'Together, we automate your workflows so you can focus on what matters—growing your business. From intelligent chatbots to seamless CRM integrations, we build AI systems that work around the clock for you.',
-        categories: ['Chatbots', 'Workflow Automation', 'Lead Generation', 'Email Automation', 'CRM Integration', 'Data Processing'],
+        description: 'Cut 60–80% of repetitive ops in 30 days. We map the bottleneck, deploy n8n / Make / GPT agents, and hand you a system that works while you sleep — with the SOPs and dashboards to prove it.',
+        categories: ['n8n Workflows', 'GPT Agents', 'CRM Sync', 'Lead Scoring', 'Email · WhatsApp Bots', 'KPI Dashboards'],
         image: '/assets/images/services/ai-automation.webp',
         alt: 'AI automation workflow and chatbot integration for small business'
     },
     {
         id: 'service2',
         number: '02',
-        title: 'Web Development',
-        description: 'We craft custom digital platforms that turn your visitors into loyal customers. Fast, responsive, and built with cutting-edge technology—let\'s create something that sets you apart from the competition.',
-        categories: ['Custom Websites', 'E-commerce', 'Web Apps', 'Landing Pages', 'CMS Integration', 'API Development'],
+        title: 'Web Engineering',
+        description: 'Sites that load in under 1s and convert above 3%. Next.js, Shopify Hydrogen, headless CMS — engineered for SEO, speed and revenue. We replace the slow WordPress build that’s costing you customers.',
+        categories: ['Next.js Builds', 'Shopify Hydrogen', 'Conversion Funnels', 'Headless CMS', 'API Integrations', 'CWV · SEO'],
         image: '/assets/images/services/web-development.webp',
         alt: 'Custom web development and e-commerce solutions by BidayaLab'
     },
     {
         id: 'service3',
         number: '03',
-        title: 'Visual Storytelling',
-        description: 'We bring your brand to life with premium video and photography that resonates. From product shoots to brand documentaries, let\'s tell your story in a way that captivates your audience.',
-        categories: ['Video Production', 'Photography', 'Motion Graphics', 'Brand Films', 'Product Shoots', 'Social Content'],
+        title: 'Brand & Motion',
+        description: 'A brand system that earns the price tag. Identity, motion, product film and editorial photo — built so your launch isn’t mistaken for the competitor next to you on the shelf.',
+        categories: ['Brand Identity', 'Motion Design', 'Product Film', 'Editorial Photo', 'Launch Systems', 'Social Cuts'],
         image: '/assets/images/services/visual-storytelling.webp',
         alt: 'Professional brand film and photography production for digital marketing'
     }
@@ -144,8 +144,8 @@ export default function Services() {
                     transition={{ duration: 0.8 }}
                     className="text-5xl md:text-7xl lg:text-8xl xl:text-9xl font-louis font-bold text-white leading-[1.05] tracking-tight mb-4"
                 >
-                    Full-Spectrum<br />
-                    <span className="text-[#beff01]">Digital Capabilities.</span>
+                    Three services.<br />
+                    <span className="text-[#beff01]">One promise: a number.</span>
                 </motion.h2>
 
                 {/* Description */}
@@ -156,7 +156,7 @@ export default function Services() {
                     transition={{ duration: 0.6, delay: 0.2 }}
                     className="text-lg md:text-xl text-zinc-400 font-louis max-w-3xl"
                 >
-                    Everything you need to dominate your market under one roof. From AI automation to stunning visuals, we deliver exceptional work that drives real results.
+                    Every engagement ships with a measured outcome attached — conversion lift, hours saved, revenue per visitor. If we don&rsquo;t hit it, we rebuild on our time.
                 </motion.p>
             </div>
 

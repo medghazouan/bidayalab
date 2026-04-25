@@ -280,8 +280,8 @@ export default function Works() {
           transition={{ duration: 0.8 }}
           className="text-5xl md:text-7xl lg:text-8xl xl:text-9xl font-louis font-bold text-white leading-[1.05] tracking-tight mb-4"
         >
-          Selected<br />
-          <span className="text-[#beff01]">Case Studies.</span>
+          The numbers<br />
+          <span className="text-[#beff01]">we&apos;ve shipped.</span>
         </motion.h2>
 
         {/* Description */}
@@ -292,7 +292,7 @@ export default function Works() {
           transition={{ duration: 0.6, delay: 0.2 }}
           className="text-lg md:text-xl text-zinc-400 font-louis max-w-3xl"
         >
-          We don't just design websites. We engineer digital experiences that convert visitors into loyal customers.
+          Each case below ships with a metric attached — conversion lift, ops automated, launch ROI — pulled from the client&apos;s own analytics, not invented for the portfolio.
         </motion.p>
       </div>
 

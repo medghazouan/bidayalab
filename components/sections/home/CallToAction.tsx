@@ -25,17 +25,24 @@ export default function CallToAction() {
           >
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-black/20 bg-black/5 text-black text-xs font-bold font-mono uppercase tracking-widest">
               <div className="w-2 h-2 rounded-full bg-black animate-pulse" />
-              Accepting New Projects
+              Free 30-min audit · Q1 intake closing soon
             </div>
 
             <h2 className="text-[12vw] sm:text-[11vw] lg:text-[9vw] font-black font-louis text-black tracking-tighter leading-[0.85] uppercase">
-              Let&apos;s <br />
-              Grow <span className="text-white">Together.</span>
+              Stop guessing.<br />
+              Get the <span className="text-white">number.</span>
             </h2>
 
             <p className="text-black/70 text-lg md:text-2xl font-medium max-w-xl leading-relaxed">
-              Ready to stand out? Let&apos;s create something extraordinary together. We&apos;re here to help you lead your industry and scale your business.
+              In 30 minutes, a senior operator will pull apart your funnel and tell you the single highest-leverage fix — conversion, automation or brand. No deck. No sales pitch. You leave with a written outcome and a price tag, even if you never hire us.
             </p>
+
+            {/* Risk-reversal microcopy */}
+            <ul className="flex flex-col gap-3 text-black/80 text-base md:text-lg max-w-xl pt-2">
+              <li className="flex items-start gap-3"><span className="mt-1.5 w-2 h-2 rounded-full bg-black flex-shrink-0" />Senior-only team — the person on the call is the person on the build.</li>
+              <li className="flex items-start gap-3"><span className="mt-1.5 w-2 h-2 rounded-full bg-black flex-shrink-0" />Measured-or-reworked guarantee, in writing.</li>
+              <li className="flex items-start gap-3"><span className="mt-1.5 w-2 h-2 rounded-full bg-black flex-shrink-0" />3 active projects per quarter — we cap intake to keep quality non-negotiable.</li>
+            </ul>
           </motion.div>
 
           <motion.div
@@ -46,9 +53,9 @@ export default function CallToAction() {
             className="flex flex-wrap gap-8 border-t border-black/10 pt-8"
           >
             {[
-              { label: 'Strategy', value: 'Data-Driven' },
-              { label: 'Design', value: 'World-Class' },
-              { label: 'Development', value: 'Bleeding Edge' }
+              { label: 'Avg conversion lift', value: '+218%' },
+              { label: 'Hours saved / mo', value: '− 94%' },
+              { label: 'Reply time', value: '< 24h' }
             ].map((item, i) => (
               <div key={i}>
                 <p className="text-xs font-bold text-black/40 uppercase tracking-widest mb-1">{item.label}</p>
@@ -95,8 +102,8 @@ function LeadForm() {
           <CheckCircle2 size={48} strokeWidth={2} />
         </div>
         <div>
-          <h3 className="text-4xl font-black font-louis uppercase mb-4">You're In.</h3>
-          <p className="text-zinc-400 text-lg">We'll be in touch within 24 hours.</p>
+          <h3 className="text-4xl font-black font-louis uppercase mb-4">Audit booked.</h3>
+          <p className="text-zinc-400 text-lg">A senior operator will reply within 24h with a calendar link and a pre-call brief. Check spam if you do not see it.</p>
         </div>
       </motion.div>
     )
@@ -114,10 +121,10 @@ function LeadForm() {
         {/* Industry Selection */}
         <div className="space-y-4">
           <label id="industry-label" className="text-xs font-bold font-louis text-black uppercase tracking-widest">
-            01. Select Your Industry
+            01. Where&apos;s the bottleneck?
           </label>
           <div className="flex flex-wrap gap-3" role="radiogroup" aria-labelledby="industry-label">
-            {['E-Com', 'SaaS', 'Real Estate', 'Finance', 'Health', 'Other'].map((ind) => (
+            {['E-com', 'SaaS', 'Lead-gen', 'Brand', 'Ops', 'Other'].map((ind) => (
               <label key={ind} className="cursor-pointer group flex-1 min-w-[100px]">
                 <input type="radio" name="industry" value={ind} required className="peer sr-only" />
                 <div className="
@@ -135,7 +142,7 @@ function LeadForm() {
         {/* Email Input */}
         <div className="space-y-4">
           <label htmlFor="lead-email" className="text-xs font-bold font-louis text-black uppercase tracking-widest">
-            02. Your Email Address
+            02. Where do we send the audit?
           </label>
           <div className="relative group">
             <input
@@ -170,7 +177,7 @@ function LeadForm() {
             "
           >
             <span className="font-black font-louis text-2xl uppercase tracking-widest">
-              {status === 'submitting' ? 'Processing...' : 'Start Now'}
+              {status === 'submitting' ? 'Sending...' : 'Send my audit request'}
             </span>
             <div className="w-10 h-10 bg-[#beff01] text-black rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
               {status === 'submitting' ? (
@@ -185,7 +192,7 @@ function LeadForm() {
             {status === 'error' ? (
               <p role="alert" className="text-red-600">Something went wrong. Please try again.</p>
             ) : (
-              <p>Limited Spots Available for {new Date().toLocaleString('default', { month: 'long' })}</p>
+              <p>3 slots open this quarter · written reply in &lt; 24h</p>
             )}
           </div>
         </div>

@@ -48,43 +48,57 @@ export default function Hero() {
             <div className="relative z-10 w-full max-w-[1920px] mx-auto px-4 md:px-12 pb-12 md:pb-24 pt-32">
 
                 <div className="max-w-full lg:max-w-4xl hero-slide-up">
-                    {/* Title Part 1 */}
+                    {/* Title Part 1 — Marketing angle */}
                     <span className="block text-xs md:text-base uppercase tracking-[0.2em] md:tracking-[0.3em] text-[#beff01] font-louis mb-3 md:mb-4">
-                        Together, We Build Your Digital Future
+                        Outcomes, not deliverables · Marrakech
                     </span>
 
-                    {/* Title Part 2 */}
+                    {/* Title Part 2 — Outcome-first */}
                     <h1 className="font-louis font-bold text-[10vw] sm:text-[9vw] md:text-[8vw] leading-[0.95] tracking-tighter text-white uppercase">
-                        AI Automation &amp;<br />
-                        <span className="inline">Web Development</span><br />
-                        <span className="inline text-zinc-500">for SMEs.</span>
+                        We don&apos;t sell<br />
+                        <span className="inline">websites.</span><br />
+                        <span className="inline text-zinc-500">We sell measurable growth.</span>
                     </h1>
+
+                    {/* Sub-lead — PAS framing + risk reversal */}
+                    <p className="mt-6 md:mt-8 max-w-2xl text-base md:text-lg lg:text-xl text-zinc-300 font-louis leading-relaxed">
+                        AI automation, web engineering and brand systems built by senior operators. Every project ships with a measured outcome attached — or we rebuild it on us.
+                    </p>
                 </div>
 
                 {/* Buttons */}
                 <div className="flex flex-col sm:flex-row gap-4 md:gap-6 mt-8 md:mt-12 hero-slide-up-delayed">
-                    {/* Primary CTA */}
+                    {/* Primary CTA — Free audit hook (reciprocity + low friction) */}
                     <div className="flex flex-col items-start">
-                        <span className="text-xs md:text-sm text-zinc-400 mb-2 font-louis tracking-wide">Ready to grow together?</span>
+                        <span className="text-xs md:text-sm text-zinc-400 mb-2 font-louis tracking-wide">30-min call · 0 MAD · No deck, no pitch</span>
                         <Link
                             href="/contact"
                             className="group px-6 md:px-10 py-4 md:py-5 bg-[#beff01] text-black text-base md:text-lg font-bold font-louis uppercase tracking-wider transition-all flex items-center justify-center gap-2 md:gap-3"
                         >
-                            <span>Let&apos;s Talk Growth</span>
+                            <span>Get my growth audit</span>
                             <ArrowRight className="w-4 h-4 md:w-5 md:h-5 transition-transform group-hover:translate-x-1" aria-hidden="true" />
                         </Link>
                     </div>
 
-                    {/* Secondary CTA */}
+                    {/* Secondary CTA — Social proof anchor */}
                     <div className="flex flex-col items-start">
-                        <span className="text-xs md:text-sm text-zinc-400 mb-2 font-louis tracking-wide">See what we&apos;ve built together</span>
+                        <span className="text-xs md:text-sm text-zinc-400 mb-2 font-louis tracking-wide">See the numbers we&apos;ve shipped</span>
                         <button
                             onClick={scrollToWorks}
                             className="px-6 md:px-10 py-4 md:py-5 bg-white/10 backdrop-blur-sm text-white text-base md:text-lg font-bold font-louis uppercase tracking-wider hover:bg-white hover:text-black transition-all text-center cursor-pointer"
                         >
-                            View Our Work
+                            View case studies
                         </button>
                     </div>
+                </div>
+
+                {/* Scarcity → honest, conversion-aligned */}
+                <div className="mt-8 md:mt-10 flex flex-wrap items-center gap-x-6 gap-y-2 text-xs md:text-sm text-zinc-400 font-louis tracking-wide hero-slide-up-delayed">
+                    <span className="flex items-center gap-2"><span className="w-2 h-2 rounded-full bg-[#beff01] animate-pulse" /> 3 active projects this quarter</span>
+                    <span className="hidden md:inline text-zinc-700">|</span>
+                    <span>Replies in &lt; 24h</span>
+                    <span className="hidden md:inline text-zinc-700">|</span>
+                    <span>Measured-or-reworked guarantee</span>
                 </div>
 
             </div>
