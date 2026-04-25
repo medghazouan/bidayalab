@@ -31,11 +31,19 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const description = post.excerpt || stripHtml(post.text);
   const imageUrl = resolveImageUrl(post.image);
+  const lang: 'en' | 'fr' = post.lang === 'fr' ? 'fr' : 'en';
 
   return {
     title: `${post.title} | BidayaLab Blog`,
     description,
-    keywords: [post.category, 'BidayaLab', 'digital transformation', 'blog'],
+    keywords: [
+      post.category,
+      'BidayaLab',
+      'digital agency Morocco',
+      'AI automation Morocco',
+      'Next.js agency Marrakech',
+      'blog',
+    ],
     openGraph: {
       title: post.title,
       description,
@@ -61,6 +69,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     },
     alternates: {
       canonical: `https://www.bidayalab.com/blogs/${slug}`,
+      languages: post.alternateSlug
+        ? {
+            [lang]: `https://www.bidayalab.com/blogs/${slug}`,
+            [lang === 'en' ? 'fr' : 'en']: `https://www.bidayalab.com/blogs/${post.alternateSlug}`,
+          }
+        : undefined,
     },
     robots: {
       index: true,
@@ -79,6 +93,8 @@ export default async function BlogDetailsPage({ params }: Props) {
 
   const imageUrl = resolveImageUrl(post.image);
 
+  const lang: 'en' | 'fr' = post.lang === 'fr' ? 'fr' : 'en';
+
   // BlogPosting JSON-LD
   const blogPostingSchema = {
     '@context': 'https://schema.org',
@@ -89,13 +105,33 @@ export default async function BlogDetailsPage({ params }: Props) {
     datePublished: post.publicationDate,
     dateModified: post.updatedAt || post.publicationDate,
     articleSection: post.category,
+    inLanguage: lang === 'fr' ? 'fr-FR' : 'en-US',
+    keywords: [
+      post.category,
+      'BidayaLab',
+      'Morocco',
+      'Marrakech',
+      'digital agency',
+    ],
+    wordCount: post.text ? stripHtml(post.text, 100000).split(/\s+/).length : undefined,
+    timeRequired: post.readingTime ? `PT${post.readingTime}M` : undefined,
     url: `https://www.bidayalab.com/blogs/${slug}`,
-    author: {
-      '@type': 'Organization',
-      '@id': 'https://www.bidayalab.com/#organization',
-      name: 'BidayaLab',
-      url: 'https://www.bidayalab.com',
-    },
+    author: post.authorName
+      ? {
+          '@type': 'Person',
+          name: post.authorName,
+          worksFor: {
+            '@type': 'Organization',
+            '@id': 'https://www.bidayalab.com/#organization',
+            name: 'BidayaLab',
+          },
+        }
+      : {
+          '@type': 'Organization',
+          '@id': 'https://www.bidayalab.com/#organization',
+          name: 'BidayaLab',
+          url: 'https://www.bidayalab.com',
+        },
     publisher: {
       '@type': 'Organization',
       '@id': 'https://www.bidayalab.com/#organization',
@@ -137,6 +173,25 @@ export default async function BlogDetailsPage({ params }: Props) {
     ],
   };
 
+  // FAQPage JSON-LD — built from optional `faq` array on the post.
+  // Surfacing FAQs as structured data is the highest-impact AEO play for
+  // PAA boxes / AI Overviews.
+  const faqSchema =
+    Array.isArray(post.faq) && post.faq.length > 0
+      ? {
+          '@context': 'https://schema.org',
+          '@type': 'FAQPage',
+          mainEntity: post.faq.map((item: { q: string; a: string }) => ({
+            '@type': 'Question',
+            name: item.q,
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: item.a,
+            },
+          })),
+        }
+      : null;
+
   return (
     <>
       <script
@@ -147,6 +202,12 @@ export default async function BlogDetailsPage({ params }: Props) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
+      {faqSchema ? (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+        />
+      ) : null}
       <BlogPostContent post={post} />
     </>
   );

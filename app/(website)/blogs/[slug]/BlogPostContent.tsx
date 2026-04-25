@@ -18,6 +18,11 @@ interface BlogPost {
   excerpt?: string;
   createdAt: string;
   updatedAt: string;
+  lang?: 'en' | 'fr';
+  alternateSlug?: string;
+  faq?: Array<{ q: string; a: string }>;
+  authorName?: string;
+  readingTime?: number;
 }
 
 export default function BlogPostContent({ post }: { post: BlogPost }) {
@@ -139,8 +144,56 @@ export default function BlogPostContent({ post }: { post: BlogPost }) {
                             "
             />
 
+            {/* FAQ block — mirrors FAQPage JSON-LD for AEO + PAA */}
+            {Array.isArray(post.faq) && post.faq.length > 0 && (
+              <section className="mt-24 pt-12 border-t border-white/10" aria-labelledby="post-faq-heading">
+                <div className="mb-10 flex items-center gap-4">
+                  <span className="font-mono text-[10px] tracking-[0.22em] uppercase text-[#beff01]">
+                    FAQ
+                  </span>
+                  <span className="h-px flex-1 bg-white/10" />
+                </div>
+                <h2
+                  id="post-faq-heading"
+                  className="font-louis font-black uppercase tracking-tight text-white text-4xl md:text-5xl lg:text-6xl leading-[0.95] mb-12"
+                >
+                  Frequently Asked Questions
+                </h2>
+                <ul className="flex flex-col gap-6">
+                  {post.faq.map((item, i) => (
+                    <li
+                      key={i}
+                      className="border border-white/10 hover:border-white/20 transition-colors p-6 md:p-8 bg-zinc-950/40"
+                    >
+                      <h3 className="font-louis font-bold text-white text-xl md:text-2xl leading-tight mb-3 tracking-tight">
+                        {item.q}
+                      </h3>
+                      <p className="text-zinc-400 text-base md:text-lg leading-relaxed font-sans">
+                        {item.a}
+                      </p>
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            )}
+
             {/* Article Footer */}
             <div className="mt-12 pt-8 flex flex-col md:flex-row justify-between items-center gap-8 border-t border-white/10">
+              {post.authorName ? (
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#beff01] to-[#7fbf00] flex items-center justify-center text-black font-louis font-black text-lg">
+                    {post.authorName.split(' ').map(s => s[0]).join('').slice(0, 2)}
+                  </div>
+                  <div>
+                    <div className="text-white font-louis font-bold uppercase tracking-wide text-sm">
+                      {post.authorName}
+                    </div>
+                    <div className="text-zinc-500 font-mono text-[10px] tracking-[0.18em] uppercase">
+                      BidayaLab · Senior operator
+                    </div>
+                  </div>
+                </div>
+              ) : null}
               <div className="lg:hidden flex gap-4 w-full justify-start">
                 <SocialButton icon={<Facebook size={20} />} />
                 <SocialButton icon={<Twitter size={20} />} />

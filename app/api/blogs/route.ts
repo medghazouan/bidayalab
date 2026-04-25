@@ -6,6 +6,7 @@ import { getDatabase } from '@/lib/mongodb';
 // Define interfaces for type safety
 interface BlogQuery {
   category?: string;
+  lang?: string;
 }
 
 interface MongoBlog {
@@ -43,6 +44,7 @@ export async function GET(request: NextRequest) {
     const limit = Math.min(parseInt(searchParams.get('limit') || '10', 10), 100);
     const category = searchParams.get('category');
     const skip = Math.max(parseInt(searchParams.get('skip') || '0', 10), 0);
+    const lang = searchParams.get('lang');
 
     const db = await getDatabase();
 
@@ -50,6 +52,9 @@ export async function GET(request: NextRequest) {
     const query: BlogQuery = {};
     if (category && category !== 'all') {
       query.category = category;
+    }
+    if (lang === 'fr' || lang === 'en') {
+      query.lang = lang;
     }
 
     // Optimized projection
