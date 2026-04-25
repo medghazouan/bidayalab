@@ -138,7 +138,7 @@ export default function GlobalSchema() {
                 "publisher": {
                     "@id": "https://www.bidayalab.com/#organization"
                 },
-                "inLanguage": ["en"],
+                "inLanguage": ["en", "fr"],
                 "potentialAction": {
                     "@type": "SearchAction",
                     "target": {

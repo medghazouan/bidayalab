@@ -7,6 +7,7 @@ import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { Instagram, Linkedin, Twitter, ArrowUpRight, AlignRight } from "lucide-react";
 import { getSettings } from "@/app/actions/settings";
+import LocaleSwitcher from "@/components/ui/LocaleSwitcher";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -108,7 +109,9 @@ export default function Navbar() {
             />
           </Link>
 
-          <div className="flex items-center gap-4 md:gap-6 pointer-events-auto relative z-[70]">
+          <div className="flex items-center gap-3 md:gap-5 pointer-events-auto relative z-[70]">
+
+            <LocaleSwitcher />
 
             <button onClick={toggleMenu} aria-label={isOpen ? 'Close menu' : 'Open menu'} aria-expanded={isOpen} className="group flex items-center justify-center">
               {isOpen ? (

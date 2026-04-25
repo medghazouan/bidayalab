@@ -22,14 +22,25 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         '/contact',
         '/privacy',
         '/terms',
+        '/fr',
+        '/fr/blogs',
     ];
 
     const now = new Date();
 
     const staticRoutes = staticPaths.map((route) => {
+        const isFr = route.startsWith('/fr');
+        const enRoute = isFr ? route.replace(/^\/fr/, '') || '/' : route;
+        const frRoute = isFr ? route : `/fr${route}`;
         return {
             url: `${baseUrl}${route}`,
             lastModified: now,
+            alternates: {
+                languages: {
+                    en: `${baseUrl}${enRoute}`,
+                    fr: `${baseUrl}${frRoute}`,
+                },
+            },
         };
     });
 
@@ -50,12 +61,27 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
             };
         });
 
-        // Fetch Blogs
-        const blogs = await db.collection('blogs').find({}).project({ slug: 1, updatedAt: 1 }).toArray();
+        // Fetch Blogs (with hreflang alternates between en/fr counterparts)
+        const blogs = await db.collection('blogs').find({}).project({ slug: 1, updatedAt: 1, lang: 1, alternateSlug: 1 }).toArray();
         blogRoutes = blogs.map((blog) => {
+            const isFr = blog.lang === 'fr';
+            const path = isFr ? `/fr/blogs/${blog.slug}` : `/blogs/${blog.slug}`;
+            const counterpart = blog.alternateSlug
+                ? isFr
+                    ? `/blogs/${blog.alternateSlug}`
+                    : `/fr/blogs/${blog.alternateSlug}`
+                : null;
             return {
-                url: `${baseUrl}/blogs/${blog.slug}`,
+                url: `${baseUrl}${path}`,
                 lastModified: safeDate(blog.updatedAt),
+                alternates: counterpart
+                    ? {
+                          languages: {
+                              [isFr ? 'fr' : 'en']: `${baseUrl}${path}`,
+                              [isFr ? 'en' : 'fr']: `${baseUrl}${counterpart}`,
+                          },
+                      }
+                    : undefined,
             };
         });
     } catch (error) {
