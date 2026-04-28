@@ -263,7 +263,7 @@ export default function Works() {
       if (!response.ok) throw new Error('Failed to fetch');
       return response.json();
     },
-    staleTime: 5 * 60 * 1000,
+    staleTime: 30 * 1000, // 30s — short so visitors see shuffled projects
     gcTime: 30 * 60 * 1000,
     refetchOnWindowFocus: false,
     retry: 1,

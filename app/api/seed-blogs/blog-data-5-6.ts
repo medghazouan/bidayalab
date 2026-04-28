@@ -1,0 +1,48 @@
+export function getBlogs5and6(now: Date) {
+  return [
+    {
+      title: 'How much does a professional website actually cost in Morocco in 2026?',
+      slug: 'website-cost-morocco-2026-honest-pricing',
+      category: 'digital-marketing',
+      lang: 'en',
+      authorName: 'Mohamed El Kechchad',
+      readingTime: 7,
+      publicationDate: new Date('2026-02-09T09:00:00.000Z'),
+      image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1600&q=80',
+      alternateSlug: 'cout-site-web-maroc-2026-prix-honnetes',
+      excerpt: "A senior agency's honest 2026 pricing breakdown for Moroccan businesses. Real budgets from 8,000 MAD (template) to 220,000 MAD (custom multilingual e-commerce). What you should pay, and what you're paying for.",
+      text: '<p><strong>TL;DR — A serious professional website in Morocco in 2026 costs between 25,000 MAD and 220,000+ MAD.</strong> Below 8,000 MAD, you are buying a template flip. Above 80,000 MAD, you should be getting custom design, custom code, and a measured-result commitment.</p><h2>What are the real website pricing tiers in Morocco?</h2><table><thead><tr><th>Tier</th><th>Price (MAD)</th><th>What you get</th><th>Right for</th></tr></thead><tbody><tr><td>Template flip</td><td>4,000-8,000</td><td>Pre-built theme, 5 pages</td><td>Hobby projects</td></tr><tr><td>WordPress + page builder</td><td>10,000-25,000</td><td>Custom-ish theme, 10-20 pages, basic SEO</td><td>Local services SMEs</td></tr><tr><td>Custom design + Next.js</td><td>25,000-70,000</td><td>Custom design, performance-grade build, technical SEO</td><td>Serious SMEs, B2B</td></tr><tr><td>Custom build + integrations</td><td>70,000-140,000</td><td>Custom design + backend + CRM/ERP + multilingual</td><td>Mid-market companies</td></tr><tr><td>Headless e-commerce</td><td>110,000-220,000+</td><td>Shopify Hydrogen / Next.js + headless CMS</td><td>DTC brands &gt;2M MAD/year</td></tr></tbody></table><h2>Why is there such a wide range?</h2><p>Five drivers: <strong>(1) Design</strong> — custom costs 20,000-60,000 MAD. <strong>(2) Number of locales</strong> — Arabic RTL adds ~40%. <strong>(3) Integrations</strong> — CRM, payment, n8n triggers. <strong>(4) CMS expectations</strong>. <strong>(5) Performance and SEO commitment</strong> — LCP &lt; 1s costs 30-50 extra hours.</p><h2>What should I pay?</h2><ul><li><strong>Solo/freelancer:</strong> 15,000-35,000 MAD</li><li><strong>SME, 5-25 employees, single locale:</strong> 35,000-75,000 MAD</li><li><strong>SME, multilingual:</strong> 60,000-110,000 MAD</li><li><strong>Mid-market:</strong> 110,000-180,000 MAD</li><li><strong>DTC e-commerce &gt;2M MAD/year:</strong> 110,000-220,000+ MAD</li></ul><h2>What we charge at BidayaLab</h2><ul><li>AI Automation: <strong>from 28,000 MAD</strong></li><li>Web Engineering: <strong>from 45,000 MAD</strong></li><li>Brand &amp; Motion: <strong>from 38,000 MAD</strong></li></ul><p>Free 30-minute audit, fixed price after. <a href="/contact">Book the audit.</a></p>',
+      faq: [
+        { q: 'Why do some agencies refuse to give a price before a discovery call?', a: 'One legitimate reason: scope varies. One less legitimate: anchor-pricing. We publish starting prices upfront.' },
+        { q: 'Does Webflow work for a serious Moroccan business website?', a: 'Yes, for brochure sites under ~30 pages. For e-commerce or AI-driven features, Next.js is better.' },
+        { q: 'How much does monthly hosting cost?', a: 'Next.js on Vercel: 0-400 MAD/month. WordPress: 200-800 MAD/month. Shopify Hydrogen: ~360 MAD/month subscription.' },
+        { q: 'Should I pay 50% upfront?', a: '40-50% upfront is standard. We split: 40% signature, 30% design approval, 30% launch.' },
+        { q: 'How long should a website project take?', a: 'Brochure: 4-8 weeks. Mid-market: 8-14 weeks. E-commerce: 10-16 weeks.' },
+      ],
+      createdAt: now,
+      updatedAt: now,
+    },
+    {
+      title: 'Core Web Vitals in 2026: why a slow mobile site costs you 30% of revenue',
+      slug: 'core-web-vitals-2026-mobile-revenue-cost',
+      category: 'digital-development',
+      lang: 'en',
+      authorName: 'Mohamed El Kechchad',
+      readingTime: 8,
+      publicationDate: new Date('2026-02-16T09:00:00.000Z'),
+      image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1600&q=80',
+      alternateSlug: 'core-web-vitals-2026-cout-mobile-chiffre-affaires',
+      excerpt: "A senior frontend engineer's 2026 deep-dive on Core Web Vitals (LCP, INP, CLS). Why mobile-LCP above 2.5s costs Moroccan SMEs 20-35% of mobile revenue. The five interventions that move the number.",
+      text: '<p><strong>TL;DR — A mobile site with LCP above 2.5 seconds in 2026 leaves 20-35% of potential revenue on the table.</strong> The five interventions that move the number: image pipeline, JS budget, font loading, third-party scripts, and server response time.</p><h2>What are Core Web Vitals in 2026?</h2><ul><li><strong>LCP</strong> — Largest Contentful Paint. Good: &lt;2.5s. Poor: &gt;4s.</li><li><strong>INP</strong> — Interaction to Next Paint. Good: &lt;200ms. Poor: &gt;500ms.</li><li><strong>CLS</strong> — Cumulative Layout Shift. Good: &lt;0.1. Poor: &gt;0.25.</li></ul><h2>How much does slow mobile cost?</h2><p>Every 1 second cut from mobile LCP corresponds to a 7-12% lift in conversion. A site at 3.5s LCP dropping to 0.9s typically sees a 22-35% conversion lift.</p><h2>The five interventions</h2><p><strong>(1) Image pipeline.</strong> AVIF + WebP. Impact: -1.0 to -2.5 seconds.</p><p><strong>(2) JS budget.</strong> Cap at 80-120KB gzipped. Large LCP and INP impact.</p><p><strong>(3) Font loading.</strong> Self-host, preload, font-display: swap. Impact: -0.3 to -0.8s.</p><p><strong>(4) Third-party scripts.</strong> Audit, defer, or remove. Large impact.</p><p><strong>(5) Server response time.</strong> Get TTFB under 200ms.</p><h2>What we recommend at BidayaLab</h2><p>We do this as a 2-4 week engagement with a written commitment to LCP &lt;1.2s and INP &lt;200ms. <a href="/contact">Free 30-minute audit.</a></p>',
+      faq: [
+        { q: 'Are Core Web Vitals a ranking factor?', a: 'Yes — part of Google Page Experience signal. Not dominant, but a tiebreaker on competitive queries.' },
+        { q: 'My Lighthouse is 95 but CrUX is red?', a: 'Lighthouse is synthetic. CrUX is real users on real devices, often on 3G/4G.' },
+        { q: 'Can I fix Core Web Vitals on WordPress?', a: 'To a point. Caching plugins can get to 1.5-2.0s LCP. Below 1s usually requires Next.js migration.' },
+        { q: 'How quickly will Google see improvements?', a: 'CrUX is a 28-day rolling window, so 4-6 weeks after fix lands.' },
+        { q: 'Minimum Lighthouse Mobile score?', a: 'Content site: 95+. E-commerce: 90+. But CrUX LCP matters more — aim for under 1.0s.' },
+      ],
+      createdAt: now,
+      updatedAt: now,
+    },
+  ];
+}

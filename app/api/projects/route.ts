@@ -47,19 +47,11 @@ export async function GET(request: Request) {
 
     // Handle diverse featured - get one project from each category
     if (featured === 'diverse') {
+      // Use $sample to randomly pick projects, ensuring variety on each page load
       const diverseProjects = await db
         .collection('projects')
         .aggregate([
-          // Group by category and get one project from each
-          { $sort: { order: 1, createdAt: -1 } },
-          {
-            $group: {
-              _id: '$category',
-              project: { $first: '$$ROOT' }
-            }
-          },
-          { $replaceRoot: { newRoot: '$project' } },
-          { $limit: limit },
+          { $sample: { size: limit } },
           {
             $project: {
               title: 1,
@@ -92,7 +84,8 @@ export async function GET(request: Request) {
         },
       }, {
         headers: {
-          'Cache-Control': 'public, s-maxage=120, stale-while-revalidate=300',
+          // Short cache so different visitors see different projects
+          'Cache-Control': 'public, s-maxage=30, stale-while-revalidate=60',
         },
       });
     }
