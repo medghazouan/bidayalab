@@ -4,8 +4,7 @@ import { getBlogs } from '@/lib/data';
 
 export const metadata: Metadata = {
   title: 'Digital Transformation Insights & AI Strategy | BidayaLab Blog',
-  description:
-    'Practical deep-dives into AI automation, n8n workflows, Next.js engineering, Shopify Hydrogen, and Core Web Vitals — from a senior agency in Marrakech, Morocco.',
+  description: 'AI automation, n8n workflows, Next.js and CWV insights from BidayaLab — Marrakech senior operators. No fluff, just field-tested techniques and real metrics.',
   keywords: [
     'AI automation blog',
     'n8n automation Morocco',

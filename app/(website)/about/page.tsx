@@ -2,8 +2,8 @@ import { Metadata } from 'next';
 import AboutPageClient from './AboutPageClient';
 
 export const metadata: Metadata = {
-  title: 'About BidayaLab | Digital Transformation Agency for SMEs',
-  description: 'BidayaLab is a Marrakech-based digital transformation agency helping SMEs scale with AI automation, web development, and visual storytelling. Learn about our mission, team, and values.',
+  title: 'About BidayaLab | Senior Digital Operators in Marrakech',
+  description: 'Senior AI and web agency in Marrakech. BidayaLab delivers automation, web engineering and brand systems with measured outcomes guaranteed in writing.',
   openGraph: {
     title: 'About BidayaLab | Digital Transformation Agency',
     description: 'Marrakech-based agency helping SMEs scale with AI, web development, and visual storytelling.',

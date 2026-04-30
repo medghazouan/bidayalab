@@ -3,8 +3,7 @@ import ServicesContent from '@/components/pages/services/ServicesContent';
 
 export const metadata: Metadata = {
   title: 'Digital Transformation Services | AI, Web & Visual Solutions',
-  description:
-    "BidayaLab offers AI automation, custom web development, and visual storytelling services for SMEs. Scale your business with our Marrakech-based digital agency.",
+  description: "BidayaLab services: AI automation, web engineering and brand systems for ambitious SMEs. Marrakech-based senior agency — results measured, outcomes guaranteed.",
   keywords: [
     'AI automation agency Morocco',
     'web development agency Marrakech',

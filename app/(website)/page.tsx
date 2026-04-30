@@ -2,8 +2,8 @@ import { Metadata } from 'next';
 import HomeContent from '@/components/pages/home/HomeContent';
 
 export const metadata: Metadata = {
-  title: 'Digital Transformation Agency for SMEs | BidayaLab',
-  description: 'We help ambitious startups and SMEs scale with AI automation, custom web development, and visual storytelling. Let\'s build your digital future together.',
+  title: { absolute: 'Digital Transformation Agency in Marrakech | BidayaLab' },
+  description: "BidayaLab : agence de transformation digitale à Marrakech. IA, développement web et branding avec résultats mesurés garantis. Audit gratuit de 30 min.",
   keywords: [
     'digital transformation agency',
     'AI automation for business',
@@ -66,58 +66,58 @@ export default function HomePage() {
     "mainEntity": [
       {
         "@type": "Question",
-        "name": "What services does Bidayalab offer?",
+        "name": "How is BidayaLab different from a freelancer or a generalist agency?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "We offer a comprehensive suite of digital services including brand strategy & identity design, web development, digital marketing, AI automation solutions, and visual storytelling through photo & video production. Each service is tailored to help businesses grow and stand out in the digital landscape."
+          "text": "Three differences. (1) We commit to a measured outcome on every project — conversion lift, hours saved, revenue per visitor — written into the proposal, not a vague brief. (2) Senior-only team, no juniors learning on your budget. (3) AI automation, web engineering and brand sit in one studio, so your funnel ships as a system, not as four disconnected vendors."
         }
       },
       {
         "@type": "Question",
-        "name": "How long does a typical project take?",
+        "name": "What does a project actually cost?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Project timelines vary based on scope and complexity. A brand identity project typically takes 4-6 weeks, web development ranges from 6-12 weeks, and ongoing marketing campaigns are structured monthly. We provide detailed timelines during our initial consultation."
+          "text": "Web from 45,000 MAD. AI automation builds from 28,000 MAD. Brand systems from 38,000 MAD. We publish starting prices instead of hiding them behind a discovery call — you should know the order of magnitude before you talk to us. Final scope is fixed in writing after the free 30-min audit."
         }
       },
       {
         "@type": "Question",
-        "name": "What is your pricing structure?",
+        "name": "How long until I see real results?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "We offer flexible pricing models including project-based fees, retainer packages, and custom solutions. Pricing is determined by project scope, deliverables, and timeline. Contact us for a personalized quote tailored to your specific needs."
+          "text": "AI automation: 2–4 weeks to first measurable hours saved. Web/Shopify rebuild: 6–10 weeks to launch, conversion lift typically visible within 30 days post-launch. Brand systems: 4–6 weeks to a launchable identity. Every project ships with a baseline measurement at week 1 and a result snapshot at handover."
         }
       },
       {
         "@type": "Question",
-        "name": "Do you work with international clients?",
+        "name": "What if the project does not hit the agreed result?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Absolutely! We work with clients globally. Our team is experienced in remote collaboration and we use modern tools to ensure seamless communication across different time zones. We have successfully delivered projects for clients in Europe, North America, and the Middle East."
+          "text": "We rebuild on our time until it does. The measured-or-reworked guarantee is written into the contract — not a marketing line. We can do this because we only take on engagements where we have line-of-sight to the outcome, which is also why availability is intentionally limited."
         }
       },
       {
         "@type": "Question",
-        "name": "What makes Bidayalab different from other agencies?",
+        "name": "Do you work with clients outside Morocco?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "We combine creative excellence with data-driven strategy. Our team brings together expertise in branding, development, marketing, and AI—all under one roof. This integrated approach ensures cohesive results and eliminates the need for multiple agency partnerships."
+          "text": "Yes. ~40% of current engagements are EU/MENA (France, UAE, KSA, North America). The team is remote-first, fluent in French/Arabic/English, and we run a 9 AM–9 PM Morocco-time window which covers GMT to EST without late nights."
         }
       },
       {
         "@type": "Question",
-        "name": "How do we get started?",
+        "name": "Why are you only running 3 projects per quarter?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Simply reach out through our contact form or book a free discovery call. We will discuss your goals, challenges, and vision. From there, we will propose a tailored strategy and roadmap to bring your project to life."
+          "text": "Because the guarantee is real. Senior-only delivery + a written outcome means we cap intake to keep quality non-negotiable. Slots open quarterly — if this one is full we will tell you straight and put you in the next intake instead of slow-walking you."
         }
       },
       {
         "@type": "Question",
-        "name": "Do you offer ongoing support?",
+        "name": "What happens after launch — do we lose you?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Yes! We believe in building long-term partnerships. All our projects include post-launch support, and we offer ongoing maintenance and optimization packages to ensure your digital assets continue to perform at their best."
+          "text": "No. Every build includes a 30-day measurement window after handover where we tune until the metric is hit. After that you can keep us on a retainer (analytics, iteration, new features) or take it fully in-house — your codebase, your dashboards, your accounts."
         }
       }
     ]

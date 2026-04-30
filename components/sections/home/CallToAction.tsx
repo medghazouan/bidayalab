@@ -16,9 +16,9 @@ import { useLocale, t, localeHref } from '@/lib/i18n';
 export default function CallToAction() {
   const lang = useLocale();
   const labels = {
-    eyebrow: { en: 'Ready? · Free 30-min audit', fr: 'Prêt ? · Audit gratuit 30 min' },
-    titleA: { en: '30-minute brief.', fr: 'Brief de 30 minutes.' },
-    titleB: { en: 'Priced answer in 48h.', fr: "Réponse chiffrée en 48h." },
+    eyebrow: { en: 'Free 30-min audit · No commitment', fr: 'Audit gratuit 30 min · Sans engagement' },
+    titleA: { en: 'Ready? Get Your Free', fr: 'Prêt ? Obtenez votre' },
+    titleB: { en: '30-Min Growth Audit', fr: 'Audit Croissance Gratuit' },
     description: {
       en: "No commitment, no disguised sales pitch. You leave with a written highest-leverage fix and an honest price tag — even if we’re not the ones building it.",
       fr: "Aucun engagement, aucun pitch déguisé. Vous repartez avec un correctif à plus fort levier écrit, et un tarif honnête — même si ce n’est pas nous qui le construisons.",

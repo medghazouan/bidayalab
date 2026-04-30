@@ -9,8 +9,8 @@ export default function AboutPageClient() {
   const lang = useLocale();
   const c = {
     eyebrow: { en: "The operators’ agency · Marrakech", fr: "L’agence des opérateurs · Marrakech" },
-    h1a: { en: "We don’t sell websites.", fr: "On ne vend pas des sites." },
-    h1b: { en: 'We sell the number.', fr: 'On vend le chiffre.' },
+    h1a: { en: ‘Outcomes,’, fr: ‘Des résultats,’ },
+    h1b: { en: ‘not deliverables.’, fr: ‘pas des livrables.’ },
     leadA: {
       en: 'BidayaLab is a senior-only studio for AI automation, web engineering and brand systems. Every engagement ships with a measured outcome attached — not a deliverable list.',
       fr: "BidayaLab est un studio 100 % senior pour l’automatisation IA, l’ingénierie web et les systèmes de marque. Chaque mission est livrée avec un résultat mesuré — pas une liste de livrables.",

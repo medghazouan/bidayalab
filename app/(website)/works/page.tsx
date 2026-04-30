@@ -2,8 +2,8 @@ import { Metadata } from 'next';
 import WorksPageClient from './WorksPageClient';
 
 export const metadata: Metadata = {
-  title: 'Our Work | Digital Transformation Case Studies | BidayaLab',
-  description: 'Explore our portfolio of AI automation, custom web development, and visual storytelling projects. See how we\'ve helped businesses scale and succeed.',
+  title: 'Our Work | Digital Transformation Case Studies',
+  description: 'BidayaLab case studies: real metrics from AI automation, Next.js web rebuilds and brand systems delivered to clients across Morocco, France, UAE and beyond.',
   keywords: [
     'digital agency portfolio',
     'web development case studies',

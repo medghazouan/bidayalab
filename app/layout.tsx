@@ -3,10 +3,11 @@ import './globals.css';
 import { Providers } from './providers';
 import dynamic from 'next/dynamic';
 const BidayalabAssistant = dynamic(() => import('@/components/chat/BidayalabAssistant'));
-import GlobalSchema from '@/components/seo/GlobalSchema';
 import GoogleAnalytics from '@/components/seo/GoogleAnalytics';
+import GlobalSchema from '@/components/seo/GlobalSchema';
 import SmoothScroll from '@/components/ui/SmoothScroll';
 import SplashScreen from '@/components/ui/SplashScreen';
+import CookieConsentBanner from '@/components/ui/CookieConsentBanner';
 import { Metadata } from 'next';
 import localFont from 'next/font/local';
 
@@ -57,7 +58,7 @@ const louis = localFont({
 export const metadata: Metadata = {
   metadataBase: new URL('https://www.bidayalab.com'),
   title: {
-    default: 'AI Automation & Web Development Agency Morocco | BidayaLab',
+    default: 'Digital Transformation Agency in Marrakech | BidayaLab',
     template: '%s | BidayaLab',
   },
   description: "Transform your SME with AI automation, custom web development & premium content. Stop losing clients to digital competitors. Marrakech-based agency.",
@@ -110,12 +111,15 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
+        {/* Hreflang */}
+        <link rel="alternate" hrefLang="en" href="https://www.bidayalab.com/" />
+        <link rel="alternate" hrefLang="fr" href="https://www.bidayalab.com/fr/" />
+        <link rel="alternate" hrefLang="x-default" href="https://www.bidayalab.com/" />
         {/* Preload critical resources */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <GlobalSchema />
         <GoogleAnalytics />
       </head>
       <body className={`${inter.className} ${melon.variable} ${nNiely.variable} ${louis.variable}`} suppressHydrationWarning>
@@ -128,6 +132,8 @@ export default function RootLayout({
             </Providers>
           </SmoothScroll>
         </SplashScreen>
+        <GlobalSchema />
+        <CookieConsentBanner />
         {/* Noise texture overlay for creative film grain effect */}
         <div className="noise-overlay" />
       </body>

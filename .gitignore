@@ -43,3 +43,8 @@ next-env.d.ts
 # sensitive data
 db.txt
 .vercel
+
+#audit 
+bidayalab_seo_audit.md
+BIDAYALAB-SEO-AUDIT.md
+DEPLOYMENT.md

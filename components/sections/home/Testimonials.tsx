@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
+import Script from 'next/script';
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
@@ -305,6 +306,25 @@ export default function Testimonials() {
                             <div className="text-xs md:text-sm text-zinc-400 font-louis">{stat.label}</div>
                         </motion.div>
                     ))}
+                </div>
+
+                {/* Clutch verified-reviews widget */}
+                <div className="py-8 border-b border-zinc-800 flex justify-center">
+                    <Script
+                        src="https://widget.clutch.co/static/js/widget.js"
+                        strategy="afterInteractive"
+                    />
+                    <div
+                        className="clutch-widget"
+                        data-url="https://widget.clutch.co"
+                        data-widget-type="4"
+                        data-height="auto"
+                        data-nofollow="false"
+                        data-expandifr="true"
+                        data-scale="100"
+                        data-reviews=""
+                        data-clutchcompany-id="2641022"
+                    />
                 </div>
 
                 {/* Bottom CTA Row - Same as FAQ Section */}
