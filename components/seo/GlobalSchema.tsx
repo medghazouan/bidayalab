@@ -1,5 +1,3 @@
-import Script from 'next/script';
-
 export default function GlobalSchema() {
     const jsonLd = {
         "@context": "https://schema.org",
@@ -287,10 +285,8 @@ export default function GlobalSchema() {
     };
 
     return (
-        <Script
-            id="global-schema"
+        <script
             type="application/ld+json"
-            strategy="afterInteractive"
             dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
     );

@@ -1,3 +1,4 @@
+import { headers } from 'next/headers';
 import { Inter } from 'next/font/google';
 import './globals.css';
 import { Providers } from './providers';
@@ -103,18 +104,15 @@ export const metadata: Metadata = {
   }
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const locale = (await headers()).get('x-locale') ?? 'en';
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang={locale} suppressHydrationWarning>
       <head>
-        {/* Hreflang */}
-        <link rel="alternate" hrefLang="en" href="https://www.bidayalab.com/" />
-        <link rel="alternate" hrefLang="fr" href="https://www.bidayalab.com/fr/" />
-        <link rel="alternate" hrefLang="x-default" href="https://www.bidayalab.com/" />
         {/* Preload critical resources */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />

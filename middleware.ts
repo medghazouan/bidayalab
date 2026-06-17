@@ -5,12 +5,11 @@ import { NextRequest, NextResponse } from 'next/server';
  */
 export function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
-  const res = NextResponse.next();
-  if (pathname === '/fr' || pathname.startsWith('/fr/')) {
-    res.headers.set('Content-Language', 'fr');
-  } else {
-    res.headers.set('Content-Language', 'en');
-  }
+  const locale = pathname === '/fr' || pathname.startsWith('/fr/') ? 'fr' : 'en';
+  const requestHeaders = new Headers(req.headers);
+  requestHeaders.set('x-locale', locale);
+  const res = NextResponse.next({ request: { headers: requestHeaders } });
+  res.headers.set('Content-Language', locale);
   return res;
 }
 

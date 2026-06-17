@@ -93,5 +93,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         console.error('Sitemap: Failed to fetch dynamic routes from database:', error);
     }
 
-    return [...staticRoutes, ...workRoutes, ...blogRoutes];
+    const toolRoutes: MetadataRoute.Sitemap = [
+        {
+            url: `${baseUrl}/tools/roi-calculator`,
+            lastModified: now,
+            changeFrequency: 'monthly',
+            priority: 0.7,
+        },
+    ];
+
+    return [...staticRoutes, ...toolRoutes, ...workRoutes, ...blogRoutes];
 }

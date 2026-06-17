@@ -212,6 +212,15 @@ export default function ServicesContent() {
                   <p className="text-[#beff01] font-bold text-lg">{service.results}</p>
                 </div>
 
+                {service.number === '01' && (
+                  <Link
+                    href={localeHref(lang, '/tools/roi-calculator')}
+                    className="inline-flex items-center gap-2 text-[#beff01] text-sm font-bold uppercase tracking-wider hover:text-white transition-colors mt-1"
+                  >
+                    → {t(lang, { en: 'Calculate your automation ROI', fr: 'Calculez votre ROI d’automatisation' })}
+                  </Link>
+                )}
+
                 <div className="mt-2">
                   <span className="text-xs font-bold text-zinc-500 uppercase tracking-widest mb-2 block">{t(lang, c.priceLabel)}</span>
                   <p className="text-zinc-300 font-medium">{service.priceFrom}</p>
